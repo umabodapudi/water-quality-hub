@@ -3,120 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Quality Literacy Hub</title>
+    <title>Public Health Water Quality Dashboard</title>
     <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
-        .filter-btn { margin-right: 5px; padding: 6px 12px; cursor: pointer; border: 1px solid #ccc; background: #fff; border-radius: 4px; font-weight: bold; }
-        .filter-btn.active { background: #007bff; color: #fff; border-color: #007bff; }
-        details { border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 10px; border-radius: 4px; background-color: #fafafa; }
-        summary { font-size: 1.1rem; font-weight: bold; cursor: pointer; outline: none; }
-        details[open] { background-color: #fff; border-color: #007bff; }
-        .hidden { display: none !important; }
-        ol li, ul li { margin-bottom: 12px; }
-        .section-content { margin-top: 15px; }
+        body { max-width: 1200px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }
+        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 20px; }
+        .dashboard-grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        .control-panel { background-color: #f7f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; height: fit-content; }
+        .display-panel { background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #007bff; min-height: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .panel-group { margin-bottom: 25px; }
+        .panel-group h3 { font-size: 0.95rem; text-transform: uppercase; color: #555; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .menu-btn { display: block; width: 100%; text-align: left; background: #ffffff; border: 1px solid #ccc; padding: 10px 15px; margin-bottom: 8px; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #333; transition: all 0.2s ease; }
+        .menu-btn:hover { background: #e9ecef; border-color: #007bff; }
+        .menu-btn.active { background: #007bff; color: #ffffff; border-color: #007bff; }
+        .data-block { margin-bottom: 25px; background: #fafafa; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff; }
+        .data-block h4 { margin-top: 0; margin-bottom: 8px; color: #007bff; font-size: 1.1rem; }
+        .hidden-data { display: none; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 850px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Water Quality Literacy Hub</h1>
-        <p>A public health resource outlining infrastructure pipelines, municipal contamination treatments, and distribution safety rules.</p>
+        <h1>Public Health Water Quality Dashboard</h1>
+        <p>A unified data-view platform mapping structural municipal engineering, regulatory parameters, and consumer rights.</p>
     </header>
 
-    <!-- SECTION 1: SYSTEM SOURCES AND JOURNEY -->
-    <section>
-        <h2>Water Infrastructure: Source to Tap</h2>
-        <p>Public water systems manage massive hydraulic networks to transport and monitor raw resources before they reach consumer plumbing. Click to expand each phase of the journey:</p>
+    <div class="dashboard-grid">
+        
+        <!-- LEFT PANEL: NAVIGATION CONTROLS -->
+        <div class="control-panel">
+            
+            <div class="panel-group">
+                <h3>Water Infrastructure</h3>
+                <button class="menu-btn active" onclick="loadView('systems-ops')">System Types and Operations</button>
+                <button class="menu-btn" onclick="loadView('cross-connect')">Cross-Connection and Backflow</button>
+            </div>
 
-        <details>
-            <summary>Water Sources: Groundwater versus Surface Water</summary>
-            <div class="section-content">
-                <p>Municipalities select and manage treatment systems based on the physical profile of their source asset:</p>
+            <div class="panel-group">
+                <h3>Municipal Treatment</h3>
+                <button class="menu-btn" onclick="loadView('muni-tech')">Advanced Utility Treatment</button>
+                <button class="menu-btn" onclick="loadView('contam-matrix')">Contaminant Treatment Matrix</button>
+            </div>
+
+            <div class="panel-group">
+                <h3>Consumer Domain</h3>
+                <button class="menu-btn" onclick="loadView('home-filters')">Home Filtration Modules</button>
+                <button class="menu-btn" onclick="loadView('legal-rights')">Legal Consumer Rights</button>
+            </div>
+
+        </div>
+
+        <!-- RIGHT PANEL: INTERACTIVE CONTENT VIEWER -->
+        <div class="display-panel" id="viewer-pane">
+            <!-- Initial content loaded via JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- HIDDEN DATA STORAGE WIDGETS -->
+    <div class="hidden-data">
+
+        <!-- DATA: SYSTEMS AND OPERATIONS -->
+        <div id="data-systems-ops">
+            <h2>System Types and Operations</h2>
+            <p>The EPA regulates over 148,000 public water systems (PWS) based on demographic structures, source locations, and seasonal usage parameters.</p>
+            
+            <div class="data-block">
+                <h4>1. Community Water Systems (CWS)</h4>
+                <p><strong>Criteria:</strong> A public water system that serves at least 15 service connections used by year-round residents or regularly serves at least 25 year-round residents.</p>
+                <p><strong>Operation and Management:</strong> Operated primarily by municipal governments, public utility districts, or corporate investor-owned utilities. They require continuous, 24/7 mechanical oversight, full laboratory monitoring pipelines, and dedicated distribution engineering crews.</p>
+            </div>
+
+            <div class="data-block">
+                <h4>2. Non-Transient Non-Community Water Systems (NTNCWS)</h4>
+                <p><strong>Criteria:</strong> A system that regularly supplies water to at least 25 of the same people over six months per year, but not year-round.</p>
+                <p><strong>Examples and Ownership:</strong> Commonly found at schools, universities, isolated industrial factories, hospitals, and large office parks that operate independent groundwater wells.</p>
+                <p><strong>Operation:</strong> Managed internally by facilities management engineers or contracted certified operators who monitor the specific facility footprint.</p>
+            </div>
+
+            <div class="data-block">
+                <h4>3. Transient Non-Community Water Systems (TNCWS)</h4>
+                <p><strong>Criteria:</strong> A system that provides water to areas where people do not remain for extended durations, serving at least 25 individuals daily for at least 60 days out of the year.</p>
+                <p><strong>Examples and Ownership:</strong> Campgrounds, highway gas stations, state parks, and rural restaurants utilizing independent wells.</p>
+                <p><strong>Operation:</strong> Overseen by the property owner, focusing heavily on basic automated disinfection and routine microbiological testing without extensive grid networks.</p>
+            </div>
+
+            <div class="data-block">
+                <h4>Operator Certification and Governance</h4>
+                <p>Public water systems must be overseen by certified operators licensed by state environmental agencies. Licensing requires passing comprehensive engineering examinations and fulfilling ongoing continuing education requirements. Operators are categorized into classes or grades (typically Class 1 through Class 4) based on the size of the population served and the complexity of the treatment technology implemented.</p>
+            </div>
+        </div>
+
+        <!-- DATA: CROSS CONNECTION AND BACKFLOW -->
+        <div id="data-cross-connect">
+            <h2>Cross-Connection Control and Backflow Prevention</h2>
+            <p>Distribution network security requires maintaining constant outward hydraulic pressure to block external pollutants from entering transmission loops.</p>
+
+            <div class="data-block">
+                <h4>Cross-Connection Dynamics</h4>
+                <p>A cross-connection is any actual or potential physical link between a drinkable public water pipe and any pipe, vessel, or machine containing non-drinkable liquids, chemicals, or waste. This includes linkages to commercial boiler systems, cooling towers, medical equipment, and landscape irrigation grids.</p>
+            </div>
+
+            <div class="data-block">
+                <h4>Hydraulic Backflow Mechanisms</h4>
                 <ul>
-                    <li><strong>Groundwater Systems:</strong> Drawn from deep underground aquifers using vertical turbine pumps. While generally free of surface debris and organic pathogens due to natural soil filtration, groundwater often carries higher concentrations of dissolved geologic minerals like arsenic, iron, and manganese.</li>
-                    <li><strong>Surface Water Systems:</strong> Collected from open rivers, lakes, or man-made reservoirs. Surface sources provide high volume but are constantly vulnerable to agricultural runoff, industrial discharge, sewage spills, and seasonal toxic algal blooms.</li>
+                    <li><strong>Backsiphonage:</strong> Occurs when a sudden drop in city main pressure creates a partial vacuum in the distribution grid, pulling non-potable water backward into the clean water line. This is typically triggered by large water main ruptures or high-volume fire department pumping operations.</li>
+                    <li><strong>Backpressure:</strong> Occurs when a downstream private plumbing system (such as an industrial pump or high-pressure heating plant) generates an internal pressure level that exceeds the incoming city supply line delivery pressure.</li>
                 </ul>
             </div>
-        </details>
 
-        <details>
-            <summary>The Core Steps of a Conventional Filtration Plant</summary>
-            <div class="section-content">
-                <p>Standard surface water filtration plants use a sequential four-stage chemical and mechanical framework to clear suspended matter:</p>
-                <ol>
-                    <li><strong>Coagulation and Flocculation:</strong> Flash-mixing chemical coagulants like aluminum sulfate (alum) or iron salts into raw water. This process neutralizes the negative electrical charges of suspended dirt particles, causing them to bind together into fragile clumps called floc.</li>
-                    <li><strong>Sedimentation:</strong> The water enters large, slow-moving basins. Under steady gravity, the heavy floc settles to the bottom of the tank as sludge, leaving clear water at the surface.</li>
-                    <li><strong>Rapid Sand Filtration:</strong> Partially clarified water drains downward through a deep bed of sand, gravel, and sometimes anthracite coal. This step mechanically traps remaining fine particulates, microbial cysts, and dust.</li>
-                    <li><strong>Primary Disinfection:</strong> Plant operators inject chlorine, chloramines, or ozone gas to destroy dangerous bacteria and viruses before the water enters the city lines.</li>
-                </ol>
-            </div>
-        </details>
-
-        <details>
-            <summary>The Distribution Network and Storage Tanks</summary>
-            <div class="section-content">
-                <p>Once treated, finished water enters the distribution network. High-service pumps push the water through thick underground water mains into elevated storage tanks or water towers. These towers store water and use gravity to maintain high water pressure across the city. This pressure prevents external groundwater from leaking back into the pipe joints.</p>
-            </div>
-        </details>
-    </section>
-
-    <!-- SECTION 2: MUNICIPAL TREATMENTS BY CONTAMINANT -->
-    <section>
-        <h2>Municipal Treatment Technologies for Specific Contaminants</h2>
-        <p>When a water utility identifies severe or chronic chemical contamination in its source water, conventional sand filtration is insufficient. Cities must build specialized chemical treatment plants based on the type of threat present:</p>
-
-        <details>
-            <summary>Granular Activated Carbon (GAC) Plants</summary>
-            <div class="section-content">
-                <p><strong>Target Contaminants:</strong> PFAS, PFOS, volatile organic compounds (VOCs), pesticides, industrial solvents, and taste-and-odor compounds.</p>
-                <p><strong>How the plant implements it:</strong> The utility constructs large filter beds packed with highly porous, baked carbon particles. As water passes through, chemical molecules physically bind to the internal surface area of the carbon via adsorption. The carbon beds must be periodically removed and heat-regenerated once the surface is full.</p>
-            </div>
-        </details>
-
-        <details>
-            <summary>Chemical Oxidation and Greensand Filtration Plants</summary>
-            <div class="section-content">
-                <p><strong>Target Contaminants:</strong> Arsenic, iron, hydrogen sulfide, and manganese.</p>
-                <p><strong>How the plant implements it:</strong> These metals dissolve completely in water, meaning they pass straight through standard sand filters. The plant first injects strong oxidants like potassium permanganate, chlorine, or ozone to force the invisible dissolved metals to transform into solid particles. The water is then sent through specialized catalytic greensand filters to capture the heavy metallic solids.</p>
-            </div>
-        </details>
-
-        <details>
-            <summary>Ion Exchange Membrane Plants</summary>
-            <div class="section-content">
-                <p><strong>Target Contaminants:</strong> Nitrates, heavy metals, radium, and hard minerals.</p>
-                <p><strong>How the plant implements it:</strong> Water passes through pressurized vessels filled with synthetic resin beads. As the water passes, a chemical exchange occurs: harmful nitrate or arsenic ions stick to the resin, while harmless chloride or sodium ions are released into the water. The system must be backwashed with a heavy salt brine to clean the resin.</p>
-            </div>
-        </details>
-    </section>
-
-    <!-- SECTION 3: CROSS CONNECTION CONTROL -->
-    <section>
-        <h2>Cross-Connection Control and Backflow Prevention</h2>
-        <p>Even if a city produces perfectly clean water at the treatment plant, the water can become contaminated inside the distribution network if water pressure drops or if plumbing is improperly connected. This is a critical focus of public health informatics.</p>
-
-        <details>
-            <summary>What is a Cross-Connection?</summary>
-            <div class="section-content">
-                <p>A cross-connection is any physical link or arrangement between a pipe carrying clean, drinkable public water and a system carrying non-drinkable water, chemicals, or waste. Common examples include a submerged garden hose inside a chemical mixing tank, a lawn irrigation system, or a boiler line connected directly to water pipes.</p>
-            </div>
-        </details>
-
-        <details>
-            <summary>How Backflow Pollutes a City</summary>
-            <div class="section-content">
-                <p>Backflow is the dangerous reversal of water flow, pulling dirty water backward into the clean city supply lines. This occurs through two pressure failures:</p>
+            <div class="data-block">
+                <h4>Mechanical Prevention Frameworks</h4>
                 <ul>
-                    <li><strong>Backsiphonage:</strong> Occurs when city water pressure drops drastically, creating a vacuum. This can happen during a massive water main break or when fire department trucks pump high volumes of water from local fire hydrants. The vacuum sucks dirty water out of private properties and into the city mains.</li>
-                    <li><strong>Backpressure:</strong> Occurs when a private connection (like a high-pressure commercial boiler or industrial pump) generates higher mechanical pressure than the incoming city water line, forcing wastewater backward into the public grid.</li>
+                    <li><strong>Physical Air Gap:</strong> The most reliable protection mechanism. It is a literal vertical, unobstructed physical space between the discharge end of a supply pipe and the top overflow rim of a receiving reservoir.</li>
+                    <li><strong>Reduced Pressure Principle Assembly (RPZ):</strong> A mechanical safety device consisting of two independently acting check valves separated by an automatically operating pressure differential relief valve. If a reverse flow condition manifests, the device vents the backflowing fluid out of an escape port.</li>
+                    <li><strong>Atmospheric Vacuum Breaker (AVB):</strong> A simple valve containing a float that drops down down to open an air vent when pressure drops to zero, instantly breaking the suction vacuum.</li>
                 </ul>
             </div>
-        </details>
+        </div>
 
-        <details>
-            <summary>Mechanical Safety Assemblies Implemented by Cities</summary>
-            <div class="section-content">
-                <p>To prevent backflow incidents, city regulations require residential and commercial properties to install physical backflow prevention devices:</p>
-                <ul>
-                    <li><strong>Physical Air Gap:</strong> The most secure method. An air gap is a literal unobstructed vertical distance through free atmosphere between the water pipe outlet and the rim of a tank or sink. Since there is no physical pipe connection, fluid cannot be sucked backward.</li>
-                    <li><strong>Reduced Pressure Principle Assembly (RPZ):</strong> A highly secure mechanical valve containing two independent internal check valves separated by an automatic differential relief valve. If a pressure drop occurs, the valve dumps the backward-flowing water out of an escape drain rather than allowing it into the city line.</li>
+        <!-- DATA: MUNICIPAL TREATMENT TECH -->
+        <div id="data-muni-tech">
+            <h2>Advanced Utility Treatment</h2>
+            <p>When raw water contains dissolved chemicals or microscopic compounds, basic sedimentation and sand filtration filters cannot isolate the particles. Municipalities implement specialized chemical separation arrays:</p>
+
+            <div class="data-block">
+                <h4>Granular Activated Carbon (GAC) Adsorption</h4>
+                <p>Water passes through large deep-bed contactors packed with baked, high-porosity carbon granules. Organic chemical compounds adhere directly to the dense internal pore surfaces of the carbon matrix through physical molecular attraction (adsorption).</p>
+            </div>
+
+            <div class="data-block">
+                <h4>Membrane Microfiltration and Reverse Osmosis (RO)</h4>
