@@ -129,11 +129,11 @@
             <button class="close-btn" onclick="closeOverlay()">Close</button>
         </div>
         <div class="overlay-body" id="overlay-body-content">
-            <!-- JavaScript populates data packs here dynamically -->
+            <!-- Content populates here dynamically via JavaScript -->
         </div>
     </div>
 
-    <!-- CONSOLIDATED REPOSITORY HOUSING ALL SYSTEM INFORMATION -->
+    <!-- HOUSED CORE SYSTEM REPOSITORIES -->
     <div style="display: none;">
         
         <!-- PACK 1: CONTAMINANTS -->
@@ -141,10 +141,10 @@
             <p>Review the comprehensive public health index below. Use the button filters to navigate specific pollutant classifications:</p>
             <br>
             <div class="encyclopedia-controls">
-                <button class="filter-btn active" onclick="filterEncyclopedia('all', this)">All Parameters</button>
-                <button class="filter-btn" onclick="filterEncyclopedia('chemical', this)">Chemicals and PFAS</button>
-                <button class="filter-btn" onclick="filterEncyclopedia('heavy-metal', this)">Heavy Metals</button>
-                <button class="filter-btn" onclick="filterEncyclopedia('biological', this)">Bacteria and Toxins</button>
+                <button class="filter-btn active" data-filter="all">All Parameters</button>
+                <button class="filter-btn" data-filter="chemical">Chemicals and PFAS</button>
+                <button class="filter-btn" data-filter="heavy-metal">Heavy Metals</button>
+                <button class="filter-btn" data-filter="biological">Bacteria and Toxins</button>
             </div>
             <br>
             
@@ -153,3 +153,5 @@
                     <strong>PFAS / PFOS (Forever Chemicals):</strong>
                     <p>Synthetic chemical compounds originating from industrial wastewater, water-repellent fabrics, and commercial firefighting foams. They stack up continuously in biological tissues and do not break down in nature.</p>
                     <p>Maximum Contaminant Level (MCL): 4.0 parts per trillion (ppt) for PFOA and PFOS parameters.</p>
+                    <p>When to worry: If your city utility's quarterly public updates show a consistent trend running above 4.0 ppt over an entire year.</p>
+                </div>
