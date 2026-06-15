@@ -18,9 +18,9 @@
         .center-core h2 { color: #ffffff; font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; }
         
         .node { position: absolute; width: 230px; padding: 18px; border-radius: 12px; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); cursor: pointer; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
-        .node:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); }
-        .node h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
-        .node p { font-size: 0.8rem; color: #64748b; line-height: 1.4; }
+        .node:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); background-color: #f8fafc; }
+        .node h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; pointer-events: none; }
+        .node p { font-size: 0.8rem; color: #64748b; line-height: 1.4; pointer-events: none; }
         
         /* BORDER DESIGN HIGHLIGHTS BY NODE */
         .node-contam { border-top: 5px solid #ef4444; } .node-contam h3 { color: #dc2626; }
@@ -65,7 +65,7 @@
         .contaminant-item { border: 1px solid #e2e8f0; padding: 12px; margin-bottom: 10px; border-radius: 6px; background: #f8fafc; }
         .hidden-item { display: none !important; }
         
-        /* MOBILE RESPONSIVE RECONSTRUCTION */
+        /* MOBILE RESPONSIVE STRUCTURE DOWNGRADE */
         @media (max-width: 850px) {
             .hub-container { height: auto; display: flex; flex-direction: column; gap: 15px; padding: 20px 0; }
             .center-core { order: -1; width: 100%; height: auto; padding: 20px; border-radius: 8px; }
@@ -90,32 +90,32 @@
             <h2>Drinking<br>Water</h2>
         </div>
 
-        <div class="node node-contam n1" onclick="openOverlay('contam')">
+        <div class="node node-contam n1" data-pack="contam">
             <h3>Contaminant Encyclopedia</h3>
             <p>Profiles, legal limits, and risk warning indicators for major chemicals and pathogens.</p>
         </div>
 
-        <div class="node node-matrix n2" onclick="openOverlay('matrix')">
+        <div class="node node-matrix n2" data-pack="matrix">
             <h3>Treatment Matrix</h3>
             <p>Conventional filtration architectures linked with advanced municipal contaminant treatment technologies.</p>
         </div>
 
-        <div class="node node-infra n3" onclick="openOverlay('infra')">
+        <div class="node node-infra n3" data-pack="infra">
             <h3>Infrastructure & Journey</h3>
             <p>Tracking water routing dynamics from surface or groundwater sources straight to distribution networks.</p>
         </div>
 
-        <div class="node node-cross n4" onclick="openOverlay('cross')">
+        <div class="node node-cross n4" data-pack="cross">
             <h3>Cross-Connections</h3>
             <p>The physics of hydraulic backflow failures, backsiphonage drops, and mechanical containment valves.</p>
         </div>
 
-        <div class="node node-filter n5" onclick="openOverlay('filter')">
+        <div class="node node-filter n5" data-pack="filter">
             <h3>Home Filtration Modules</h3>
             <p>An evaluation comparing carbon blocks, reverse osmosis membranes, and residential softeners.</p>
         </div>
 
-        <div class="node node-rights n6" onclick="openOverlay('rights')">
+        <div class="node node-rights n6" data-pack="rights">
             <h3>Legal Consumer Rights</h3>
             <p>Statutory disclosure frameworks, report publication rules, and public comment avenues under the SDWA.</p>
         </div>
@@ -126,10 +126,10 @@
     <div class="overlay" id="overlay-pane">
         <div class="overlay-header">
             <h2 id="overlay-title">Topic View</h2>
-            <button class="close-btn" onclick="closeOverlay()">Close</button>
+            <button class="close-btn" id="close-overlay-btn">Close</button>
         </div>
         <div class="overlay-body" id="overlay-body-content">
-            <!-- Content populates here dynamically via JavaScript -->
+            <!-- JavaScript populates data packs here dynamically -->
         </div>
     </div>
 
@@ -155,3 +155,4 @@
                     <p>Maximum Contaminant Level (MCL): 4.0 parts per trillion (ppt) for PFOA and PFOS parameters.</p>
                     <p>When to worry: If your city utility's quarterly public updates show a consistent trend running above 4.0 ppt over an entire year.</p>
                 </div>
+
