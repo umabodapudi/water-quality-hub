@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Literacy Hub</title>
+    <!-- Lightweight layout framework that looks modern automatically -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <style>
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .badge-chemical { background-color: #e3f2fd; color: #0d47a1; }
+        .badge-metal { background-color: #efebe9; color: #4e342e; }
+        .badge-biological { background-color: #fbe9e7; color: #d84315; }
+        .filter-btn { margin-right: 5px; padding: 6px 12px; cursor: pointer; border: 1px solid #ccc; background: #fff; border-radius: 4px; font-weight: bold; }
+        .filter-btn.active { background: #007bff; color: #fff; border-color: #007bff; }
+        .contaminant-card { border: 1px solid #e0e0e0; padding: 20px; margin-bottom: 20px; border-radius: 8px; background-color: #fafafa; }
+        .hidden { display: none !important; }
+        ol li { margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>💧 Water Quality Literacy Hub</h1>
+        <p>A straight-to-the-point public health guide translating complex legal rules and chemical limits into plain English.</p>
+    </header>
+
+    <!-- UNKNOWN RULES SECTION -->
+    <section>
+        <h2>⚠️ Hidden Water Rules You Should Know</h2>
+        <p>Most citizens assume tap water is either 100% pure or completely toxic. The federal government actually regulates water using these non-obvious guidelines:</p>
+        
+        <ol>
+            <li>
+                <strong>The Cost vs. Health Gap (MCL vs. MCLG):</strong> 
+                The EPA sets a <em>Maximum Contaminant Level Goal (MCLG)</em> where health risks are exactly zero. However, utilities are not legally forced to meet it. Instead, they must follow the <em>Maximum Contaminant Level (MCL)</em>, which allows trace chemical amounts if removing them completely is too expensive for the city.
+            </li>
+            <li>
+                <strong>The 10-Year Lead Clock (LCRI Rule):</strong> 
+                Under the federal Lead and Copper Rule Improvements, public water utilities are legally mandated to identify and completely replace 100% of lead service lines within 10 years. Your city is required to provide a public map of these lines.
+            </li>
+            <li>
+                <strong>The Forgotten Annual Report (CCR):</strong> 
+                By law, your water provider must publish a comprehensive "Consumer Confidence Report" by July 1st every single year. They rarely mail them directly to homes anymore; you must look them up online manually.
+            </li>
+        </ol>
+    </section>
+
+    <!-- INTERACTIVE FILTER ENCYCLOPEDIA -->
+    <section>
+        <h2>🧪 The Contaminant Encyclopedia</h2>
+        <p>Filter the list below to understand common water components, their legal limits, and when you should actually worry:</p>
+        
+        <div id="filter-controls">
+            <button class="filter-btn active" onclick="filterList('all', this)">All Contaminants</button>
+            <button class="filter-btn" onclick="filterList('chemical', this)">Chemicals & PFAS</button>
+            <button class="filter-btn" onclick="filterList('heavy-metal', this)">Heavy Metals</button>
+            <button class="filter-btn" onclick="filterList('biological', this)">Bacteria & Toxins</button>
+        </div>
+        <br>
+
+        <div id="contaminant-container">
+
+            <!-- PFAS -->
+            <div class="contaminant-card" data-category="chemical">
+                <h3>PFAS / PFOS <span class="badge badge-chemical">Chemical</span></h3>
+                <p><strong>What it is:</strong> "Forever chemicals" from industrial waste, non-stick products, and waterproofing sprays that accumulate over time.</p>
+                <p><strong>The Legal Limit (MCL):</strong> 4.0 parts per trillion (ppt) for PFOA and PFOS.</p>
+                <p><strong>When to worry:</strong> If your local public water system updates show persistent chemical metrics running above the 4.0 ppt marker across multiple consecutive quarters.</p>
+            </div>
+
+            <!-- LEAD -->
+            <div class="contaminant-card" data-category="heavy-metal">
+                <h3>Lead <span class="badge badge-metal">Heavy Metal</span></h3>
+                <p><strong>What it is:</strong> A highly toxic heavy metal that leaches directly into drinking water from aging household plumbing fixtures or underground lead service lines.</p>
+                <p><strong>The Legal Limit (Action Level):</strong> 15 parts per billion (ppb).</p>
+                <p><strong>When to worry:</strong> If you live in a building constructed before 1986 and routinely drink water that has sat completely stagnant in the pipes for more than 6 hours.</p>
+            </div>
+
+            <!-- COPPER -->
+            <div class="contaminant-card" data-category="heavy-metal">
+                <h3>Copper <span class="badge badge-metal">Heavy Metal</span></h3>
+                <p><strong>What it is:</strong> A metallic element that dissolves into water from corroding residential copper pipes, often leaving blue-green stains on sinks.</p>
+                <p><strong>The Legal Limit (Action Level):</strong> 1.3 parts per million (ppm).</p>
+                <p><strong>When to worry:</strong> If your water tastes noticeably metallic, causes stomach distress, or if your city fails its regional plumbing monitoring thresholds.</p>
+            </div>
+
+            <!-- CYANOTOXINS -->
+            <div class="contaminant-card" data-category="biological">
+                <h3>Cyanotoxins <span class="badge badge-biological">Bacteria & Toxins</span></h3>
+                <p><strong>What it is:</strong> Dangerous poisons produced by blue-green harmful algal blooms (HABs) in warm lakes, reservoirs, or slow-moving rivers during summer.</p>
+                <p><strong>The Legal Limit:</strong> No permanent federal MCL, but states deploy immediate health advisories using EPA safety thresholds.</p>
+                <p><strong>When to worry:</strong> Only during sudden, severe summer heat waves if local health officials issue an explicit, temporary "Do Not Drink" alert.</p>
+            </div>
+
+            <!-- NITRATES -->
+            <div class="contaminant-card" data-category="chemical">
+                <h3>Nitrates <span class="badge badge-chemical">Chemical</span></h3>
+                <p><strong>What it is:</strong> Chemical compounds originating from agricultural fertilizers, commercial manure runoff, and failing backyard septic tanks.</p>
+                <p><strong>The Legal Limit (MCL):</strong> 10 milligrams per liter (mg/L).</p>
+                <p><strong>When to worry:</strong> If you drink from a shallow private well located directly adjacent to active farmland or commercial livestock operations.</p>
+            </div>
+
+            <!-- ARSENIC -->
+            <div class="contaminant-card" data-category="heavy-metal">
+                <h3>Arsenic <span class="badge badge-metal">Heavy Metal</span></h3>
+                <p><strong>What it is:</strong> A highly toxic, naturally occurring element found in regional rock formations that can erode into underground aquifers.</p>
+                <p><strong>The Legal Limit (MCL):</strong> 0.010 mg/L (or 10 parts per billion).</p>
+                <p><strong>When to worry:</strong> If you rely on unmonitored private well water in geologically high-arsenic territories without a reverse osmosis filtration system.</p>
+            </div>
+
+            <!-- COLIFORMS -->
+            <div class="contaminant-card" data-category="biological">
+                <h3>Coliforms & E. coli <span class="badge badge-biological">Bacteria & Toxins</span></h3>
+                <p><strong>What it is:</strong> Bacterial organisms used by scientists as indicators that sewage, animal feces, or surface pathogens may have breached the water network.</p>
+                <p><strong>The Legal Limit:</strong> No more than 5% of monthly system samples can test positive for total coliforms. Any single <em>E. coli</em> positive sample triggers an emergency.</p>
+                <p><strong>When to worry:</strong> If a water main break or system failure prompts local utilities to issue an immediate, mandatory "Boil Water Advisory."</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- OFFICIAL VERIFICATION SITES -->
+    <section>
+        <h2>🔗 Where to Audit Your Local Water System</h2>
+        <p>Use these free, verified tools to cross-reference your specific location with national data:</p>
+        <ul>
+            <li><a href="https://epa.gov" target="_blank">EPA Consumer Confidence Report Finder</a> – Search your zip code to read your city's official water testing scores.</li>
+            <li><a href="https://ewg.org" target="_blank">EWG Tap Water Database</a> – Review independent health-focused diagnostic metrics by utility.</li>
+            <li><a href="https://cdc.gov" target="_blank">CDC Private Well Tool</a> – Access safety checklists and testing guidance if you do not use city water.</li>
+        </ul>
+    </section>
+
+    <!-- JAVASCRIPT FILTERING ENGINE -->
+    <script>
+        function filterList(category, button) {
+            // Remove active highlight from all buttons and add to the clicked button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Hide or reveal the matching contaminant cards
+            document.querySelectorAll('.contaminant-card').forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.classList.remove('hidden');
