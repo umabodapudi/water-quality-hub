@@ -157,100 +157,145 @@ header p{color:#475569}
 
 <script>
 
-const overlay = document.getElementById("overlay");
-const title = document.getElementById("title");
-const content = document.getElementById("content");
+const overlay=document.getElementById("overlay");
+const title=document.getElementById("title");
+const content=document.getElementById("content");
 
-const titles = {
-contam: "Contaminant Encyclopedia",
-matrix: "Treatment Matrix",
-infra: "Water Infrastructure",
-cross: "Cross-Connections",
-filter: "Home Filtration",
-rights: "Legal Rights"
+const titles={
+contam:"Contaminant Encyclopedia",
+matrix:"Treatment Matrix",
+infra:"Infrastructure & Journey",
+cross:"Cross Connections & Backflow",
+filter:"Home Filtration Modules",
+rights:"Legal Consumer Rights"
 };
 
-const dataPacks = {
+/* FULL CONTENT RESTORED */
+const dataPacks={
 
-contam: `
-<h4>Contaminants</h4>
+contam:`
+<h4>Contaminant Encyclopedia</h4>
 
-<div class="filter-area">
-<button class="filter-btn active" data-type="all">All</button>
-<button class="filter-btn" data-type="chemical">Chemical</button>
-<button class="filter-btn" data-type="metal">Heavy Metals</button>
-<button class="filter-btn" data-type="bio">Biological</button>
+<div class="filter-bar">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="chemical">Chemicals</button>
+<button class="filter-btn" data-filter="heavy">Heavy Metals</button>
+<button class="filter-btn" data-filter="bio">Biological</button>
 </div>
 
-<div class="contaminant-item" data-type="metal">
-<b>Copper</b><br>Leaches from pipes. Limit 1.3 ppm.
-</div>
-
-<div class="contaminant-item" data-type="metal">
-<b>Lead</b><br>Neurotoxic metal from old plumbing. Limit 15 ppb.
-</div>
+<div id="contam-list">
 
 <div class="contaminant-item" data-type="chemical">
-<b>Nitrates</b><br>Fertilizer runoff. Limit 10 mg/L.
+<b>PFAS / PFOS:</b>
+<p>Forever chemicals from industrial waste and coatings.</p>
+<p>MCL: 4 ppt</p>
+</div>
+
+<div class="contaminant-item" data-type="heavy">
+<b>Copper:</b>
+<p>Dissolves from pipes causing blue-green staining.</p>
+<p>Action Level: 1.3 ppm</p>
+</div>
+
+<div class="contaminant-item" data-type="heavy">
+<b>Lead:</b>
+<p>Neurotoxic metal from old plumbing systems.</p>
+<p>Action Level: 15 ppb</p>
 </div>
 
 <div class="contaminant-item" data-type="bio">
-<b>E. coli</b><br>Indicates sewage contamination.
+<b>E. coli:</b>
+<p>Indicates sewage contamination.</p>
+</div>
+
+<div class="contaminant-item" data-type="chemical">
+<b>Nitrates:</b>
+<p>Fertilizer runoff affecting infants (Blue Baby Syndrome).</p>
+<p>MCL: 10 mg/L</p>
+</div>
+
+<div class="contaminant-item" data-type="bio">
+<b>Cyanotoxins:</b>
+<p>Algal bloom toxins during heat waves.</p>
+</div>
+
 </div>
 `,
 
-matrix: `
+matrix:`
 <h4>Treatment Systems</h4>
-
-<table class="matrix-table">
-<tr><th>Contaminant</th><th>Treatment</th></tr>
-<tr><td>PFAS</td><td>Activated Carbon / RO</td></tr>
-<tr><td>Lead</td><td>Orthophosphate dosing</td></tr>
-<tr><td>Nitrates</td><td>Ion Exchange</td></tr>
-</table>
+<ul>
+<li>Coagulation & Flocculation</li>
+<li>Sedimentation</li>
+<li>Rapid Sand Filtration</li>
+<li>Disinfection (Chlorine / UV / Ozone)</li>
+</ul>
+<p><b>Advanced methods:</b> RO, activated carbon, ion exchange, oxidation</p>
 `,
 
-infra: `<h4>Water Journey</h4><p>Source → Treatment → Storage → Distribution → Tap</p>`,
+infra:`
+<h4>Water Journey</h4>
+<p>Source → Treatment Plant → Storage Tanks → Distribution Mains → Household Tap</p>
+<p>System categories: CWS, NTNCWS, TNCWS</p>
+`,
 
-cross: `<h4>Backflow</h4><p>Backsiphonage + backpressure risks in plumbing systems.</p>`,
+cross:`
+<h4>Cross Connections</h4>
+<p>Backflow happens when dirty water reverses into clean supply.</p>
+<ul>
+<li>Backsiphonage: pressure drop</li>
+<li>Backpressure: reverse force from equipment</li>
+</ul>
+`,
 
-filter: `<h4>Home Filters</h4><p>Carbon removes taste, RO removes dissolved solids, softeners remove hardness.</p>`,
+filter:`
+<h4>Home Filtration</h4>
+<ul>
+<li>Carbon filters: taste & chlorine</li>
+<li>Reverse Osmosis: removes heavy metals + PFAS</li>
+<li>Water softeners: removes hardness</li>
+<li>Distillation: steam purification</li>
+</ul>
+`,
 
-rights: `<h4>SDWA Rights</h4><p>CCR reports, violation alerts, lead disclosure, public hearings.</p>`
+rights:`
+<h4>Legal Rights (SDWA)</h4>
+<ul>
+<li>Annual Consumer Confidence Report</li>
+<li>Emergency violation alerts (24 hr rule)</li>
+<li>Lead service line disclosure</li>
+<li>Public participation rights</li>
+</ul>
+`
 
 };
 
-document.querySelectorAll(".node").forEach(n => {
-n.addEventListener("click", () => {
-    const key = n.dataset.pack;
-    title.innerHTML = titles[key];
-    content.innerHTML = dataPacks[key];
-    overlay.classList.add("open");
+document.querySelectorAll(".node").forEach(node=>{
+node.addEventListener("click",()=>{
+const key=node.dataset.pack;
+title.innerText=titles[key];
+content.innerHTML=dataPacks[key];
+overlay.classList.add("open");
 });
 });
 
 function closePanel(){
 overlay.classList.remove("open");
-content.innerHTML = "";
 }
 
-content.addEventListener("click", (e) => {
+/* FILTER FIX (delegated so it works after render) */
+document.addEventListener("click",function(e){
+if(e.target.classList.contains("filter-btn")){
+const filter=e.target.dataset.filter;
 
-if (e.target.classList.contains("filter-btn")) {
-    const type = e.target.dataset.type;
+document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+e.target.classList.add("active");
 
-    content.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    e.target.classList.add("active");
-
-    content.querySelectorAll(".contaminant-item").forEach(item => {
-        if (type === "all" || item.dataset.type === type) {
-            item.classList.remove("hidden");
-        } else {
-            item.classList.add("hidden");
-        }
-    });
+document.querySelectorAll(".contaminant-item").forEach(item=>{
+const type=item.dataset.type;
+item.classList.toggle("hidden-item", !(filter==="all" || filter===type));
+});
 }
-
 });
 
 </script>
