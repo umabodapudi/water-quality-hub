@@ -1,130 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Public Health Water Quality Dashboard</title>
-
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI,sans-serif}
-
-body{
-  background:radial-gradient(circle,#f4f7f6,#e2e8f0);
-  min-height:100vh;
-  padding:20px;
-}
-
-header{text-align:center;margin-bottom:20px}
-header h1{color:#1e3a8a;font-size:2rem;font-weight:800}
-header p{color:#475569}
-
-/* GRID */
-.hub-container{
-  display:grid;
-  grid-template-areas:
-  "n6 n1 n2"
-  "n5 cc n3"
-  ". n4 .";
-  grid-template-columns:1fr 220px 1fr;
-  gap:20px;
-  max-width:950px;
-  margin:auto;
-  align-items:center;
-  justify-items:center;
-  position:relative;
-}
-
-.center-core{
-  grid-area:cc;
-  width:170px;height:170px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-weight:800;
-  z-index:10;
-  text-align:center;
-}
-
-/* NODES */
-.node{
-  background:#fff;
-  padding:16px;
-  border-radius:12px;
-  cursor:pointer;
-  transition:0.2s;
-  border:1px solid #e2e8f0;
-  max-width:260px;
-  position:relative;
-  z-index:5;
-}
-
-.node:hover{transform:translateY(-4px)}
-
-.node h3{font-size:1rem;font-weight:700}
-.node p{font-size:0.8rem;color:#64748b}
-
-/* COLORS */
-.node-contam{border-top:5px solid #ef4444}
-.node-matrix{border-top:5px solid #3b82f6}
-.node-infra{border-top:5px solid #06b6d4}
-.node-cross{border-top:5px solid #f59e0b}
-.node-filter{border-top:5px solid #10b981}
-.node-rights{border-top:5px solid #8b5cf6}
-
-/* overlay */
-.overlay{
-  position:fixed;
-  top:0;right:-100%;
-  width:100%;max-width:700px;
-  height:100%;
-  background:#fff;
-  transition:0.35s ease;
-  z-index:999;
-  overflow-y:auto;
-  border-left:5px solid #1d4ed8;
-  box-shadow:-10px 0 30px rgba(0,0,0,0.2);
-}
-
-.overlay.open{right:0}
-
-.overlay-header{
-  display:flex;
-  justify-content:space-between;
-  padding:18px;
-  border-bottom:1px solid #eee;
-}
-
-.overlay-body{padding:20px}
-
-.close-btn{cursor:pointer;padding:6px 12px}
-
-/* FILTERS */
-.filter-btn{
-  padding:6px 10px;
-  border:1px solid #ccc;
-  background:#fff;
-  cursor:pointer;
-}
-
-.filter-btn.active{
-  background:#1d4ed8;
-  color:white;
-}
-
-.hidden-item{display:none}
-
-.contaminant-item{
-  border:1px solid #e2e8f0;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:8px;
-  background:#f8fafc;
-}
-</style>
-</head>
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Public Health Water Quality Dashboard</title> 
+    <style> 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; } 
+        body { background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; } 
+        header { text-align: center; margin-bottom: 25px; } 
+        header h1 { color: #1e3a8a; font-size: 2.2rem; font-weight: 800; } 
+        header p { color: #475569; margin-top: 5px; font-size: 1rem; } 
+        
+        /* RADIAL HUB LAYOUT ENGINE */
+        .hub-container { position: relative; width: 100%; max-width: 950px; height: 580px; margin: auto; display: flex; justify-content: center; align-items: center; } 
+        
+        .center-core { width: 170px; height: 170px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4); border: 4px solid #ffffff; z-index: 10; text-align: center; } 
+        .center-core h2 { color: #ffffff; font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; } 
+        
+        .node { position: absolute; width: 230px; padding: 18px; border-radius: 12px; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); cursor: pointer; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; } 
+        .node:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); background-color: #f8fafc; } 
+        .node h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; pointer-events: none; } 
+        .node p { font-size: 0.8rem; color: #64748b; line-height: 1.4; pointer-events: none; } 
+        
+        /* BORDER DESIGN DECENT COLOR CODING BY NODE CATEGORY */
+        .node-contam { border-top: 5px solid #ef4444; } .node-contam h3 { color: #dc2626; } 
+        .node-matrix { border-top: 5px solid #3b82f6; } .node-matrix h3 { color: #2563eb; } 
+        .node-infra { border-top: 5px solid #06b6d4; } .node-infra h3 { color: #0891b2; } 
+        .node-cross { border-top: 5px solid #f59e0b; } .node-cross h3 { color: #d97706; } 
+        .node-filter { border-top: 5px solid #10b981; } .node-filter h3 { color: #059669; } 
+        .node-rights { border-top: 5px solid #8b5cf6; } .node-rights h3 { color: #7c3aed; } 
+        
+        /* GEOMETRIC COORDINATE POSITIONS Around Center Core */
+        .n1 { top: 15px; left: 50%; transform: translateX(-50%); } 
+        .n2 { top: 110px; right: 20px; } 
+        .n3 { bottom: 110px; right: 20px; } 
+        .n4 { bottom: 15px; left: 50%; transform: translateX(-50%); } 
+        .n5 { bottom: 110px; left: 20px; } 
+        .n6 { top: 110px; left: 20px; } 
+        
+        /* SIDE DRAWER SLIDE OVERLAY PANEL */
+        .overlay { position: fixed; top: 0; right: -100%; width: 100%; max-width: 600px; height: 100%; background: #ffffff; box-shadow: -10px 0 40px rgba(0,0,0,0.15); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; padding: 40px 30px; overflow-y: auto; border-left: 6px solid #1d4ed8; } 
+        .overlay.open { right: 0; } 
+        .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; } 
+        .overlay-header h2 { color: #0f172a; font-size: 1.6rem; font-weight: 800; } 
+        .close-btn { background: #f1f5f9; border: none; padding: 8px 16px; font-weight: 700; border-radius: 6px; cursor: pointer; color: #475569; transition: background 0.2s; } 
+        .close-btn:hover { background: #e2e8f0; color: #0f172a; } 
+        
+        /* OVERLAY TEXT INTERIOR STYLING */
+        .overlay-body h4 { color: #1e3a8a; font-size: 1.15rem; margin: 25px 0 10px 0; font-weight: 700; border-bottom: 1px solid #f1f5f9; padding-bottom: 5px; } 
+        .overlay-body p { color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; } 
+        .overlay-body ul, .overlay-body ol { padding-left: 20px; margin-bottom: 15px; } 
+        .overlay-body li { color: #334155; font-size: 0.95rem; margin-bottom: 8px; line-height: 1.5; } 
+        .overlay-body strong { color: #0f172a; } 
+        
+        /* TREATMENT DATA MATRIX CHART STYLES */
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; line-height: 1.5; } 
+        .matrix-table th, .matrix-table td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: top; } 
+        .matrix-table th { background-color: #f8fafc; font-weight: 700; color: #1e3a8a; } 
+        
+        /* ENCYCLOPEDIA FILTER INTERFACE UTILITIES */
+        .encyclopedia-controls { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; } 
+        .filter-btn { padding: 6px 12px; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; } 
+        .filter-btn.active { background: #1d4ed8; color: #ffffff; border-color: #1d4ed8; } 
+        .contaminant-item { border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 12px; border-radius: 6px; background: #f8fafc; } 
+        .hidden-item { display: none !important; } 
+        
+        /* FALLBACK RESPONSIVE ADAPTATION */
+        @media (max-width: 850px) { 
+            .hub-container { height: auto; display: flex; flex-direction: column; gap: 15px; padding: 20px 0; } 
+            .center-core { order: -1; width: 100%; height: auto; padding: 20px; border-radius: 8px; position: static; transform: none; } 
+            .node { position: static; width: 100%; transform: none !important; text-align: left; } 
+            .overlay { max-width: 100%; } 
+        } 
+        footer { text-align: center; padding: 15px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 20px; } 
+    </style> 
+</head> 
 
 <body>
 
