@@ -1,339 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Health Impact Calculator</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%); min-height: 100vh; padding: 30px; display: flex; flex-direction: column; align-items: center; }
-        .calc-wrapper { width: 100%; max-width: 1000px; display: grid; grid-template-columns: 380px 1fr; gap: 30px; margin-top: 20px; }
-        .input-panel { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); height: fit-content; border: 1px solid #e2e8f0; }
-        .input-panel h2 { color: #1e3a8a; font-size: 1.4rem; margin-bottom: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
-        .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; outline: none; }
-        .form-group select:focus, .form-group input:focus { border-color: #1d4ed8; }
-        .unit-display { font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 4px; display: block; }
-        .calc-btn { width: 100%; padding: 12px; background: #1d4ed8; color: #ffffff; border: none; font-weight: 700; font-size: 1rem; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        .calc-btn:hover { background: #1e40af; }
-        
-        /* OUTPUT REPORT DASHBOARD LAYOUT */
-        .output-panel { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; min-height: 400px; display: flex; flex-direction: column; }
-        .welcome-view { display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1; text-align: center; color: #64748b; }
-        .welcome-view h3 { margin-bottom: 5px; color: #475569; }
-        .report-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
-        .report-header h2 { color: #0f172a; font-size: 1.8rem; font-weight: 800; }
-        .metric-pill-box { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
-        .metric-pill { background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #334155; }
-        
-        /* RISK LEVEL STRIPS */
-        .status-strip { padding: 12px 18px; border-radius: 6px; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 25px; }
-        .status-low { background-color: #d1fae5; color: #065f46; border-left: 5px solid #059669; }
-        .status-mod { background-color: #fef3c7; color: #92400e; border-left: 5px solid #d97706; }
-        .status-high { background-color: #ffedd5; color: #9a3412; border-left: 5px solid #ea580c; }
-        .status-crit { background-color: #fee2e2; color: #991b1b; border-left: 5px solid #dc2626; }
-        
-        /* INTERACTIVE OUTPUT TABS */
-        .tab-box { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; gap: 5px; }
-        .tab-btn { padding: 10px 18px; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 0.95rem; color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
-        .tab-btn:hover { color: #1d4ed8; }
-        .tab-btn.active { color: #1d4ed8; border-bottom: 2px solid #1d4ed8; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .tab-content ul { padding-left: 20px; }
-        .tab-content li { margin-bottom: 10px; line-height: 1.5; color: #334155; font-size: 0.95rem; }
-        
-        @media (max-width: 850px) {
-            .calc-wrapper { grid-template-columns: 1fr; }
-        }
-    </style>
-    <!-- Loads data configuration directly from the asset sheet -->
-    <script src="calculator-data.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Health Impact Calculator</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calc-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.input-panel {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
+    height: fit-content;
+}
+
+.input-panel h2 {
+    color: #1e3a8a;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}
+
+.calc-btn {
+    width: 100%;
+    padding: 12px;
+    background: #1d4ed8;
+    color: white;
+    border: none;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.output-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: #64748b;
+    text-align: center;
+}
+
+.report-header {
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.metric-pill-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.metric-pill {
+    background: #f8fafc;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border: 1px solid #e2e8f0;
+}
+
+.status-strip {
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.status-low { background: #d1fae5; }
+.status-mod { background: #fef3c7; }
+.status-high { background: #ffedd5; }
+.status-crit { background: #fee2e2; }
+
+.tab-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    font-weight: 700;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+    color: #1d4ed8;
+    border-bottom: 2px solid #1d4ed8;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.tab-content li {
+    margin-bottom: 8px;
+    color: #334155;
+}
+</style>
 </head>
+
 <body>
 
-    <header style="text-align: center; margin-bottom: 20px;">
-        <h1 style="color: #1e3a8a;">Water Health Impact Calculator</h1>
-        <p style="color: #475569; margin-top: 5px;">Input water metrics to generate expert public health diagnostics instantly.</p>
-    </header>
+<h1>Water Health Impact Calculator</h1>
 
-    <div class="calc-wrapper">
-        
-        <!-- INPUT CONTROL FORM -->
-        <div class="input-panel">
-            <h2>User Input</h2>
-            <div class="form-group">
-                <label for="contaminant">Select Contaminant</label>
-                <select id="contaminant">
-                    <option value="E. coli">E. coli</option>
-                    <option value="Total Coliform">Total Coliform</option>
-                    <option value="Lead">Lead</option>
-                    <option value="Copper">Copper</option>
-                    <option value="Arsenic">Arsenic</option>
-                    <option value="Nitrate">Nitrate</option>
-                    <option value="Nitrite">Nitrite</option>
-                    <option value="PFAS">PFAS</option>
-                    <option value="PFOS">PFOS</option>
-                    <option value="PFOA">PFOA</option>
-                    <option value="Uranium">Uranium</option>
-                    <option value="Manganese">Manganese</option>
-                    <option value="Turbidity">Turbidity</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="detected-level">Detected Level</label>
-                <input type="number" id="detected-level" step="any" placeholder="Enter number value">
-                <span class="unit-display" id="unit-label">Unit: CFU/100mL</span>
-            </div>
-            
-            <button class="calc-btn" id="calculate-btn">Calculate</button>
-        </div>
+<div class="calc-wrapper">
 
-        <!-- REVENUE DIAGNOSTIC DISPLAY REPORT -->
-        <div class="output-panel">
-            <div class="welcome-view" id="welcome-message">
-                <h3>No Data Calculated</h3>
-                <p>Select a water component parameter on the left panel to execute a public health translation report.</p>
-            </div>
+<!-- INPUT -->
+<div class="input-panel">
+<h2>User Input</h2>
 
-            <div id="report-view" style="display: none;">
-                <div class="report-header">
-                    <h2 id="report-title">Contaminant Name</h2>
-                    <div class="metric-pill-box">
-                        <div class="metric-pill" id="pill-user-level">Your Level: --</div>
-                        <div class="metric-pill" id="pill-epa-limit">EPA Limit: --</div>
-                        <div class="metric-pill" id="pill-exceedance" style="display: none;">Exceeds Limit By: --</div>
-                    </div>
-                </div>
+<select id="contaminant">
+<option>E. coli</option>
+<option>Total Coliform</option>
+<option>Lead</option>
+<option>Copper</option>
+<option>Arsenic</option>
+<option>Nitrate</option>
+<option>Nitrite</option>
+<option>PFAS</option>
+<option>PFOS</option>
+<option>PFOA</option>
+<option>Uranium</option>
+<option>Manganese</option>
+<option>Turbidity</option>
+</select>
 
-                <div class="status-strip" id="risk-strip">RISK STATUS</div>
+<input type="number" id="level" placeholder="Detected level">
 
-                <!-- SUB TABS NAVIGATION CONTROLS -->
-                <div class="tab-box">
-                    <button class="tab-btn active" onclick="switchTab('health')">Health Effects</button>
-                    <button class="tab-btn" onclick="switchTab('sources')">Sources</button>
-                    <button class="tab-btn" onclick="switchTab('treatment')">Recommended Action</button>
-                </div>
+<span id="unit">Unit: CFU/100mL</span>
 
-                <!-- TABS CONTAINER CHANNELS -->
-                <div class="tab-content active" id="tab-health">
-                    <ul id="list-health"></ul>
-                </div>
-                <div class="tab-content" id="tab-sources">
-                    <ul id="list-sources"></ul>
-                </div>
-                <div class="tab-content" id="tab-treatment">
-                    <ul id="list-treatment"></ul>
-                </div>
-            </div>
-        </div>
+<button class="calc-btn" id="btn">Calculate</button>
+</div>
 
-    </div>
+<!-- OUTPUT -->
+<div class="output-panel">
 
-    
+<div id="welcome">
+<p>Select contaminant to begin</p>
+</div>
 
-    <!-- PIPELINE AUTOMATION SCRIPT -->
-    <script>
-        window.calculatorRules = {
-    "E. coli": {
-        "unit": "CFU/100mL",
-        "mcl": 0,
-        "lowMax": 0,
-        "moderateMax": 0,
-        "highMax": 0,
-        "effects": ["Severe diarrhea and stomach cramps", "Vomiting", "Severe kidney complications in vulnerable individuals"],
-        "sources": ["Human or animal fecal waste breaches", "Sewage overflows", "Failed septic systems leaking into groundwater lines"],
-        "treatment": ["Immediate boiling of all drinking water", "System shock chlorination", "Ultraviolet (UV) point-of-entry disinfection systems"]
-    },
-    "Total Coliform": {
-        "unit": "Present/Absent",
-        "mcl": 0,
-        "lowMax": 0,
-        "moderateMax": 1,
-        "highMax": 5,
-        "effects": ["Potential presence of disease-causing bacteria, viruses, or parasites", "General digestive distress"],
-        "sources": ["Soil runoff entering well casings", "Water main pressure drops pulling in topsoil elements", "Aging pipe joints"],
-        "treatment": ["System flushing and chlorination", "Shocking well infrastructure", "Point-of-entry sanitization arrays"]
-    },
-    "Lead": {
-        "unit": "ppb",
-        "mcl": 15,
-        "lowMax": 15,
-        "moderateMax": 30,
-        "highMax": 999,
-        "effects": ["Learning disabilities and reduced IQ scores", "Behavioral problems and attention shifts", "Developmental delays in young children"],
-        "sources": ["Corroding home brass faucets", "Aging lead pipes or joints in interior plumbing", "Legacy municipal service lines"],
-        "treatment": ["Reverse Osmosis filtration systems", "NSF-certified point-of-use carbon block filters", "Full plumbing service line replacement"]
-    },
-    "Copper": {
-        "unit": "ppm",
-        "mcl": 1.3,
-        "lowMax": 1.3,
-        "moderateMax": 2.6,
-        "highMax": 999,
-        "effects": ["Stomach irritation and abdominal pain", "Nausea and vomiting", "Long-term liver or kidney strain with high chronic levels"],
-        "sources": ["Corrosion of residential copper pipe grids", "Acidic water leaching minerals from building loops"],
-        "treatment": ["Point-of-use Carbon block filtration", "Installing a whole-house neutralizer to raise water pH", "Reverse Osmosis systems"]
-    },
-    "Arsenic": {
-        "unit": "ppb",
-        "mcl": 10,
-        "lowMax": 10,
-        "moderateMax": 20,
-        "highMax": 999,
-        "effects": ["Increased risk of skin, bladder, and lung cancers", "Skin lesions and structural discoloration anomalies", "Cardiovascular issues"],
-        "sources": ["Erosion of deep natural rock formations into aquifers", "Industrial factory waste discharge arrays"],
-        "treatment": ["Reverse Osmosis systems", "Point-of-entry Activated Alumina filter media", "Anion Exchange filtration tanks"]
-    },
-    "Nitrate": {
-        "unit": "mg/L",
-        "mcl": 10,
-        "lowMax": 10,
-        "moderateMax": 20,
-        "highMax": 999,
-        "effects": ["Blue Baby Syndrome (Methemoglobinemia) in infants", "Reduced oxygen transport capabilities inside blood channels"],
-        "sources": ["Commercial farm field fertilizer rain runoff", "Livestock feedlot waste seepage", "Leaking background septic lines"],
-        "treatment": ["Point-of-use Reverse Osmosis systems", "Anion Exchange treatment columns", "Electrodialysis processors"]
-    },
-    "Nitrite": {
-        "unit": "mg/L",
-        "mcl": 1,
-        "lowMax": 1,
-        "moderateMax": 2,
-        "highMax": 999,
-        "effects": ["Acute blood oxygen saturation disruptions", "Rapid Methemoglobinemia complications in vulnerable populations"],
-        "sources": ["Agricultural fertilizer seepage", "Sewage system leaks", "Bacterial breakdown of existing ammonia in distribution pipes"],
-        "treatment": ["Reverse Osmosis membrane elements", "Anion Exchange media columns"]
-    },
-    "PFAS": {
-        "unit": "ppt",
-        "mcl": 4,
-        "lowMax": 4,
-        "moderateMax": 10,
-        "highMax": 999,
-        "effects": ["Elevated serum cholesterol metrics", "Immune system function suppression", "Increased risk of specific developmental anomalies and cancers"],
-        "sources": ["Industrial manufacturing waste streams", "Commercial waterproofing chemical sprays", "Firefighting foam runoff at airports"],
-        "treatment": ["Granular Activated Carbon (GAC) beds", "Specialized Ion Exchange resin filters", "High-pressure Reverse Osmosis systems"]
-    },
-    "PFOS": {
-        "unit": "ppt",
-        "mcl": 4,
-        "lowMax": 4,
-        "moderateMax": 10,
-        "highMax": 999,
-        "effects": ["Liver tissue effects and enzyme shifts", "Suppressed antibody vaccine responses", "Thyroid disruptions"],
-        "sources": ["Legacy non-stick manufacturing chemical waste lines", "Aviation firefighting foams"],
-        "treatment": ["Deep-bed Granular Activated Carbon filters", "Pressurized Ion Exchange columns"]
-    },
-    "PFOA": {
-        "unit": "ppt",
-        "mcl": 4,
-        "lowMax": 4,
-        "moderateMax": 10,
-        "highMax": 999,
-        "effects": ["Altered lipid metabolism parameters", "Suppressed immune diagnostics", "Increased developmental risks"],
-        "sources": ["Industrial coatings processing facilities", "Waterproof fabric manufacturing plants"],
-        "treatment": ["Granular Activated Carbon (GAC)", "Nanofiltration systems", "Reverse Osmosis membrane arrays"]
-    },
-    "Uranium": {
-        "unit": "ppb",
-        "mcl": 30,
-        "lowMax": 30,
-        "moderateMax": 60,
-        "highMax": 999,
-        "effects": ["Increased heavy metal toxicity risk to human kidney structures", "Long-term cancer risks"],
-        "sources": ["Natural erosion of radioactive subterranean mineral fields into aquifers"],
-        "treatment": ["Anion Exchange filtration columns", "Point-of-use Reverse Osmosis arrays"]
-    },
-    "Manganese": {
-        "unit": "ppb",
-        "mcl": 50,
-        "lowMax": 50,
-        "moderateMax": 300,
-        "highMax": 999,
-        "effects": ["Neurological effects similar to Parkinson\\'s disease in high chronic doses", "Black sink staining"],
-        "sources": ["Natural underground mineral erosion", "Industrial tool manufacturing wastewater"],
-        "treatment": ["Catalytic Manganese Greensand filtration plants", "Chemical oxidation paired with physical filters"]
-    },
-    "Turbidity": {
-        "unit": "NTU",
-        "mcl": 1,
-        "lowMax": 1,
-        "moderateMax": 5,
-        "highMax": 999,
-        "effects": ["Interferes with city water disinfection channels", "Can harbor hidden bacteria, viruses, or protozoa"],
-        "sources": ["Stormwater topsoil runoff entering water intakes", "Water main pipe breaks churning up sediment silt"],
-        "treatment": ["Conventional coagulation and sedimentation basins", "Microfiltration membrane plants"]
-    }
+<div id="report" style="display:none;">
+
+<h2 id="title"></h2>
+
+<div class="status-strip" id="strip">Risk</div>
+
+<div class="metric-pill-box">
+<div class="metric-pill" id="user"></div>
+<div class="metric-pill" id="limit"></div>
+<div class="metric-pill" id="exceed"></div>
+</div>
+
+<div class="tab-box">
+<button class="tab-btn active" onclick="tab('health')">Health</button>
+<button class="tab-btn" onclick="tab('source')">Sources</button>
+<button class="tab-btn" onclick="tab('treat')">Treatment</button>
+</div>
+
+<div class="tab-content active" id="health"></div>
+<div class="tab-content" id="source"></div>
+<div class="tab-content" id="treat"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+const data = {
+"E. coli": {unit:"CFU/100mL",mcl:0,effects:["Diarrhea","Vomiting"],sources:["Fecal contamination"],treat:["Boiling","UV"]},
+"Lead": {unit:"ppb",mcl:15,effects:["Brain damage"],sources:["Old pipes"],treat:["RO filter"]},
+"PFAS": {unit:"ppt",mcl:4,effects:["Hormone disruption"],sources:["Industry"],treat:["Activated carbon"]},
+"Arsenic": {unit:"ppb",mcl:10,effects:["Cancer"],sources:["Natural rocks"],treat:["RO system"]}
 };
 
-        const contSelect = document.getElementById("contaminant");
-        const levelInput = document.getElementById("detected-level");
-        const unitLabel = document.getElementById("unit-label");
-        const calcBtn = document.getElementById("calculate-btn");
+const c=document.getElementById("contaminant");
+const l=document.getElementById("level");
+const u=document.getElementById("unit");
 
-        const welcomeMessage = document.getElementById("welcome-message");
-        const reportView = document.getElementById("report-view");
+u.innerText="Unit: "+data[c.value].unit;
 
-        // Keep unit label fields up to date instantly upon parameter drop adjustments
-        contSelect.addEventListener("change", function() {
-            const rules = window.calculatorRules[contSelect.value];
-            unitLabel.innerText = "Unit: " + rules.unit;
-        });
+c.onchange=()=>u.innerText="Unit: "+data[c.value].unit;
 
-        // Run analysis computations
-        calcBtn.addEventListener("click", function() {
-            const name = contSelect.value;
-            const level = parseFloat(levelInput.value);
+document.getElementById("btn").onclick=()=>{
 
-            if (isNaN(level) || level < 0) {
-                alert("Please enter a valid positive number value.");
-                return;
-            }
+const n=c.value;
+const v=parseFloat(l.value);
+const d=data[n];
 
-            const rules = window.calculatorRules[name];
-            welcomeMessage.style.display = "none";
-            reportView.style.display = "block";
+if(!d || isNaN(v)){
+alert("Invalid input");
+return;
+}
 
-            // Update title text elements inside report panels
-            document.getElementById("report-title").innerText = name;
-            document.getElementById("pill-user-level").innerText = `Your Level: ${level} ${rules.unit}`;
-            document.getElementById("pill-epa-limit").innerText = `EPA Limit: ${rules.mcl} ${rules.unit}`;
+document.getElementById("welcome").style.display="none";
+document.getElementById("report").style.display="block";
 
-            // Exceedance processing card loops
-            const exceedBox = document.getElementById("pill-exceedance");
-            if (rules.mcl > 0 && level > rules.mcl) {
-                const multiFactor = (level / rules.mcl).toFixed(2);
-                exceedBox.innerText = `Exceeds Standard By: ${multiFactor}x`;
-                exceedBox.style.display = "block";
-            } else {
-              exceedBox.style.display = "none";}
-          // Execute risk threshold checking logic arrays
-          let risk = "Low";let stripClass = "status-low";
-          if (name === "E. coli") {if (level > 0) { risk = "Critical"; stripClass = "status-crit"; }} 
-          else if (rules.mcl === 0) { 
-            // Total Coliform fallback configuration rules
-            if (level > rules.lowMax && level <= rules.moderateMax) { risk = "Moderate"; stripClass = "status-mod"; }
-            if (level > rules.moderateMax) { risk = "High"; stripClass = "status-high"; }} 
-          else { 
-            // Standard heavy chemical components processing
-            if (level > rules.lowMax && level <= rules.moderateMax) { risk = "Moderate"; stripClass = "status-mod"; }
-            if (level > rules.moderateMax) { risk = "High"; stripClass = "status-high"; }}
-          // Redesign color strip markers dynamically
-          const strip = document.getElementById("risk-strip");strip.innerText = Risk Status: ${risk};strip.className = "status-strip " + stripClass;
-          // Inject detailed sub-page profile parameters
-          populateList("list-health", rules.effects);populateList("list-sources", rules.sources);populateList("list-treatment", rules.treatment);
-          // Default route focus path directly back to health tab layout metrics
-          switchTab('health');});function populateList(elementId, itemsArray) {
-          const listElement = document.getElementById(elementId);listElement.innerHTML = "";
-          itemsArray.forEach(text => {
-            const li = document.createElement("li");li.innerText = text;listElement.appendChild(li);});}
-      // Sub tab click router routing actions
-      function switchTab(tabKey) {document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-                                  document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
-                                  // Find exact button target matching strings
-                                  const activeBtn = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.getAttribute("onclick").includes(tabKey));
-                                  if (activeBtn) activeBtn.classList.add("active");
-                                  document.getElementById("tab-" + tabKey).classList.add("active");}
+document.getElementById("title").innerText=n;
+
+document.getElementById("user").innerText="Your: "+v+" "+d.unit;
+document.getElementById("limit").innerText="Limit: "+d.mcl+" "+d.unit;
+
+let risk="Low",cls="status-low";
+
+if(v>d.mcl*2){risk="High";cls="status-high";}
+else if(v>d.mcl){risk="Moderate";cls="status-mod";}
+
+document.getElementById("strip").innerText=`Risk Status: ${risk}`;
+document.getElementById("strip").className="status-strip "+cls;
+
+document.getElementById("health").innerHTML=d.effects.map(x=>"<li>"+x+"</li>").join("");
+document.getElementById("source").innerHTML=d.sources.map(x=>"<li>"+x+"</li>").join("");
+document.getElementById("treat").innerHTML=d.treat.map(x=>"<li>"+x+"</li>").join("");
+
+tab('health');
+};
+
+function tab(t){
+document.querySelectorAll(".tab-content").forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+
+document.getElementById(t).classList.add("active");
+event.target.classList.add("active");
+}
+</script>
+
+</body>
+</html>
