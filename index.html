@@ -6,271 +6,350 @@
 <title>Public Health Water Quality Dashboard</title>
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Segoe UI; }
-
-body {
-  background: radial-gradient(circle, #f4f7f6, #e2e8f0);
-  min-height: 100vh;
-  padding: 20px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* HUB */
+body {
+  background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+header h1 {
+  color: #1e3a8a;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+header p {
+  color: #475569;
+  margin-top: 5px;
+}
+
+/* HUB LAYOUT */
 .hub-container {
   position: relative;
   width: 100%;
   max-width: 950px;
-  height: 600px;
+  height: 580px;
   margin: auto;
 }
 
+/* CENTER CORE */
 .center-core {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 170px;
-  height: 170px;
-  background: #1d4ed8;
-  color: white;
-  border-radius: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  color: white;
   font-weight: 800;
   text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 /* NODES */
 .node {
   position: absolute;
   width: 230px;
-  padding: 15px;
-  background: white;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
-.node:hover { transform: translateY(-5px); }
-
-.n1 { top: 10px; left: 50%; transform: translateX(-50%); }
-.n2 { top: 120px; right: 10px; }
-.n3 { bottom: 120px; right: 10px; }
-.n4 { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.n5 { bottom: 120px; left: 10px; }
-.n6 { top: 120px; left: 10px; }
-
-/* OVERLAY */
-.overlay {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 650px;
-  height: 100%;
-  background: white;
-  overflow-y: auto;
-  transition: 0.3s;
-  border-left: 4px solid #1d4ed8;
-}
-.overlay.open { right: 0; }
-
-.overlay-body { padding: 20px; }
-
-.filter-btn {
-  padding: 6px 10px;
-  margin: 3px;
-  border: 1px solid #ccc;
-  background: white;
-  cursor: pointer;
-}
-
-.filter-btn.active {
-  background: #1d4ed8;
-  color: white;
-}
-
-.contaminant-item {
-  padding: 12px;
-  margin: 10px 0;
+  padding: 18px;
+  border-radius: 12px;
+  background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #f8fafc;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  user-select: none;
 }
 
-.hidden { display: none; }
+.node:hover {
+  transform: translateY(-5px);
+}
 
-h4 { margin-top: 10px; }
+.node:active {
+  transform: scale(0.97);
+}
 
+/* COLORS */
+.node-contam { border-top: 5px solid #ef4444; }
+.node-matrix { border-top: 5px solid #3b82f6; }
+.node-infra  { border-top: 5px solid #06b6d4; }
+.node-cross  { border-top: 5px solid #f59e0b; }
+.node-filter { border-top: 5px solid #10b981; }
+.node-rights { border-top: 5px solid #8b5cf6; }
+
+/* POSITIONS */
+.n1 { top: 0; left: 50%; transform: translateX(-50%); }
+.n2 { top: 90px; right: 10px; }
+.n3 { bottom: 90px; right: 10px; }
+.n4 { bottom: 0; left: 50%; transform: translateX(-50%); }
+.n5 { bottom: 90px; left: 10px; }
+.n6 { top: 90px; left: 10px; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hub-container {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .node {
+    position: relative;
+    width: 100%;
+  }
+
+  .center-core {
+    position: relative;
+    transform: none;
+    margin: 20px auto;
+  }
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
 </style>
 </head>
 
 <body>
 
+<header>
+<h1>Public Health Water Quality Dashboard</h1>
+<p>Interactive EPA SDWA Water Safety System</p>
+</header>
+
 <div class="hub-container">
 
 <div class="center-core">Drinking Water</div>
 
-<div class="node n1" data-key="contam">Contaminants</div>
-<div class="node n2" data-key="matrix">Treatment</div>
-<div class="node n3" data-key="infra">Infrastructure</div>
-<div class="node n4" data-key="cross">Backflow</div>
-<div class="node n5" data-key="filter">Filtration</div>
-<div class="node n6" data-key="rights">Rights</div>
+<div class="node node-contam n1" data-pack="contam">
+<h3>Contaminants</h3><p>PFAS, metals, bacteria</p>
+</div>
+
+<div class="node node-matrix n2" data-pack="matrix">
+<h3>Treatment Matrix</h3><p>Municipal purification systems</p>
+</div>
+
+<div class="node node-infra n3" data-pack="infra">
+<h3>Infrastructure</h3><p>Water supply chain</p>
+</div>
+
+<div class="node node-cross n4" data-pack="cross">
+<h3>Backflow</h3><p>Cross-connection risks</p>
+</div>
+
+<div class="node node-filter n5" data-pack="filter">
+<h3>Home Filtration</h3><p>RO, carbon, softeners</p>
+</div>
+
+<div class="node node-rights n6" data-pack="rights">
+<h3>Legal Rights</h3><p>EPA protections</p>
+</div>
 
 </div>
 
-<div class="overlay" id="overlay">
-<div class="overlay-body" id="content"></div>
-</div>
+<footer>EPA SDWA Educational Dashboard</footer>
 
 <script>
 
-const overlay=document.getElementById("overlay");
-const content=document.getElementById("content");
+/* TITLE MAP */
+const titles = {
+  contam: "Contaminant Encyclopedia",
+  matrix: "Treatment Matrix",
+  infra: "Water Infrastructure",
+  cross: "Cross Connection & Backflow",
+  filter: "Home Filtration",
+  rights: "Consumer Water Rights"
+};
 
-const data={
+/* FULL CONTENT (NO CUTTING) */
+const dataPacks = {
 
-contam:`
-<h2>Contaminant Encyclopedia</h2>
+contam: `
+<h1>Contaminant Encyclopedia</h1>
 
-<button class="filter-btn active" data-filter="all">All Parameters</button>
-<button class="filter-btn" data-filter="chemical">Chemicals and PFAS</button>
-<button class="filter-btn" data-filter="heavy">Heavy Metals</button>
-<button class="filter-btn" data-filter="bio">Bacteria and Toxins</button>
+<h3>PFAS / PFOS</h3>
+<p>Forever chemicals from industrial waste, firefighting foam, and non-stick coatings.</p>
+<p><b>MCL:</b> 4 ppt</p>
 
-<div class="contaminant-item" data-type="chemical">
-<h4>PFAS / PFOS (Forever Chemicals)</h4>
-Synthetic chemical compounds originating from industrial wastewater, water-repellent fabrics, and firefighting foams. They accumulate in biological tissues and do not break down.<br><br>
-<b>MCL:</b> 4.0 ppt<br>
-<b>When to worry:</b> Continuous exceedance above 4.0 ppt over a year.
-</div>
+<h3>Lead</h3>
+<p>Neurotoxic metal from old pipes and solder systems.</p>
+<p><b>Action Level:</b> 15 ppb</p>
 
-<div class="contaminant-item" data-type="heavy">
-<h4>Lead</h4>
-A severe neurotoxic metal that leaches from aging plumbing, brass fixtures, and service lines.<br><br>
-<b>Action Level:</b> 15 ppb<br>
-<b>When to worry:</b> Homes built before 1986 or stagnant water > 6 hours.
-</div>
+<h3>Copper</h3>
+<p>Pipe corrosion product causing metallic taste and staining.</p>
+<p><b>Action Level:</b> 1.3 ppm</p>
 
-<div class="contaminant-item" data-type="heavy">
-<h4>Copper</h4>
-A metallic element that dissolves from corroding pipes causing blue-green staining.<br><br>
-<b>Action Level:</b> 1.3 ppm<br>
-<b>When to worry:</b> Metallic taste or pipe corrosion signs.
-</div>
+<h3>Cyanotoxins</h3>
+<p>Algal bloom toxins during warm water conditions.</p>
 
-<div class="contaminant-item" data-type="bio">
-<h4>Cyanotoxins</h4>
-Liver and nerve toxins from algal blooms in warm stagnant water.<br><br>
-<b>Regulation:</b> No fixed federal MCL<br>
-<b>When to worry:</b> Heat waves + official Do Not Drink advisory.
-</div>
+<h3>Nitrates</h3>
+<p>Fertilizer runoff causing Blue Baby Syndrome.</p>
+<p><b>MCL:</b> 10 mg/L</p>
 
-<div class="contaminant-item" data-type="chemical">
-<h4>Nitrates</h4>
-Agricultural runoff from fertilizers and septic systems.<br><br>
-<b>MCL:</b> 10 mg/L<br>
-<b>Risk:</b> Blue Baby Syndrome in infants.
-</div>
+<h3>Arsenic</h3>
+<p>Natural groundwater contaminant with cancer risk.</p>
+<p><b>MCL:</b> 0.010 mg/L</p>
 
-<div class="contaminant-item" data-type="bio">
-<h4>Coliforms / E. coli</h4>
-Indicator bacteria showing sewage contamination.<br><br>
-<b>Threshold:</b> Any detection triggers emergency violation.
-</div>
+<h3>E. coli</h3>
+<p>Indicates sewage contamination and requires boil advisory.</p>
 `,
 
-matrix:`
-<h2>Treatment Matrix</h2>
+matrix: `
+<h1>Treatment Matrix</h1>
 
-The Conventional Filtration Architecture:
-Coagulation → Sedimentation → Sand Filtration → Disinfection (Chlorine/UV/Ozone)
+<h3>Core Process</h3>
+<ul>
+<li>Coagulation</li>
+<li>Sedimentation</li>
+<li>Filtration</li>
+<li>Disinfection</li>
+</ul>
 
-<br><br>
-
-Advanced Treatment Systems:
-<br>
-<b>PFAS:</b> Activated Carbon, Ion Exchange, Reverse Osmosis<br>
-<b>Lead/Copper:</b> pH adjustment, Orthophosphate dosing<br>
-<b>Cyanotoxins:</b> Ozone oxidation, PAC injection<br>
-<b>Nitrates:</b> Ion exchange, RO membranes<br>
-<b>Arsenic:</b> Iron coagulation, greensand filtration<br>
-<b>Pathogens:</b> UV + Chlorination
+<h3>Advanced Systems</h3>
+<ul>
+<li>Activated Carbon</li>
+<li>Reverse Osmosis</li>
+<li>Ion Exchange</li>
+<li>Ozone Treatment</li>
+</ul>
 `,
 
-infra:`
-<h2>Infrastructure & Journey</h2>
+infra: `
+<h1>Water Infrastructure</h1>
 
-Water Flow:
-Source → Treatment Plant → Storage Tank → Distribution Mains → Tap
+<p>Source → Treatment Plant → Storage Tanks → Distribution Network → Home Tap</p>
 
-<br><br>
-
-System Types:
-CWS (Community), NTNCWS (Schools/Industries), TNCWS (Rest stops)
-
-<br><br>
-
-Operators:
-Licensed Class 1–4 depending on system size and complexity
+<h3>System Types</h3>
+<ul>
+<li>Community Systems</li>
+<li>Institutional Systems</li>
+<li>Transient Systems</li>
+</ul>
 `,
 
-cross:`
-<h2>Cross-Connections & Backflow</h2>
+cross: `
+<h1>Backflow Prevention</h1>
 
-Backflow occurs when contaminated water reverses into clean supply.
+<h3>Types</h3>
+<ul>
+<li>Backsiphonage</li>
+<li>Backpressure</li>
+</ul>
 
-<br><br>
-
-Types:
-• Backsiphonage (pressure drop)
-• Backpressure (reverse force)
-
-<br><br>
-
-Prevention:
-• Air gap separation
-• RPZ valve system
-• Vacuum breakers
+<h3>Protection</h3>
+<ul>
+<li>Air Gap</li>
+<li>RPZ Valve</li>
+<li>Vacuum Breaker</li>
+</ul>
 `,
 
-filter:`
-<h2>Home Filtration</h2>
+filter: `
+<h1>Home Filtration</h1>
 
-Carbon filters → removes chlorine & taste<br>
-Reverse Osmosis → removes heavy metals, PFAS, nitrates<br>
-Water softeners → removes hardness minerals<br>
-Distillation → steam purification
+<ul>
+<li>Carbon Filters</li>
+<li>Reverse Osmosis</li>
+<li>Water Softeners</li>
+<li>Distillation</li>
+</ul>
 `,
 
-rights:`
-<h2>Legal Rights (SDWA)</h2>
+rights: `
+<h1>Consumer Rights</h1>
 
-1. Annual Water Quality Report (CCR)<br>
-2. Emergency violation alerts (24-hour rule)<br>
-3. Lead service line disclosure rights<br>
-4. Public participation in water governance
+<ul>
+<li>Annual Water Quality Report</li>
+<li>Emergency Notifications</li>
+<li>Lead Pipe Disclosure</li>
+<li>Public Governance Access</li>
+</ul>
 `
 
 };
 
-document.querySelectorAll(".node").forEach(n=>{
-n.onclick=()=>{
-content.innerHTML=data[n.dataset.key];
-overlay.classList.add("open");
-};
-});
+/* OPEN NEW PAGE */
+document.querySelectorAll(".node").forEach(node => {
+  node.addEventListener("click", () => {
 
-document.addEventListener("click",e=>{
-if(e.target.classList.contains("filter-btn")){
-let f=e.target.dataset.filter;
+    const key = node.dataset.pack;
 
-document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-e.target.classList.add("active");
+    const win = window.open("", "_blank");
 
-document.querySelectorAll(".contaminant-item").forEach(i=>{
-i.classList.toggle("hidden", !(f==="all"||i.dataset.type===f));
-});
-}
+    win.document.write(`
+      <html>
+      <head>
+        <title>${titles[key]}</title>
+        <style>
+          body{
+            font-family:Segoe UI;
+            padding:30px;
+            background:linear-gradient(135deg,#f4f7f6,#e2e8f0);
+          }
+
+          h1{
+            color:#1e3a8a;
+          }
+
+          h3{
+            color:#2563eb;
+            margin-top:20px;
+          }
+
+          p,li{
+            line-height:1.6;
+            color:#0f172a;
+          }
+
+          .close{
+            position:fixed;
+            top:15px;
+            right:15px;
+            padding:10px 15px;
+            background:#1d4ed8;
+            color:white;
+            border:none;
+            cursor:pointer;
+            border-radius:6px;
+          }
+        </style>
+      </head>
+      <body>
+
+      <button class="close" onclick="window.close()">Close</button>
+
+      ${dataPacks[key]}
+
+      </body>
+      </html>
+    `);
+
+    win.document.close();
+  });
 });
 
 </script>
