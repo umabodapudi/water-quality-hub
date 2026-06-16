@@ -1,254 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Water Quality Dashboard</title>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Public Health Water Quality Dashboard</title> 
+    <style> 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; } 
+        body { background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; } 
+        header { text-align: center; margin-bottom: 25px; } 
+        header h1 { color: #1e3a8a; font-size: 2.2rem; font-weight: 800; } 
+        header p { color: #475569; margin-top: 5px; font-size: 1rem; } 
+        .hub-container { display: grid; grid-template-areas: "n6 n1 n2" "n5 cc n3" ". n4 ."; grid-template-columns: 1fr 220px 1fr; grid-template-rows: auto auto auto; gap: 25px; width: 100%; max-width: 950px; margin: auto; align-items: center; justify-items: center; } 
+        .center-core { grid-area: cc; width: 170px; height: 170px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4); border: 4px solid #ffffff; z-index: 10; text-align: center; } 
+        .center-core h2 { color: #ffffff; font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; } 
+        .node { width: 100%; max-width: 260px; padding: 18px; border-radius: 12px; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); cursor: pointer; text-align: center; transition: all 0.3s ease; z-index: 5; } 
+        .node:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); background-color: #f8fafc; } 
+        .node h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; pointer-events: none; } 
+        .node p { font-size: 0.8rem; color: #64748b; line-height: 1.4; pointer-events: none; } 
+        .node-contam { border-top: 5px solid #ef4444; } .node-contam h3 { color: #dc2626; } 
+        .node-matrix { border-top: 5px solid #3b82f6; } .node-matrix h3 { color: #2563eb; } 
+        .node-infra { border-top: 5px solid #06b6d4; } .node-infra h3 { color: #0891b2; } 
+        .node-cross { border-top: 5px solid #f59e0b; } .node-cross h3 { color: #d97706; } 
+        .node-filter { border-top: 5px solid #10b981; } .node-filter h3 { color: #059669; } 
+        .node-rights { border-top: 5px solid #8b5cf6; } .node-rights h3 { color: #7c3aed; } 
+        .n1 { grid-area: n1; } .n2 { grid-area: n2; } .n3 { grid-area: n3; } .n4 { grid-area: n4; } .n5 { grid-area: n5; } .n6 { grid-area: n6; } 
+        .overlay { position: fixed; top: 0; right: -100%; width: 100%; max-width: 600px; height: 100%; background: #ffffff; box-shadow: -10px 0 40px rgba(0,0,0,0.15); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; padding: 40px 30px; overflow-y: auto; border-left: 6px solid #1d4ed8; } 
+        .overlay.open { right: 0; } 
+        .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; } 
+        .overlay-header h2 { color: #0f172a; font-size: 1.6rem; font-weight: 800; } 
+        .close-btn { background: #f1f5f9; border: none; padding: 8px 16px; font-weight: 700; border-radius: 6px; cursor: pointer; color: #475569; } 
+        .overlay-body h4 { color: #1e3a8a; font-size: 1.15rem; margin: 20px 0 8px 0; font-weight: 700; border-bottom: 1px solid #f1f5f9; padding-bottom: 5px; } 
+        .overlay-body p { color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; } 
+        .overlay-body ul, .overlay-body ol { padding-left: 20px; margin-bottom: 15px; } 
+        .overlay-body li { color: #334155; font-size: 0.95rem; margin-bottom: 6px; line-height: 1.5; } 
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; line-height: 1.5; } 
+        .matrix-table th, .matrix-table td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: top; } 
+        .matrix-table th { background-color: #f8fafc; font-weight: 700; color: #1e3a8a; } 
+        .encyclopedia-controls { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; } 
+        .filter-btn { padding: 6px 12px; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; } 
+        .filter-btn.active { background: #1d4ed8; color: #ffffff; border-color: #1d4ed8; } 
+        .contaminant-item { border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 12px; border-radius: 6px; background: #f8fafc; } 
+        .hidden-item { display: none !important; } 
+        @media (max-width: 850px) { .hub-container { display: flex; flex-direction: column; gap: 15px; padding: 20px 0; } .center-core { order: -1; width: 100%; height: auto; padding: 20px; border-radius: 8px; position: static; transform: none; } .node { width: 100%; max-width: 100%; text-align: left; } .overlay { max-width: 100%; } } 
+        footer { text-align: center; padding: 15px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 20px; } 
+    </style> 
+    <!-- Links directly to the data file asset sheet created above -->
+    <script src="data.js"></script>
+</head> 
+<body> 
+    <header> 
+        <h1>Public Health Water Quality Dashboard</h1> 
+        <p>An interactive single-page application mapping infrastructure frameworks, pollutant diagnostics, and environmental laws.</p> 
+    </header> 
+    <div class="hub-container"> 
+        <div class="center-core"><h2>Drinking<br>Water</h2></div> 
+        <div class="node node-contam n1" data-pack="contam"><h3>Contaminant Encyclopedia</h3><p>Profiles, limits, and safety metrics for major chemicals and pathogens.</p></div> 
+        <div class="node node-matrix n2" data-pack="matrix"><h3>Treatment Matrix</h3><p>Advanced engineering frameworks matching treatment types to target pollutants.</p></div> 
+        <div class="node node-infra n3" data-pack="infra"><h3>Infrastructure & Journey</h3><p>Tracking water routing dynamics from raw sources straight to distribution.</p></div> 
+        <div class="node node-cross n4" data-pack="cross"><h3>Cross-Connections</h3><p>The engineering physics of hydraulic backflow and backsiphonage rules.</p></div> 
+        <div class="node node-filter n5" data-pack="filter"><h3>Home Filtration Modules</h3><p>A data evaluation comparing carbon, reverse osmosis, and softeners.</p></div> 
+        <div class="node node-rights n6" data-pack="rights"><h3>Legal Consumer Rights</h3><p>Federal right-to-know options and disclosure laws under the SDWA.</p></div> 
+    </div> 
+    <div class="overlay" id="overlay"> 
+        <div class="overlay-header"> 
+            <h2 id="title">Topic View</h2> 
+            <button class="close-btn" onclick="closePanel()">Close</button> 
+        </div> 
+        <div class="overlay-body" id="content"></div> 
+    </div> 
+    <footer><p>Data compiled and verified via the EPA Safe Drinking Water Act (SDWA) Platform.</p></footer> 
+    <script> 
+        const overlay = document.getElementById("overlay"); 
+        const title = document.getElementById("title"); 
+        const content = document.getElementById("content"); 
+        
+        document.querySelectorAll(".node").forEach(node => { 
+            node.addEventListener("click", () => { 
+                const packKey = node.dataset.pack; 
+                title.innerText = window.titles[packKey]; 
+                content.innerHTML = window.dataPacks[packKey]; 
+                overlay.classList.add("open"); 
+            }); 
+        }); 
+        
+        function closePanel() { overlay.classList.remove("open"); } 
+        
+        content.addEventListener("click", (e) => { 
+            if (e.target.classList.contains("filter-btn")) { 
+                const targetFilter = e.target.dataset.filter; 
+                content.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active")); 
+                e.target.classList.add("active"); 
+                content.querySelectorAll(".contaminant-item").forEach(item => { 
+                    item.classList.toggle("hidden-item", !(targetFilter === "all" || item.dataset.type === targetFilter)); 
+                }); 
+            } 
+        }); 
+    </script> 
+</body> 
+</html>
+window.titles = { 
+    contam: "Contaminant Encyclopedia", 
+    matrix: "Contaminant Treatment Matrix", 
+    infra: "Infrastructure & Journey", 
+    cross: "Cross-Connections and Backflow", 
+    filter: "Home Filtration Modules", 
+    rights: "Legal Consumer Rights" 
+}; 
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Segoe UI; }
-
-body {
-    background: radial-gradient(circle,#f4f7f6,#e2e8f0);
-    min-height: 100vh;
-    padding: 20px;
-}
-
-header { text-align: center; margin-bottom: 20px; }
-header h1 { color: #1e3a8a; }
-
-.hub-container {
-    position: relative;
-    width: 100%;
-    max-width: 950px;
-    height: 580px;
-    margin: auto;
-}
-
-.center-core {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: #1d4ed8;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-.node {
-    position: absolute;
-    width: 220px;
-    background: white;
-    padding: 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
-
-.node:hover { transform: translateY(-4px); }
-
-.n1 { top: 10px; left: 50%; transform: translateX(-50%); }
-.n2 { top: 120px; right: 10px; }
-.n3 { bottom: 120px; right: 10px; }
-.n4 { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.n5 { bottom: 120px; left: 10px; }
-.n6 { top: 120px; left: 10px; }
-
-.overlay {
-    position: fixed;
-    right: -100%;
-    top: 0;
-    width: 100%;
-    max-width: 650px;
-    height: 100%;
-    background: white;
-    transition: 0.3s;
-    overflow-y: auto;
-    padding: 20px;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
-    z-index: 999;
-}
-
-.overlay.open { right: 0; }
-
-.filter-btn {
-    padding: 5px 10px;
-    margin: 3px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-}
-
-.filter-btn.active { background: #1d4ed8; color: white; }
-
-.contaminant-item {
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-top: 10px;
-    border-radius: 6px;
-}
-.hidden-item { display: none; }
-
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>Public Water Quality Dashboard</h1>
-</header>
-
-<div class="hub-container">
-
-<div class="center-core">Water System</div>
-
-<div class="node n1" data-pack="contam">Contaminants</div>
-<div class="node n2" data-pack="matrix">Treatment</div>
-<div class="node n3" data-pack="infra">Infrastructure</div>
-<div class="node n4" data-pack="cross">Backflow</div>
-<div class="node n5" data-pack="filter">Home Filters</div>
-<div class="node n6" data-pack="rights">Rights</div>
-
-</div>
-
-<div class="overlay" id="overlay">
-<h2 id="title"></h2>
-<button onclick="closePanel()">Close</button>
-<div id="content"></div>
-</div>
-
-<!-- ================= DATA PACKS ================= -->
-
-<div id="pack-contam" style="display:none;">
-
-<div>
-<button class="filter-btn active" data-filter="all">All</button>
-<button class="filter-btn" data-filter="chemical">Chemical</button>
-<button class="filter-btn" data-filter="metal">Metals</button>
-<button class="filter-btn" data-filter="bio">Biological</button>
-</div>
-
-<div class="contaminant-item" data-type="chemical">
-<strong>PFAS (Forever Chemicals)</strong>
-<p>Industrial persistent chemicals that accumulate in the body.</p>
-</div>
-
-<div class="contaminant-item" data-type="metal">
-<strong>Lead</strong>
-<p>Leaches from old pipes and solder in plumbing systems.</p>
-</div>
-
-<div class="contaminant-item" data-type="chemical">
-<strong>Nitrates</strong>
-<p>From fertilizers and agricultural runoff.</p>
-</div>
-
-<div class="contaminant-item" data-type="bio">
-<strong>E. coli</strong>
-<p>Indicates fecal contamination in water supply.</p>
-</div>
-
-</div>
-
-<div id="pack-matrix" style="display:none;">
-<h3>Treatment Systems</h3>
-<p>
-- Coagulation & Flocculation<br>
-- Sedimentation<br>
-- Sand Filtration<br>
-- Chlorination<br>
-- UV Disinfection<br>
-- Reverse Osmosis
-</p>
-</div>
-
-<div id="pack-infra" style="display:none;">
-<h3>Water Infrastructure</h3>
-<p>
-Water flows from source → treatment plant → storage tanks → distribution mains → household taps.
-</p>
-</div>
-
-<div id="pack-cross" style="display:none;">
-<h3>Backflow & Cross Connection</h3>
-<p>
-Backflow happens when contaminated water reverses into clean water lines due to pressure changes.
-</p>
-</div>
-
-<div id="pack-filter" style="display:none;">
-<h3>Home Filtration</h3>
-<p>
-- Activated Carbon Filters<br>
-- Reverse Osmosis Systems<br>
-- Ion Exchange Softeners<br>
-- Distillation Units
-</p>
-</div>
-
-<div id="pack-rights" style="display:none;">
-<h3>Consumer Rights (SDWA)</h3>
-<p>
-- Annual Water Quality Report (CCR)<br>
-- Emergency violation alerts<br>
-- Lead line disclosure rights<br>
-- Public participation in utility decisions
-</p>
-</div>
-
-<script>
-
-const overlay = document.getElementById("overlay");
-const title = document.getElementById("title");
-const content = document.getElementById("content");
-
-const titles = {
- contam: "Contaminants",
- matrix: "Treatment Systems",
- infra: "Infrastructure",
- cross: "Backflow",
- filter: "Home Filters",
- rights: "Consumer Rights"
+window.dataPacks = { 
+    contam: `
+        <p>Review the comprehensive public health index below. Use the button filters to navigate specific pollutant classifications:</p><br>
+        <div class="encyclopedia-controls">
+            <button class="filter-btn active" data-filter="all">All Parameters</button>
+            <button class="filter-btn" data-filter="chemical">Chemicals and PFAS</button>
+            <button class="filter-btn" data-filter="heavy-metal">Heavy Metals</button>
+            <button class="filter-btn" data-filter="biological">Bacteria and Toxins</button>
+        </div><br>
+        <div id="encyclopedia-container">
+            <div class="contaminant-item" data-type="chemical">
+                <h4>PFAS / PFOS (Forever Chemicals)</h4>
+                <p>Synthetic chemical compounds originating from industrial wastewater, water-repellent fabrics, and commercial firefighting foams. They stack up continuously in biological tissues and do not break down in nature.</p>
+                <p><strong>Maximum Contaminant Level (MCL):</strong> 4.0 parts per trillion (ppt) for PFOA and PFOS parameters.</p>
+                <p><strong>When to worry:</strong> If your city utility's quarterly public updates show a consistent trend running above 4.0 ppt over an entire year.</p>
+            </div>
+            <div class="contaminant-item" data-type="heavy-metal">
+                <h4>Lead</h4>
+                <p>A severe neurotoxic heavy metal that leaches directly into drinking water downstream from the utility from aging brass faucets, building lead solder, or underground lead service lines.</p>
+                <p><strong>Federal Action Level:</strong> 15 parts per billion (ppb).</p>
+                <p><strong>When to worry:</strong> If you reside in a building built before 1986 and consume water that has sat completely stagnant in the pipes for more than six hours.</p>
+            </div>
+            <div class="contaminant-item" data-type="heavy-metal">
+                <h4>Copper</h4>
+                <p>A metallic element that dissolves out of copper pipe networks due to highly corrosive water conditions, often staining sinks with a blue-green crust.</p>
+                <p><strong>Federal Action Level:</strong> 1.3 parts per million (ppm).</p>
+                <p><strong>When to worry:</strong> If your household water has a sharp metallic taste, triggers stomach irritation, or if city metrics reveal systemic plumbing corrosion failures.</p>
+            </div>
+            <div class="contaminant-item" data-type="biological">
+                <h4>Cyanotoxins</h4>
+                <p>Dangerous liver and nerve poisons generated by blue-green harmful algal blooms (HABs) in lakes or stagnant water reservoirs during hot summer months.</p>
+                <p><strong>Regulatory Limit:</strong> No permanent federal MCL, but individual state health departments enforce rapid closures based on EPA advisory baselines.</p>
+                <p><strong>When to worry:</strong> Only during sudden, severe summer heat waves if local water officials issue an explicit, temporary Do Not Drink alert.</p>
+            </div>
+            <div class="contaminant-item" data-type="chemical">
+                <h4>Nitrates</h4>
+                <p>Agricultural compounds that wash into water resources from commercial field fertilizers, cattle manure runoff, or nearby failing septic tanks.</p>
+                <p><strong>Maximum Contaminant Level (MCL):</strong> 10 milligrams per liter (mg/L). High levels cause Blue Baby Syndrome in infants under six months old.</p>
+                <p><strong>When to worry:</strong> If your domestic water is sourced from a shallow private well located near heavily fertilized agricultural properties or cattle feedlots.</p>
+            </div>
+            <div class="contaminant-item" data-type="heavy-metal">
+                <h4>Arsenic</h4>
+                <p>A highly toxic, carcinogenic element that dissolves naturally into water tables when deep rock aquifers erode over geological timeframes.</p>
+                <p><strong>Maximum Contaminant Level (MCL):</strong> 0.010 mg/L (or 10 parts per billion).</p>
+                <p><strong>When to worry:</strong> If you rely on an unmonitored private well network in geologically high-arsenic territories without an under-sink reverse osmosis system.</p>
+            </div>
+            <div class="contaminant-item" data-type="biological">
+                <h4>Coliforms and E. coli</h4>
+                <p>Bacterial indicator groups used to signal that structural distribution pipes have been breached by surface pathogens, stormwater runoff, or raw sewage.</p>
+                <p><strong>Regulatory Threshold:</strong> No more than 5.0% of monthly routine water samples can test positive for total coliforms. Any single E. coli detection triggers an immediate emergency violation.</p>
+                <p><strong>When to worry:</strong> If a water main break or system pressure loss prompts city emergency managers to issue a mandatory Boil Water Advisory.</p>
+            </div>
+        </div>
+    `,
+    matrix: `
+        <h4>The Conventional Filtration Architecture</h4>
+        <p>Standard surface water treatment plants utilize a sequence of four mechanical and chemical barriers:</p>
+        <ol>
+            <li><strong>Coagulation and Flocculation:</strong> Rapidly mixing aluminum sulfate (alum) into raw water to form clumps called floc.</li>
+            <li><strong>Sedimentation:</strong> Routing water into quiet basins where heavy floc clumps sink to the bottom as sludge.</li>
+            <li><strong>Rapid Sand Filtration:</strong> Draining water down through sand, gravel, and anthracite layers to capture microscopic cysts.</li>
+            <li><strong>Primary Disinfection:</strong> Injecting gaseous chlorine, sodium hypochlorite, or chloramines to destroy remaining pathogens.</li>
+        </ol><br>
+        <h4>Advanced Municipal Treatment Matrix</h4>
+        <p>When source water carries dissolved compounds, conventional methods fail. Cities deploy these advanced solutions:</p>
+        <table class="matrix-table">
+            <thead><tr><th>Target Contaminant</th><th>Every Available Municipal Treatment Process</th></tr></thead>
+            <tbody>
+                <tr><td><strong>PFAS / PFOS</strong></td><td>Granular Activated Carbon (GAC) beds, pressurized Anion Exchange resin vessels, high-pressure Reverse Osmosis systems.</td></tr>
+                <tr><td><strong>Lead & Copper</strong></td><td>Alkalinity and pH optimization (lime/soda ash additions), automated Orthophosphate chemical dosing loops to build protective pipe scale.</td></tr>
+                <tr><td><strong>Cyanotoxins</strong></td><td>Powdered Activated Carbon (PAC) injection feeds at source inlets, Ozone chemical oxidation arrays to split toxin cells.</td></tr>
+                <tr><td><strong>Nitrates</strong></td><td>Strong-base Anion Exchange configurations, Industrial high-pressure Reverse Osmosis membrane units.</td></tr>
+                <tr><td><strong>Arsenic</strong></td><td>Iron Co-Precipitation chemical configurations, Catalytic Manganese Greensand filtration plants, Adsorptive Alumina beds.</td></tr>
+                <tr><td><strong>Coliforms / E. coli</strong></td><td>Free Chlorination residual maintenance, Chloramination loops, intense Ultraviolet (UV) irradiation, on-site Ozonation.</td></tr>
+            </tbody>
+        </table>
+    `, 
+    infra: `
+        <h4>The Journey of Water: Asset to Tap</h4>
+        <p>Municipal water moves through a highly engineered loop. First, it is drawn from a natural resource asset (aquifers or reservoirs). It is treated to meet safety levels, pumped into high-elevation water towers, and distributed across a sealed network of underground water mains. These mains use gravity-driven hydraulic pressure to move water straight to your faucet connection.</p><br>
+        <h4>Statutory Public Water System (PWS) Categories</h4>
+        <ul>
+            <li><strong>Community Water Systems (CWS):</strong> Systems serving at least 15 year-round lines or 25 residents. Requires permanent operators, lab networks, and repair crews.</li>
+            <li><strong>Non-Transient Non-Community Systems (NTNCWS):</strong> Regularly serves at least 25 of the same people over six months (e.g., schools, factories, or clinics with independent wells).</li>
+            <li><strong>Transient Non-Community Systems (TNCWS):</strong> Serves spaces where travelers stop briefly, open at least 60 days a year (e.g., highway rest stops, state parks, campgrounds).</li>
+        </ul><br>
+        <h4>Operator Licensing Criteria</h4>
+        <p>Public networks must be overseen by certified operators licensed by state environmental boards. Licensing scales from Grade 1 up to Class 4 based on system capacity, matching population densities and treatment complexity.</p>
+    `, 
+    cross: `
+        <h4>The Mechanics of Cross-Connections</h4>
+        <p>A cross-connection is any actual physical loop between a pipe carrying clean city water and an alternative channel carrying sewage, industrial chemicals, or non-potable liquids (e.g., cooling towers or irrigation feeds).</p><br>
+        <h4>The Dual Physics of Backflow</h4>
+        <ul>
+            <li><strong>Backsiphonage:</strong> Occurs when city mains lose pressure rapidly (from main breaks or high-volume firefighting hydrants). This creates an internal vacuum that sucks dirty fluids backward from properties into public water mains.</li>
+            <li><strong>Backpressure:</strong> Occurs when a downstream private installation (like a high-pressure commercial boiler or industrial process pump) generates internal pressure exceeding the incoming city main line delivery pressure.</li>
+        </ul><br>
+        <h4>Mechanical Prevention Engineering</h4>
+        <ul>
+            <li><strong>Physical Air Gap:</strong> An unobstructed vertical space through open atmosphere between the output of a pipe and the overflow rim of a receiving tank. Eliminates physical pipe connections entirely.</li>
+            <li><strong>Reduced Pressure Principle Assembly (RPZ):</strong> A mechanical assembly with two independent check valves and an automatic differential relief valve that dumps backward flows out an escape port.</li>
+            <li><strong>Hose Bibb Vacuum Breaker:</strong> A small valve installed on outdoor spigots that lets air into the line if pressure drops, breaking the vacuum suction instantly.</li>
+        </ul>
+    `, 
+    filter: `
+        <p>If you choose to filter water at home, different point-of-use (POU) designs target completely different contaminants:</p><br>
+        <h4>Activated Carbon Blocks</h4>
+        <p>Pitcher carafes, refrigerator lines, or faucet adapters. Relies on chemical adsorption, where organic pollutants adhere to porous surfaces. Excellent for chlorine tastes and basic solvents. Misses nitrates, heavy metals, or hard minerals.</p><br>
+        <h4>Point-of-Use Reverse Osmosis (RO) Systems</h4>
+        <p>Multi-stage under-sink setups featuring sediment pre-filters, carbon blocks, and semi-permeable membranes. High pressure strips up to 99% of dissolved solids, matching lead, arsenic, nitrates, and PFAS profiles. Creates wastewater during system processing cycles.</p><br>
+        <h4>Ion Exchange Water Softeners</h4>
+        <p>Whole-house resin beds that swap hard calcium and magnesium ions for sodium ions to prevent household plumbing scale. Does not remove lead, organic chemicals, or bacterial pathogens.</p>
+    `, 
+    rights: `
+        <p>The Safe Drinking Water Act (SDWA) grants explicit statutory right-to-know guarantees to all public system consumers:</p><br>
+        <h4>1. The Right to an Annual Water Report</h4>
+        <p>Community suppliers must publish a Consumer Confidence Report (CCR) by July 1st annually. This file profiles water source points, lists detected contaminants, and details standard violations.</p><br>
+        <h4>2. The Right to Direct Public Notification</h4>
+        <p>The EPA Public Notification Rule requires utilities to alert consumers to system failures. Tier 1 alerts (acute emergencies like E. coli breaches) mandate warnings via local media, text alerts, or door flyers within 24 hours.</p><br>
+        <h4>3. The Right to Lead Infrastructure Disclosures</h4>
+        <p>Under federal Lead and Copper Rule Improvements (LCRI), water networks must compile and publish public service line asset maps. Consumers have a legal right to audit these maps to check for lead links leading to their property.</p><br>
+        <h4>4. The Right to Participatory Governance</h4>
+        <p>Federal mandates guarantee open public comment periods for state infrastructure models. Consumers have a legal right to attend local utility board meetings to vote on structural policies and rate changes.</p>
+    ` 
 };
 
-document.querySelectorAll(".node").forEach(n => {
- n.addEventListener("click", () => {
-     const pack = document.getElementById("pack-" + n.dataset.pack);
-     title.innerText = titles[n.dataset.pack];
-     content.innerHTML = pack.innerHTML;
-     overlay.classList.add("open");
- });
-});
-
-function closePanel() {
- overlay.classList.remove("open");
-}
-
-content.addEventListener("click", (e) => {
- if (e.target.classList.contains("filter-btn")) {
-
-     const filter = e.target.dataset.filter;
-
-     content.querySelectorAll(".filter-btn")
-         .forEach(b => b.classList.remove("active"));
-
-     e.target.classList.add("active");
-
-     content.querySelectorAll(".contaminant-item")
-         .forEach(item => {
-             item.classList.toggle(
-                 "hidden-item",
-                 !(filter === "all" || item.dataset.type === filter)
-             );
-         });
- }
-});
-
-</script>
-
-</body>
-</html>
