@@ -3,32 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Public Health Water Quality Dashboard</title>
+<title>Water Quality Dashboard</title>
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Segoe UI; }
 
 body {
-    background: radial-gradient(circle at center, #f4f7f6, #e2e8f0);
+    background: radial-gradient(circle,#f4f7f6,#e2e8f0);
     min-height: 100vh;
     padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-header h1 {
-    color: #1e3a8a;
-    font-size: 2rem;
-    font-weight: 800;
-}
-
-header p {
-    color: #475569;
-    font-size: 0.95rem;
-}
+header { text-align: center; margin-bottom: 20px; }
+header h1 { color: #1e3a8a; }
 
 .hub-container {
     position: relative;
@@ -42,209 +29,196 @@ header p {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background: linear-gradient(135deg,#3b82f6,#1d4ed8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #1d4ed8;
     color: white;
-    font-weight: 700;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    z-index: 5;
 }
 
 .node {
     position: absolute;
     width: 220px;
     background: white;
+    padding: 14px;
     border-radius: 10px;
-    padding: 15px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: 0.2s;
-    z-index: 4;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.node:hover {
-    transform: translateY(-5px);
-}
+.node:hover { transform: translateY(-4px); }
 
-.node h3 { font-size: 1rem; margin-bottom: 5px; }
-.node p { font-size: 0.8rem; color: #64748b; }
-
-.node-contam { border-top: 4px solid #ef4444; }
-.node-matrix { border-top: 4px solid #3b82f6; }
-.node-infra { border-top: 4px solid #06b6d4; }
-.node-cross { border-top: 4px solid #f59e0b; }
-.node-filter { border-top: 4px solid #10b981; }
-.node-rights { border-top: 4px solid #8b5cf6; }
-
-.n1 { top: 20px; left: 50%; transform: translateX(-50%); }
-.n2 { top: 120px; right: 20px; }
-.n3 { bottom: 120px; right: 20px; }
-.n4 { bottom: 20px; left: 50%; transform: translateX(-50%); }
-.n5 { bottom: 120px; left: 20px; }
-.n6 { top: 120px; left: 20px; }
+.n1 { top: 10px; left: 50%; transform: translateX(-50%); }
+.n2 { top: 120px; right: 10px; }
+.n3 { bottom: 120px; right: 10px; }
+.n4 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+.n5 { bottom: 120px; left: 10px; }
+.n6 { top: 120px; left: 10px; }
 
 .overlay {
     position: fixed;
-    top: 0;
     right: -100%;
+    top: 0;
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     height: 100%;
     background: white;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
-    transition: 0.35s;
-    z-index: 1000;
-    padding: 25px;
+    transition: 0.3s;
     overflow-y: auto;
+    padding: 20px;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+    z-index: 999;
 }
 
 .overlay.open { right: 0; }
 
-.overlay-header {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.close-btn {
-    background: #f1f5f9;
-    border: none;
-    padding: 6px 10px;
-    cursor: pointer;
-}
-
 .filter-btn {
     padding: 5px 10px;
-    border: 1px solid #cbd5e1;
-    background: white;
+    margin: 3px;
+    border: 1px solid #ccc;
     cursor: pointer;
-    margin-right: 5px;
-    margin-bottom: 5px;
 }
 
-.filter-btn.active {
-    background: #1d4ed8;
-    color: white;
-}
+.filter-btn.active { background: #1d4ed8; color: white; }
 
 .contaminant-item {
     padding: 10px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #ddd;
     margin-top: 10px;
     border-radius: 6px;
 }
+.hidden-item { display: none; }
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Public Health Water Dashboard</h1>
-<p>Interactive water safety system</p>
+<h1>Public Water Quality Dashboard</h1>
 </header>
 
 <div class="hub-container">
 
-<div class="center-core">Drinking Water</div>
+<div class="center-core">Water System</div>
 
-<div class="node node-contam n1" data-pack="contam">
-<h3>Contaminants</h3><p>PFAS, Lead, Nitrates</p>
-</div>
-
-<div class="node node-matrix n2" data-pack="matrix">
-<h3>Treatment</h3><p>Filtration systems</p>
-</div>
-
-<div class="node node-infra n3" data-pack="infra">
-<h3>Infrastructure</h3><p>Water supply chain</p>
-</div>
-
-<div class="node node-cross n4" data-pack="cross">
-<h3>Backflow</h3><p>System safety risks</p>
-</div>
-
-<div class="node node-filter n5" data-pack="filter">
-<h3>Home Filters</h3><p>RO, Carbon, Softening</p>
-</div>
-
-<div class="node node-rights n6" data-pack="rights">
-<h3>Rights</h3><p>EPA protections</p>
-</div>
+<div class="node n1" data-pack="contam">Contaminants</div>
+<div class="node n2" data-pack="matrix">Treatment</div>
+<div class="node n3" data-pack="infra">Infrastructure</div>
+<div class="node n4" data-pack="cross">Backflow</div>
+<div class="node n5" data-pack="filter">Home Filters</div>
+<div class="node n6" data-pack="rights">Rights</div>
 
 </div>
 
 <div class="overlay" id="overlay">
-<div class="overlay-header">
 <h2 id="title"></h2>
-<button class="close-btn" onclick="closePanel()">Close</button>
-</div>
+<button onclick="closePanel()">Close</button>
 <div id="content"></div>
 </div>
 
-<!-- DATA PACKS -->
+<!-- ================= DATA PACKS ================= -->
+
 <div id="pack-contam" style="display:none;">
-<div class="filter-bar">
+
+<div>
 <button class="filter-btn active" data-filter="all">All</button>
 <button class="filter-btn" data-filter="chemical">Chemical</button>
 <button class="filter-btn" data-filter="metal">Metals</button>
+<button class="filter-btn" data-filter="bio">Biological</button>
 </div>
 
 <div class="contaminant-item" data-type="chemical">
-PFAS (Forever Chemicals)
+<strong>PFAS (Forever Chemicals)</strong>
+<p>Industrial persistent chemicals that accumulate in the body.</p>
 </div>
 
 <div class="contaminant-item" data-type="metal">
-Lead contamination in old pipes
+<strong>Lead</strong>
+<p>Leaches from old pipes and solder in plumbing systems.</p>
+</div>
+
+<div class="contaminant-item" data-type="chemical">
+<strong>Nitrates</strong>
+<p>From fertilizers and agricultural runoff.</p>
+</div>
+
+<div class="contaminant-item" data-type="bio">
+<strong>E. coli</strong>
+<p>Indicates fecal contamination in water supply.</p>
 </div>
 
 </div>
 
 <div id="pack-matrix" style="display:none;">
-<p>Treatment systems: RO, UV, Chlorination</p>
+<h3>Treatment Systems</h3>
+<p>
+- Coagulation & Flocculation<br>
+- Sedimentation<br>
+- Sand Filtration<br>
+- Chlorination<br>
+- UV Disinfection<br>
+- Reverse Osmosis
+</p>
 </div>
 
 <div id="pack-infra" style="display:none;">
-<p>Water travels from source → treatment → storage → home</p>
+<h3>Water Infrastructure</h3>
+<p>
+Water flows from source → treatment plant → storage tanks → distribution mains → household taps.
+</p>
 </div>
 
 <div id="pack-cross" style="display:none;">
-<p>Backflow occurs due to pressure imbalance</p>
+<h3>Backflow & Cross Connection</h3>
+<p>
+Backflow happens when contaminated water reverses into clean water lines due to pressure changes.
+</p>
 </div>
 
 <div id="pack-filter" style="display:none;">
-<p>Carbon filters, RO systems, softeners</p>
+<h3>Home Filtration</h3>
+<p>
+- Activated Carbon Filters<br>
+- Reverse Osmosis Systems<br>
+- Ion Exchange Softeners<br>
+- Distillation Units
+</p>
 </div>
 
 <div id="pack-rights" style="display:none;">
-<p>You have EPA protected water rights</p>
+<h3>Consumer Rights (SDWA)</h3>
+<p>
+- Annual Water Quality Report (CCR)<br>
+- Emergency violation alerts<br>
+- Lead line disclosure rights<br>
+- Public participation in utility decisions
+</p>
 </div>
 
 <script>
+
 const overlay = document.getElementById("overlay");
 const title = document.getElementById("title");
 const content = document.getElementById("content");
 
 const titles = {
  contam: "Contaminants",
- matrix: "Treatment",
+ matrix: "Treatment Systems",
  infra: "Infrastructure",
  cross: "Backflow",
  filter: "Home Filters",
  rights: "Consumer Rights"
 };
 
-document.querySelectorAll(".node").forEach(node => {
- node.addEventListener("click", () => {
-     const pack = document.getElementById("pack-" + node.dataset.pack);
-     title.innerText = titles[node.dataset.pack];
+document.querySelectorAll(".node").forEach(n => {
+ n.addEventListener("click", () => {
+     const pack = document.getElementById("pack-" + n.dataset.pack);
+     title.innerText = titles[n.dataset.pack];
      content.innerHTML = pack.innerHTML;
      overlay.classList.add("open");
  });
@@ -259,17 +233,21 @@ content.addEventListener("click", (e) => {
 
      const filter = e.target.dataset.filter;
 
-     content.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+     content.querySelectorAll(".filter-btn")
+         .forEach(b => b.classList.remove("active"));
+
      e.target.classList.add("active");
 
-     content.querySelectorAll(".contaminant-item").forEach(item => {
-         item.style.display =
-             (filter === "all" || item.dataset.type === filter)
-             ? "block"
-             : "none";
-     });
+     content.querySelectorAll(".contaminant-item")
+         .forEach(item => {
+             item.classList.toggle(
+                 "hidden-item",
+                 !(filter === "all" || item.dataset.type === filter)
+             );
+         });
  }
 });
+
 </script>
 
 </body>
