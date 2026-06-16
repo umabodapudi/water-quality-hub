@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Health Impact Calculator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%); min-height: 100vh; padding: 30px; display: flex; flex-direction: column; align-items: center; }
+        .calc-wrapper { width: 100%; max-width: 1000px; display: grid; grid-template-columns: 380px 1fr; gap: 30px; margin-top: 20px; }
+        .input-panel { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); height: fit-content; border: 1px solid #e2e8f0; }
+        .input-panel h2 { color: #1e3a8a; font-size: 1.4rem; margin-bottom: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
+        .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; outline: none; }
+        .form-group select:focus, .form-group input:focus { border-color: #1d4ed8; }
+        .unit-display { font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 4px; display: block; }
+        .calc-btn { width: 100%; padding: 12px; background: #1d4ed8; color: #ffffff; border: none; font-weight: 700; font-size: 1rem; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .calc-btn:hover { background: #1e40af; }
+        
+        /* OUTPUT REPORT DASHBOARD LAYOUT */
+        .output-panel { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; min-height: 400px; display: flex; flex-direction: column; }
+        .welcome-view { display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1; text-align: center; color: #64748b; }
+        .welcome-view h3 { margin-bottom: 5px; color: #475569; }
+        .report-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
+        .report-header h2 { color: #0f172a; font-size: 1.8rem; font-weight: 800; }
+        .metric-pill-box { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
+        .metric-pill { background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #334155; }
+        
+        /* RISK LEVEL STRIPS */
+        .status-strip { padding: 12px 18px; border-radius: 6px; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 25px; }
+        .status-low { background-color: #d1fae5; color: #065f46; border-left: 5px solid #059669; }
+        .status-mod { background-color: #fef3c7; color: #92400e; border-left: 5px solid #d97706; }
+        .status-high { background-color: #ffedd5; color: #9a3412; border-left: 5px solid #ea580c; }
+        .status-crit { background-color: #fee2e2; color: #991b1b; border-left: 5px solid #dc2626; }
+        
+        /* INTERACTIVE OUTPUT TABS */
+        .tab-box { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; gap: 5px; }
+        .tab-btn { padding: 10px 18px; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 0.95rem; color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+        .tab-btn:hover { color: #1d4ed8; }
+        .tab-btn.active { color: #1d4ed8; border-bottom: 2px solid #1d4ed8; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-content ul { padding-left: 20px; }
+        .tab-content li { margin-bottom: 10px; line-height: 1.5; color: #334155; font-size: 0.95rem; }
+        
+        @media (max-width: 850px) {
+            .calc-wrapper { grid-template-columns: 1fr; }
+        }
+    </style>
+    <!-- Loads data configuration directly from the asset sheet -->
+    <script src="calculator-data.js"></script>
+</head>
+<body>
+
+    <header style="text-align: center; margin-bottom: 20px;">
+        <h1 style="color: #1e3a8a;">Water Health Impact Calculator</h1>
+        <p style="color: #475569; margin-top: 5px;">Input water metrics to generate expert public health diagnostics instantly.</p>
+    </header>
+
+    <div class="calc-wrapper">
+        
+        <!-- INPUT CONTROL FORM -->
+        <div class="input-panel">
+            <h2>User Input</h2>
+            <div class="form-group">
+                <label for="contaminant">Select Contaminant</label>
+                <select id="contaminant">
+                    <option value="E. coli">E. coli</option>
+                    <option value="Total Coliform">Total Coliform</option>
+                    <option value="Lead">Lead</option>
+                    <option value="Copper">Copper</option>
+                    <option value="Arsenic">Arsenic</option>
+                    <option value="Nitrate">Nitrate</option>
+                    <option value="Nitrite">Nitrite</option>
+                    <option value="PFAS">PFAS</option>
+                    <option value="PFOS">PFOS</option>
+                    <option value="PFOA">PFOA</option>
+                    <option value="Uranium">Uranium</option>
+                    <option value="Manganese">Manganese</option>
+                    <option value="Turbidity">Turbidity</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="detected-level">Detected Level</label>
+                <input type="number" id="detected-level" step="any" placeholder="Enter number value">
+                <span class="unit-display" id="unit-label">Unit: CFU/100mL</span>
+            </div>
+            
+            <button class="calc-btn" id="calculate-btn">Calculate</button>
+        </div>
+
+        <!-- REVENUE DIAGNOSTIC DISPLAY REPORT -->
+        <div class="output-panel">
+            <div class="welcome-view" id="welcome-message">
+                <h3>No Data Calculated</h3>
+                <p>Select a water component parameter on the left panel to execute a public health translation report.</p>
+            </div>
+
+            <div id="report-view" style="display: none;">
+                <div class="report-header">
+                    <h2 id="report-title">Contaminant Name</h2>
+                    <div class="metric-pill-box">
+                        <div class="metric-pill" id="pill-user-level">Your Level: --</div>
+                        <div class="metric-pill" id="pill-epa-limit">EPA Limit: --</div>
+                        <div class="metric-pill" id="pill-exceedance" style="display: none;">Exceeds Limit By: --</div>
+                    </div>
+                </div>
+
+                <div class="status-strip" id="risk-strip">RISK STATUS</div>
+
+                <!-- SUB TABS NAVIGATION CONTROLS -->
+                <div class="tab-box">
+                    <button class="tab-btn active" onclick="switchTab('health')">Health Effects</button>
+                    <button class="tab-btn" onclick="switchTab('sources')">Sources</button>
+                    <button class="tab-btn" onclick="switchTab('treatment')">Recommended Action</button>
+                </div>
+
+                <!-- TABS CONTAINER CHANNELS -->
+                <div class="tab-content active" id="tab-health">
+                    <ul id="list-health"></ul>
+                </div>
+                <div class="tab-content" id="tab-sources">
+                    <ul id="list-sources"></ul>
+                </div>
+                <div class="tab-content" id="tab-treatment">
+                    <ul id="list-treatment"></ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PIPELINE AUTOMATION SCRIPT -->
+    <script>
+        const contSelect = document.getElementById("contaminant");
+        const levelInput = document.getElementById("detected-level");
+        const unitLabel = document.getElementById("unit-label");
+        const calcBtn = document.getElementById("calculate-btn");
+
+        const welcomeMessage = document.getElementById("welcome-message");
+        const reportView = document.getElementById("report-view");
+
+        // Keep unit label fields up to date instantly upon parameter drop adjustments
+        contSelect.addEventListener("change", function() {
+            const rules = window.calculatorRules[contSelect.value];
+            unitLabel.innerText = "Unit: " + rules.unit;
+        });
+
+        // Run analysis computations
+        calcBtn.addEventListener("click", function() {
+            const name = contSelect.value;
+            const level = parseFloat(levelInput.value);
+
+            if (isNaN(level) || level < 0) {
+                alert("Please enter a valid positive number value.");
+                return;
+            }
+
+            const rules = window.calculatorRules[name];
+            welcomeMessage.style.display = "none";
+            reportView.style.display = "block";
+
+            // Update title text elements inside report panels
+            document.getElementById("report-title").innerText = name;
+            document.getElementById("pill-user-level").innerText = `Your Level: ${level} ${rules.unit}`;
+            document.getElementById("pill-epa-limit").innerText = `EPA Limit: ${rules.mcl} ${rules.unit}`;
+
+            // Exceedance processing card loops
+            const exceedBox = document.getElementById("pill-exceedance");
+            if (rules.mcl > 0 && level > rules.mcl) {
+                const multiFactor = (level / rules.mcl).toFixed(2);
+                exceedBox.innerText = `Exceeds Standard By: ${multiFactor}x`;
+                exceedBox.style.display = "block";
+            } else {
+              exceedBox.style.display = "none";}
+          // Execute risk threshold checking logic arrays
+          let risk = "Low";let stripClass = "status-low";
+          if (name === "E. coli") {if (level > 0) { risk = "Critical"; stripClass = "status-crit"; }} 
+          else if (rules.mcl === 0) { 
+            // Total Coliform fallback configuration rules
+            if (level > rules.lowMax && level <= rules.moderateMax) { risk = "Moderate"; stripClass = "status-mod"; }
+            if (level > rules.moderateMax) { risk = "High"; stripClass = "status-high"; }} 
+          else { 
+            // Standard heavy chemical components processing
+            if (level > rules.lowMax && level <= rules.moderateMax) { risk = "Moderate"; stripClass = "status-mod"; }
+            if (level > rules.moderateMax) { risk = "High"; stripClass = "status-high"; }}
+          // Redesign color strip markers dynamically
+          const strip = document.getElementById("risk-strip");strip.innerText = Risk Status: ${risk};strip.className = "status-strip " + stripClass;
+          // Inject detailed sub-page profile parameters
+          populateList("list-health", rules.effects);populateList("list-sources", rules.sources);populateList("list-treatment", rules.treatment);
+          // Default route focus path directly back to health tab layout metrics
+          switchTab('health');});function populateList(elementId, itemsArray) {
+          const listElement = document.getElementById(elementId);listElement.innerHTML = "";
+          itemsArray.forEach(text => {
+            const li = document.createElement("li");li.innerText = text;listElement.appendChild(li);});}
+      // Sub tab click router routing actions
+      function switchTab(tabKey) {document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+                                  document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
+                                  // Find exact button target matching strings
+                                  const activeBtn = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.getAttribute("onclick").includes(tabKey));
+                                  if (activeBtn) activeBtn.classList.add("active");
+                                  document.getElementById("tab-" + tabKey).classList.add("active");}
