@@ -44,7 +44,7 @@ body {
     padding-bottom: 10px;
 }
 
-.form-group { margin-bottom: 18px; }
+
 
 .form-group label {
     display: block;
@@ -72,6 +72,18 @@ body {
     border-radius: 6px;
     cursor: pointer;
 }
+
+.calc-wrapper {
+    gap: 40px;
+}
+
+.form-group {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 
 .output-panel {
     background: white;
@@ -290,14 +302,26 @@ document.getElementById("title").innerText=n;
 
 document.getElementById("user").innerText="Your: "+v+" "+d.unit;
 document.getElementById("limit").innerText="Limit: "+d.mcl+" "+d.unit;
+
 const exceedBox = document.getElementById("exceed");
 
-if (d.mcl > 0 && v > d.mcl) {
-    const factor = (v / d.mcl).toFixed(2);
-    exceedBox.innerText = `Exceeds Limit: ${factor}x`;
+let isExceeded = false;
+
+if (d.mcl === 0) {
+    // bacteria rule: any detection = risk
+    isExceeded = v > 0;
+} else {
+    isExceeded = v > d.mcl;
+}
+
+if (isExceeded) {
+    const factor = d.mcl > 0 ? (v / d.mcl).toFixed(2) : "Detected";
+    exceedBox.innerText = `Exceeds Limit: ${factor}`;
 } else {
     exceedBox.innerText = "Within safe range";
 }
+
+    
 
 let risk="Low",cls="status-low";
 
