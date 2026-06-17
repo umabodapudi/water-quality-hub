@@ -274,8 +274,17 @@ document.getElementById("health").innerHTML =
     ? d.symptoms
     : [d.symptoms]
 ).map(x => "<li>" + x + "</li>").join("");
-document.getElementById("source").innerHTML=d.sources.map(x=>"<li>"+x+"</li>").join("");
-document.getElementById("treat").innerHTML=d.treatment.map(x=>"<li>"+x+"</li>").join("");
+document.getElementById("source").innerHTML =
+(Array.isArray(d.sources)
+    ? d.sources
+    : [d.sources]
+).map(x => "<li>" + x + "</li>").join("");
+document.getElementById("treat").innerHTML =
+(Array.isArray(d.treatment)
+    ? d.treatment
+    : [d.treatment]
+).map(x => "<li>" + x + "</li>").join("");
+
 
 tab('health');
 };
