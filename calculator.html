@@ -236,7 +236,10 @@ const u=document.getElementById("unit");
 const temp = data.find(item => item.name === c.value);
 if (temp) u.innerText = "Unit: " + temp.unit;
 
-c.onchange=()=>u.innerText="Unit: "+data[c.value].unit;
+c.onchange = () => {
+    const d = data.find(item => item.name === c.value);
+    if (d) u.innerText = "Unit: " + d.unit;
+};
 
 document.getElementById("btn").onclick=()=>{
 
@@ -259,6 +262,14 @@ document.getElementById("title").innerText=n;
 
 document.getElementById("user").innerText="Your: "+v+" "+d.unit;
 document.getElementById("limit").innerText="Limit: "+d.mcl+" "+d.unit;
+const exceedBox = document.getElementById("exceed");
+
+if (d.mcl > 0 && v > d.mcl) {
+    const factor = (v / d.mcl).toFixed(2);
+    exceedBox.innerText = `Exceeds Limit: ${factor}x`;
+} else {
+    exceedBox.innerText = "Within safe range";
+}
 
 let risk="Low",cls="status-low";
 
