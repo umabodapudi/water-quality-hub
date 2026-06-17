@@ -100,19 +100,28 @@ body {
     margin-bottom: 20px;
 }
 
+
 .metric-pill-box {
     display: flex;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 18px; 
     flex-wrap: wrap;
-    margin-top: 10px;
 }
 
+
 .metric-pill {
-    background: #f8fafc;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 7px 12px;
+    border-radius: 8px;
     font-size: 0.85rem;
-    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.report-header {
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
 }
 
 .status-strip {
@@ -127,24 +136,43 @@ body {
 .status-high { background: #ffedd5; }
 .status-crit { background: #fee2e2; }
 
+#exceed {
+    background: #fff3f3;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-weight: 700;
+}
+    
 .tab-box {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
 }
 
+
 .tab-btn {
-    background: none;
-    border: none;
-    font-weight: 700;
-    padding: 8px 12px;
+    padding: 10px 14px;
+    border-radius: 8px 8px 0 0;
+    background: #f8fafc;
+    border: 1px solid transparent;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
+    font-weight: 700;
+}
+    
+.tab-box {
+    display: flex;
+    gap: 6px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 6px;
 }
 
 .tab-btn.active {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-bottom: 2px solid white;
     color: #1d4ed8;
-    border-bottom: 2px solid #1d4ed8;
 }
 
 .tab-content { display: none; }
