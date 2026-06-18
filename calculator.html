@@ -17,6 +17,10 @@ body {
     align-items: center;
 }
 
+.main-content{
+    margin-left:260px;
+    padding:30px;
+}
 .calc-wrapper {
     width: 100%;
     max-width: 1000px;
@@ -144,6 +148,8 @@ body {
 .status-high { background: #ffedd5; }
 .status-crit { background: #fee2e2; }
 
+
+
 #exceed {
     background: #fff3f3;
     border: 1px solid #fecaca;
@@ -193,7 +199,14 @@ body {
 </style>
 </head>
 
+
 <body>
+
+<div class="sidebar">
+    ...
+</div>
+
+<div class="main-content">
 
 <h1>Water Health Impact Calculator</h1>
 
@@ -356,6 +369,8 @@ document.getElementById(t).classList.add("active");
 event.target.classList.add("active");
 }
 </script>
+
+</div>
 
 </body>
 </html>
