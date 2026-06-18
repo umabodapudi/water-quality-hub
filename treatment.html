@@ -1,13 +1,16 @@
 <style>
-    .treatment-table{
+.treatment-table{
     width:100%;
     border-collapse:collapse;
     margin-top:20px;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
 }
 
 .treatment-table th,
 .treatment-table td{
-    border:1px solid #ddd;
+    border:1px solid #e5e7eb;
     padding:12px;
     text-align:center;
 }
@@ -15,7 +18,13 @@
 .treatment-table th{
     background:#1e3a8a;
     color:white;
+    font-weight:700;
 }
+
+.treatment-table tr:nth-child(even){
+    background:#f8fafc;
+}
+    
 .main-content{
     margin-left:260px;
     padding:30px;
@@ -37,7 +46,7 @@ Learn which treatment methods work for different drinking water contaminants.
 
 
 
-  <table>
+<table class="treatment-table">
 <thead>
 <tr>
 <th>Contaminant</th>
@@ -263,6 +272,5 @@ Learn which treatment methods work for different drinking water contaminants.
 
 </div>
 
-</div>
 
 </body>
