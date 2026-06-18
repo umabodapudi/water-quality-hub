@@ -39,6 +39,36 @@ header p {
   margin-top: 5px;
 }
 
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:240px;
+    height:100vh;
+    background:#1e3a8a;
+    padding:20px;
+}
+
+.sidebar h2{
+    color:white;
+    margin-bottom:25px;
+}
+
+.nav-link{
+    display:block;
+    background:white;
+    color:#1e3a8a;
+    text-decoration:none;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.nav-link:hover{
+    background:#dbeafe;
+}
+
 /* HUB LAYOUT */
 .hub-container {
   position: relative;
@@ -143,6 +173,12 @@ footer {
 <p>Interactive EPA SDWA Water Safety System</p>
 </header>
 
+<div class="sidebar">
+    <h2>Water Quality Hub</h2>
+
+    <a href="calculator.html" class="nav-link">Calculator</a>
+    <a href="treatment.html" class="nav-link">Treatment Guide</a>
+</div>
 <div class="hub-container">
 
 <div class="center-core">Drinking Water</div>
