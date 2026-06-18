@@ -15,11 +15,9 @@
 
 body {
   background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding: 20px;
   margin: 0;
-  padding: 0;
- 
-  
- 
 }
 
 /* HEADER */
@@ -49,9 +47,10 @@ header p {
     padding:20px;
 }
 
-.main-content{
-    margin-left: 260px;
-    padding: 30px;
+.main-content {
+  margin-left: 240px;
+  padding: 30px;
+  width: calc(100% - 240px);
 }
   
 .sidebar h2{
@@ -80,9 +79,11 @@ header p {
   position: relative;
   width: 100%;
   max-width: 950px;
-  margin: 40px auto;
-  padding: 20px;
+  height: 700px;   /* instead of 100vh */
+  margin: auto;
+  overflow: hidden;
 }
+  
 /* CENTER CORE */
 .center-core {
   width: 170px;
