@@ -91,10 +91,7 @@ header p {
   position: relative;
   width: 700px;
   height: 700px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  place-items: center;
+  margin: auto;
 }
   
 /* CENTER CORE */
@@ -137,6 +134,15 @@ header p {
   transform: scale(0.97);
 }
 
+.node-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+}
+
 /* COLORS */
 .node-contam { border-top: 5px solid #ef4444; }
 .node-matrix { border-top: 5px solid #3b82f6; }
@@ -146,12 +152,12 @@ header p {
 .node-rights { border-top: 5px solid #8b5cf6; }
 
 /* POSITIONS */
-.node:nth-child(1) { grid-column: 2; grid-row: 1; }
-.node:nth-child(2) { grid-column: 3; grid-row: 2; }
-.node:nth-child(3) { grid-column: 3; grid-row: 3; }
-.node:nth-child(4) { grid-column: 2; grid-row: 3; }
-.node:nth-child(5) { grid-column: 1; grid-row: 3; }
-.node:nth-child(6) { grid-column: 1; grid-row: 2; }
+.node-contam { grid-column: 2; grid-row: 1; }
+.node-matrix { grid-column: 3; grid-row: 2; }
+.node-infra  { grid-column: 3; grid-row: 3; }
+.node-cross  { grid-column: 2; grid-row: 3; }
+.node-filter { grid-column: 1; grid-row: 3; }
+.node-rights { grid-column: 1; grid-row: 2; }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
@@ -198,33 +204,36 @@ footer {
 <div class="hub-container">
   <div class="hub-grid">
 
-<div class="center-core">Drinking Water</div>
+  <div class="center-core">Drinking Water</div>
 
-<div class="node node-contam n1" data-pack="contam">
-<h3>Contaminants</h3><p>PFAS, metals, bacteria</p>
+  <div class="node-grid">
+    <div class="node node-contam" data-pack="contam">
+      <h3>Contaminants</h3><p>PFAS, metals, bacteria</p>
+    </div>
+
+    <div class="node node-matrix" data-pack="matrix">
+      <h3>Treatment Matrix</h3><p>Municipal purification systems</p>
+    </div>
+
+    <div class="node node-infra" data-pack="infra">
+      <h3>Infrastructure</h3><p>Water supply chain</p>
+    </div>
+
+    <div class="node node-cross" data-pack="cross">
+      <h3>Backflow</h3><p>Cross-connection risks</p>
+    </div>
+
+    <div class="node node-filter" data-pack="filter">
+      <h3>Home Filtration</h3><p>RO, carbon, softeners</p>
+    </div>
+
+    <div class="node node-rights" data-pack="rights">
+      <h3>Legal Rights</h3><p>EPA protections</p>
+    </div>
+  </div>
+
 </div>
-
-<div class="node node-matrix n2" data-pack="matrix">
-<h3>Treatment Matrix</h3><p>Municipal purification systems</p>
-</div>
-
-<div class="node node-infra n3" data-pack="infra">
-<h3>Infrastructure</h3><p>Water supply chain</p>
-</div>
-
-<div class="node node-cross n4" data-pack="cross">
-<h3>Backflow</h3><p>Cross-connection risks</p>
-</div>
-
-<div class="node node-filter n5" data-pack="filter">
-<h3>Home Filtration</h3><p>RO, carbon, softeners</p>
-</div>
-
-<div class="node node-rights n6" data-pack="rights">
-<h3>Legal Rights</h3><p>EPA protections</p>
-</div>
-
-</div></div>
+  </div>
 
 <footer>EPA SDWA Educational Dashboard</footer>
 
