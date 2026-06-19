@@ -76,15 +76,11 @@ header p {
 /* HUB LAYOUT */
 
 
-
 .hub-container {
   position: relative;
-  width: 100%;
-  max-width: 950px;
+  width: 700px;
+  height: 700px;
   margin: 40px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .hub-grid {
@@ -115,6 +111,7 @@ header p {
 
 /* NODES */
 .node {
+  position: absolute;
   width: 240px;
   min-height: 120px;
   padding: 18px;
@@ -122,7 +119,6 @@ header p {
   background: white;
   border: 1px solid #e2e8f0;
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  cursor: pointer;
   transition: 0.25s;
 }
 
@@ -405,6 +401,22 @@ rights: `
 `
 
 };
+
+const nodes = document.querySelectorAll(".node");
+
+const radius = 260; // circle size
+const centerX = 350;
+const centerY = 350;
+
+nodes.forEach((node, i) => {
+  const angle = (i / nodes.length) * (2 * Math.PI);
+
+  const x = centerX + radius * Math.cos(angle) - 120;
+  const y = centerY + radius * Math.sin(angle) - 60;
+
+  node.style.left = x + "px";
+  node.style.top = y + "px";
+});
 
 /* OPEN NEW PAGE */
 document.querySelectorAll(".node").forEach(node => {
