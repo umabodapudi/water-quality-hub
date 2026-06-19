@@ -74,14 +74,14 @@ header p {
 }
 
 /* HUB LAYOUT */
-
-
 .hub-container {
   position: relative;
   width: 700px;
   height: 700px;
   margin: 40px auto;
 }
+
+
 
 
 .hub-grid {
@@ -114,14 +114,13 @@ header p {
 
 .node {
   position: absolute;
-  width: 240px;
-  min-height: 120px;
-  padding: 18px;
-  border-radius: 12px;
+  width: 200px;
+  padding: 15px;
   background: white;
-  border: 1px solid #e2e8f0;
+  border-radius: 12px;
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  transition: 0.25s;
+  text-align: center;
+  cursor: pointer;
 }
 
 .node:hover {
@@ -186,38 +185,21 @@ footer {
 <h1>Public Health Water Quality Dashboard</h1>
 <p>Interactive EPA SDWA Water Safety System</p>
 </header>
-<div class="hub-container">
-  <div class="hub-grid">
 
+  <div class="hub-container">
   <div class="center-core">Drinking Water</div>
 
-    <div class="node node-contam" data-pack="contam">
-      <h3>Contaminants</h3><p>PFAS, metals, bacteria</p>
-    </div>
+  <div class="node node-contam" data-pack="contam">Contaminants</div>
+  <div class="node node-matrix" data-pack="matrix">Treatment Matrix</div>
+  <div class="node node-infra" data-pack="infra">Infrastructure</div>
+  <div class="node node-cross" data-pack="cross">Backflow</div>
+  <div class="node node-filter" data-pack="filter">Home Filtration</div>
+  <div class="node node-rights" data-pack="rights">Legal Rights</div>
+</div>
 
-    <div class="node node-matrix" data-pack="matrix">
-      <h3>Treatment Matrix</h3><p>Municipal purification systems</p>
-    </div>
-
-    <div class="node node-infra" data-pack="infra">
-      <h3>Infrastructure</h3><p>Water supply chain</p>
-    </div>
-
-    <div class="node node-cross" data-pack="cross">
-      <h3>Backflow</h3><p>Cross-connection risks</p>
-    </div>
-
-    <div class="node node-filter" data-pack="filter">
-      <h3>Home Filtration</h3><p>RO, carbon, softeners</p>
-    </div>
-
-    <div class="node node-rights" data-pack="rights">
-      <h3>Legal Rights</h3><p>EPA protections</p>
-    </div>
+ 
   
 
-</div>
-  </div>
 
 <footer>EPA SDWA Educational Dashboard</footer>
 
