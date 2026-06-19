@@ -75,13 +75,26 @@ header p {
 
 /* HUB LAYOUT */
 
+
+
 .hub-container {
   position: relative;
   width: 100%;
   max-width: 950px;
-  height: 700px;   /* instead of 100vh */
-  margin: auto;
-  overflow: hidden;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hub-grid {
+  position: relative;
+  width: 700px;
+  height: 700px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
 }
   
 /* CENTER CORE */
@@ -105,16 +118,15 @@ header p {
 
 /* NODES */
 .node {
-  position: absolute;
-  width: 230px;
+  width: 240px;
+  min-height: 120px;
   padding: 18px;
   border-radius: 12px;
-  background: #fff;
+  background: white;
   border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: 0.25s;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  user-select: none;
 }
 
 .node:hover {
@@ -134,12 +146,12 @@ header p {
 .node-rights { border-top: 5px solid #8b5cf6; }
 
 /* POSITIONS */
-.n1 { top: 0; left: 50%; transform: translateX(-50%); }
-.n2 { top: 90px; right: 10px; }
-.n3 { bottom: 90px; right: 10px; }
-.n4 { bottom: 0; left: 50%; transform: translateX(-50%); }
-.n5 { bottom: 90px; left: 10px; }
-.n6 { top: 90px; left: 10px; }
+.node:nth-child(1) { grid-column: 2; grid-row: 1; }
+.node:nth-child(2) { grid-column: 3; grid-row: 2; }
+.node:nth-child(3) { grid-column: 3; grid-row: 3; }
+.node:nth-child(4) { grid-column: 2; grid-row: 3; }
+.node:nth-child(5) { grid-column: 1; grid-row: 3; }
+.node:nth-child(6) { grid-column: 1; grid-row: 2; }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
@@ -184,6 +196,7 @@ footer {
 <p>Interactive EPA SDWA Water Safety System</p>
 </header>
 <div class="hub-container">
+  <div class="hub-grid">
 
 <div class="center-core">Drinking Water</div>
 
@@ -211,7 +224,7 @@ footer {
 <h3>Legal Rights</h3><p>EPA protections</p>
 </div>
 
-</div>
+</div></div>
 
 <footer>EPA SDWA Educational Dashboard</footer>
 
