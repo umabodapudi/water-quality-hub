@@ -83,6 +83,7 @@ header p {
   margin: 40px auto;
 }
 
+
 .hub-grid {
   position: relative;
   width: 700px;
@@ -110,6 +111,7 @@ header p {
 }
 
 /* NODES */
+
 .node {
   position: absolute;
   width: 240px;
@@ -130,14 +132,6 @@ header p {
   transform: scale(0.97);
 }
 
-.node-grid {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  place-items: center;
-}
 
 /* COLORS */
 .node-contam { border-top: 5px solid #ef4444; }
@@ -148,12 +142,7 @@ header p {
 .node-rights { border-top: 5px solid #8b5cf6; }
 
 /* POSITIONS */
-.node-contam { grid-column: 2; grid-row: 1; }
-.node-matrix { grid-column: 3; grid-row: 2; }
-.node-infra  { grid-column: 3; grid-row: 3; }
-.node-cross  { grid-column: 2; grid-row: 3; }
-.node-filter { grid-column: 1; grid-row: 3; }
-.node-rights { grid-column: 1; grid-row: 2; }
+
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
@@ -202,7 +191,6 @@ footer {
 
   <div class="center-core">Drinking Water</div>
 
-  <div class="node-grid">
     <div class="node node-contam" data-pack="contam">
       <h3>Contaminants</h3><p>PFAS, metals, bacteria</p>
     </div>
@@ -226,7 +214,7 @@ footer {
     <div class="node node-rights" data-pack="rights">
       <h3>Legal Rights</h3><p>EPA protections</p>
     </div>
-  </div>
+  
 
 </div>
   </div>
