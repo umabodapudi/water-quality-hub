@@ -77,8 +77,8 @@ header p {
 .hub-container {
   position: relative;
   width: 700px;
-  height: 150px;
-  margin: 5px auto;
+  height: 500px;
+  margin: 10px auto;
 }
 
 .hub-grid {
@@ -90,21 +90,12 @@ header p {
   
 /* CENTER CORE */
 .center-core {
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-weight: 800;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    top: 240px;
+    left: 350px;
+    transform: translate(-50%, -50%);
 }
 
 /* NODES */
@@ -367,18 +358,18 @@ rights: `
 
 };
 const nodes = document.querySelectorAll(".node");
-const radius = 200; // circle size
+const radius = 180;
 const centerX = 350;
-const centerY = 350;
+const centerY = 240;
 
 nodes.forEach((node, i) => {
-  const angle = (i / nodes.length) * (2 * Math.PI);
+    const angle = (i / nodes.length) * (2 * Math.PI);
 
-  const x = centerX + radius * Math.cos(angle) - 100;
-  const y = centerY + radius * Math.sin(angle) - 60;
+    const x = centerX + radius * Math.cos(angle) - 85;
+    const y = centerY + radius * Math.sin(angle) - 50;
 
-  node.style.left = `${x}px`;
-  node.style.top = `${y}px`;
+    node.style.left = `${x}px`;
+    node.style.top = `${y}px`;
 });
 
 /* OPEN NEW PAGE */
