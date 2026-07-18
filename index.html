@@ -151,31 +151,74 @@
                         </div>
                     </div>
 
-                    <div class="hero-card">
-                        <div class="hero-card-top">
-                            <span class="hero-card-icon" aria-hidden="true">
-                                H₂O
-                            </span>
+                    <div class="hero-card rotating-result-card">
+    <div class="hero-card-top">
+        <span class="hero-card-icon" aria-hidden="true">
+            H₂O
+        </span>
 
-                            <span class="small-label">
-                                Water result
-                            </span>
-                        </div>
+        <span class="small-label">
+            Example water result
+        </span>
+    </div>
 
-                        <div class="sample-result">
-                            <span>Arsenic</span>
+    <div
+        id="rotating-result"
+        class="rotating-result"
+        aria-live="polite"
+    >
+        <div class="rotating-result-heading">
+            <span id="rotating-contaminant">
+                Arsenic
+            </span>
 
-                            <strong>12 ppb</strong>
-                        </div>
+            <strong id="rotating-value">
+                12 ppb
+            </strong>
+        </div>
 
-                        <div class="result-line">
-                            <span class="result-dot"></span>
+        <div
+            id="rotating-status-row"
+            class="result-line"
+        >
+            <span
+                id="rotating-status-dot"
+                class="result-dot"
+            ></span>
 
-                            <span>
-                                Above the drinking-water limit
-                            </span>
-                        </div>
+            <span id="rotating-status">
+                Above the drinking-water limit
+            </span>
+        </div>
 
+        <p
+            id="rotating-description"
+            class="rotating-result-description"
+        >
+            Compare a test result with the drinking-water limit.
+        </p>
+    </div>
+
+    <div
+        class="rotating-result-dots"
+        aria-hidden="true"
+    >
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <button
+        class="card-button"
+        type="button"
+        data-go-to="calculator"
+    >
+        Check your own result
+        <span aria-hidden="true">→</span>
+    </button>
+</div>
                         <button
                             class="card-button"
                             type="button"
