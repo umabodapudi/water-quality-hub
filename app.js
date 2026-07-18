@@ -296,6 +296,243 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 100);
     }
 
+
+    /* =========================================================
+   WATER UNIT CONVERSION
+========================================================= */
+
+const unitAliases = {
+    "mg/l": "mg/L",
+    "mg": "mg/L",
+    "ppm": "ppm",
+
+    "ug/l": "µg/L",
+    "µg/l": "µg/L",
+    "mcg/l": "µg/L",
+    "ppb": "ppb",
+
+    "ng/l": "ng/L",
+    "ppt": "ppt"
+};
+
+/*
+All values are converted through µg/L.
+
+1 mg/L = 1,000 µg/L
+1 ppm  = 1,000 µg/L
+1 µg/L = 1 µg/L
+1 ppb  = 1 µg/L
+1 ng/L = 0.001 µg/L
+1 ppt  = 0.001 µg/L
+*/
+
+function normalizeUnit(unit) {
+    if (!unit) {
+        return "";
+    }
+
+    const cleanedUnit = unit
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "");
+
+    return unitAliases[cleanedUnit] || unit;
+}
+
+function convertToMicrogramsPerLiter(value, unit) {
+    const numericValue = Number(value);
+    const normalizedUnit = normalizeUnit(unit);
+
+    if (!Number.isFinite(numericValue)) {
+        return null;
+    }
+
+    switch (normalizedUnit) {
+        case "mg/L":
+        case "ppm":
+            return numericValue * 1000;
+
+        case "µg/L":
+        case "ppb":
+            return numericValue;
+
+        case "ng/L":
+        case "ppt":
+            return numericValue / 1000;
+
+        default:
+            return null;
+    }
+}
+
+function convertFromMicrogramsPerLiter(valueInMicrograms, targetUnit) {
+    const normalizedUnit = normalizeUnit(targetUnit);
+
+    if (!Number.isFinite(valueInMicrograms)) {
+        return null;
+    }
+
+    switch (normalizedUnit) {
+        case "mg/L":
+        case "ppm":
+            return valueInMicrograms / 1000;
+
+        case "µg/L":
+        case "ppb":
+            return valueInMicrograms;
+
+        case "ng/L":
+        case "ppt":
+            return valueInMicrograms * 1000;
+
+        default:
+            return null;
+    }
+}
+
+function convertWaterUnit(value, fromUnit, toUnit) {
+    const valueInMicrograms = convertToMicrogramsPerLiter(
+        value,
+        fromUnit
+    );
+
+    if (valueInMicrograms === null) {
+        return null;
+    }
+
+    return convertFromMicrogramsPerLiter(
+        valueInMicrograms,
+        toUnit
+    );
+}
+
+function formatConvertedNumber(value) {
+    if (!Number.isFinite(value)) {
+        return "";
+    }
+
+    if (value === 0) {
+        return "0";
+    }
+
+    if (Math.abs(value) >= 1000) {
+        return value.toLocaleString(undefined, {
+            maximumFractionDigits: 2
+        });
+    }
+
+    if (Math.abs(value) >= 1) {
+        return value.toLocaleString(undefined, {
+            maximumFractionDigits: 4
+        });
+    }
+
+    return value.toLocaleString(undefined, {
+        maximumSignificantDigits: 4
+    });
+}
+
+function getEquivalentUnits(value, unit) {
+    const normalizedUnit = normalizeUnit(unit);
+    const valueInMicrograms = convertToMicrogramsPerLiter(
+        value,
+        normalizedUnit
+    );
+
+    if (valueInMicrograms === null) {
+        return [];
+    }
+
+    const equivalents = [
+        {
+            unit: "mg/L",
+            value: convertFromMicrogramsPerLiter(
+                valueInMicrograms,
+                "mg/L"
+            )
+        },
+        {
+            unit: "µg/L",
+            value: convertFromMicrogramsPerLiter(
+                valueInMicrograms,
+                "µg/L"
+            )
+        },
+        {
+            unit: "ppb",
+            value: convertFromMicrogramsPerLiter(
+                valueInMicrograms,
+                "ppb"
+            )
+        },
+        {
+            unit: "ppt",
+            value: convertFromMicrogramsPerLiter(
+                valueInMicrograms,
+                "ppt"
+            )
+        }
+    ];
+
+    return equivalents.filter((item) => {
+        return normalizeUnit(item.unit) !== normalizedUnit;
+    });
+}
+
+function displayUnitConversions(value, unit) {
+    const conversionContainer = document.getElementById(
+        "unit-conversion-display"
+    );
+
+    const conversionList = document.getElementById(
+        "unit-conversion-list"
+    );
+
+    if (!conversionContainer || !conversionList) {
+        return;
+    }
+
+    const equivalents = getEquivalentUnits(value, unit);
+
+    if (equivalents.length === 0) {
+        conversionContainer.hidden = true;
+        conversionList.innerHTML = "";
+        return;
+    }
+
+    conversionList.innerHTML = equivalents
+        .map((item) => {
+            return `
+                <li>
+                    <span>${item.unit}</span>
+                    <strong>
+                        ${formatConvertedNumber(item.value)}
+                    </strong>
+                </li>
+            `;
+        })
+        .join("");
+
+    conversionContainer.hidden = false;
+}
+
+function clearUnitConversions() {
+    const conversionContainer = document.getElementById(
+        "unit-conversion-display"
+    );
+
+    const conversionList = document.getElementById(
+        "unit-conversion-list"
+    );
+
+    if (conversionContainer) {
+        conversionContainer.hidden = true;
+    }
+
+    if (conversionList) {
+        conversionList.innerHTML = "";
+    }
+}
     /*
     =====================================================
     RESULT CHECKER
