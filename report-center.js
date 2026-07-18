@@ -1,60 +1,96 @@
 "use strict";
 
-const EPA_BASE = "https://data.epa.gov/efservice";
-const EPA_SEARCH = "https://enviro.epa.gov/facts/sdwis/search.html";
-const EPA_DETAILS = "https://sdwis.epa.gov/ords/sfdw_pub/f";
-const REQUEST_TIMEOUT = 20000;
+/*
+|--------------------------------------------------------------------------
+| EPA SETTINGS
+|--------------------------------------------------------------------------
+*/
 
-const tabs = document.querySelectorAll("[data-report-tab]");
-const panels = document.querySelectorAll(".report-panel");
+const EPA_BASE =
+    "https://data.epa.gov/efservice";
 
-const stateSelect = document.getElementById("reportState");
-const zipInput = document.getElementById("reportZip");
-const findButton = document.getElementById("findWaterSystemsButton");
-const clearButton = document.getElementById("clearWaterSystemsButton");
-const statusBox = document.getElementById("waterSystemStatus");
-const resultsBox = document.getElementById("waterSystemResults");
-const systemSelect = document.getElementById("waterSystemSelect");
-const systemCard = document.getElementById("selectedWaterSystem");
+const EPA_PUBLIC_SEARCH =
+    "https://sdwis.epa.gov/ords/sfdw_pub/" +
+    "r/sfdw/sdwis_fed_reports_public/200";
 
-const systemName = document.getElementById("selectedSystemName");
-const systemId = document.getElementById("selectedSystemId");
-const systemType = document.getElementById("selectedSystemType");
-const systemSource = document.getElementById("selectedSystemSource");
-const systemPopulation = document.getElementById(
-    "selectedSystemPopulation"
-);
+const REQUEST_TIMEOUT =
+    20000;
 
-const annualReportButton = document.getElementById(
-    "annualReportButton"
-);
 
-const epaButton = document.getElementById("epaSystemButton");
+/*
+|--------------------------------------------------------------------------
+| HTML ELEMENTS
+|--------------------------------------------------------------------------
+*/
 
-const annualReportUnavailable = document.getElementById(
-    "annualReportUnavailable"
-);
+const tabs =
+    document.querySelectorAll("[data-report-tab]");
 
-const reportText = document.getElementById("waterReportText");
-const explainButton = document.getElementById(
-    "explainReportButton"
-);
+const panels =
+    document.querySelectorAll(".report-panel");
 
-const exampleButton = document.getElementById(
-    "loadReportExampleButton"
-);
+const stateSelect =
+    document.getElementById("reportState");
 
-const clearTextButton = document.getElementById(
-    "clearReportTextButton"
-);
+const locationTypeSelect =
+    document.getElementById("locationType");
 
-const explanationStatus = document.getElementById(
-    "reportExplanationStatus"
-);
+const locationInput =
+    document.getElementById("reportLocation");
 
-const explanationResults = document.getElementById(
-    "reportExplanationResults"
-);
+const findButton =
+    document.getElementById("findWaterSystemsButton");
+
+const clearButton =
+    document.getElementById("clearWaterSystemsButton");
+
+const statusBox =
+    document.getElementById("waterSystemStatus");
+
+const resultsBox =
+    document.getElementById("waterSystemResults");
+
+const systemSelect =
+    document.getElementById("waterSystemSelect");
+
+const systemCard =
+    document.getElementById("selectedWaterSystem");
+
+const systemName =
+    document.getElementById("selectedSystemName");
+
+const systemId =
+    document.getElementById("selectedSystemId");
+
+const systemType =
+    document.getElementById("selectedSystemType");
+
+const systemSource =
+    document.getElementById("selectedSystemSource");
+
+const systemPopulation =
+    document.getElementById("selectedSystemPopulation");
+
+const epaSystemButton =
+    document.getElementById("epaSystemButton");
+
+const reportText =
+    document.getElementById("waterReportText");
+
+const explainButton =
+    document.getElementById("explainReportButton");
+
+const exampleButton =
+    document.getElementById("loadReportExampleButton");
+
+const clearTextButton =
+    document.getElementById("clearReportTextButton");
+
+const explanationStatus =
+    document.getElementById("reportExplanationStatus");
+
+const explanationResults =
+    document.getElementById("reportExplanationResults");
 
 let currentSystems = [];
 
@@ -69,7 +105,10 @@ tabs.forEach((button) => {
     button.addEventListener("click", () => {
         tabs.forEach((tab) => {
             tab.classList.remove("active");
-            tab.setAttribute("aria-selected", "false");
+            tab.setAttribute(
+                "aria-selected",
+                "false"
+            );
         });
 
         panels.forEach((panel) => {
@@ -77,11 +116,16 @@ tabs.forEach((button) => {
         });
 
         button.classList.add("active");
-        button.setAttribute("aria-selected", "true");
 
-        const target = document.getElementById(
-            button.dataset.reportTab
+        button.setAttribute(
+            "aria-selected",
+            "true"
         );
+
+        const target =
+            document.getElementById(
+                button.dataset.reportTab
+            );
 
         if (target) {
             target.classList.add("active");
@@ -105,7 +149,9 @@ function showStatus(
         return;
     }
 
-    element.textContent = message;
+    element.textContent =
+        message;
+
     element.className =
         `report-status show ${type}`;
 }
@@ -120,7 +166,9 @@ function showStatusHtml(
         return;
     }
 
-    element.innerHTML = html;
+    element.innerHTML =
+        html;
+
     element.className =
         `report-status show ${type}`;
 }
@@ -132,7 +180,8 @@ function clearStatus(element) {
     }
 
     element.textContent = "";
-    element.className = "report-status";
+    element.className =
+        "report-status";
 }
 
 
@@ -141,6 +190,73 @@ function clearStatus(element) {
 | GENERAL HELPERS
 |--------------------------------------------------------------------------
 */
+
+function normalize(value) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value).trim();
+}
+
+
+function normalizeForComparison(value) {
+    return normalize(value)
+        .toUpperCase()
+        .replace(/\bCOUNTY\b/g, "")
+        .replace(/\bCITY OF\b/g, "")
+        .replace(/\bTOWN OF\b/g, "")
+        .replace(/\bSAINT\b/g, "ST")
+        .replace(/[.'’]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+
+function getValue(record, possibleKeys) {
+    if (
+        !record ||
+        typeof record !== "object"
+    ) {
+        return "";
+    }
+
+    for (const key of possibleKeys) {
+        if (
+            record[key] !== undefined &&
+            record[key] !== null
+        ) {
+            return record[key];
+        }
+    }
+
+    const recordKeys =
+        Object.keys(record);
+
+    for (const expectedKey of possibleKeys) {
+        const actualKey =
+            recordKeys.find((recordKey) => {
+                return (
+                    recordKey.toUpperCase() ===
+                    expectedKey.toUpperCase()
+                );
+            });
+
+        if (
+            actualKey &&
+            record[actualKey] !== undefined &&
+            record[actualKey] !== null
+        ) {
+            return record[actualKey];
+        }
+    }
+
+    return "";
+}
+
 
 function escapeHtml(value) {
     return String(value)
@@ -152,76 +268,22 @@ function escapeHtml(value) {
 }
 
 
-function normalize(value) {
-    if (
-        value === undefined ||
-        value === null
-    ) {
-        return "";
-    }
-
-    return String(value).trim();
-}
-
-
-function getValue(record, keys) {
-    if (
-        !record ||
-        typeof record !== "object"
-    ) {
-        return "";
-    }
-
-    for (const key of keys) {
-        if (
-            record[key] !== undefined &&
-            record[key] !== null
-        ) {
-            return record[key];
-        }
-    }
-
-    const actualKeys =
-        Object.keys(record);
-
-    for (const key of keys) {
-        const matchingKey =
-            actualKeys.find((actualKey) => {
-                return (
-                    actualKey.toUpperCase() ===
-                    key.toUpperCase()
-                );
-            });
-
-        if (
-            matchingKey &&
-            record[matchingKey] !== undefined &&
-            record[matchingKey] !== null
-        ) {
-            return record[matchingKey];
-        }
-    }
-
-    return "";
-}
-
-
 function formatPopulation(value) {
-    const cleanedValue =
+    const cleaned =
         normalize(value).replaceAll(",", "");
 
-    if (!cleanedValue) {
+    if (!cleaned) {
         return "Not listed";
     }
 
-    const population =
-        Number(cleanedValue);
+    const number =
+        Number(cleaned);
 
-    if (!Number.isFinite(population)) {
+    if (!Number.isFinite(number)) {
         return normalize(value);
     }
 
-    return population.toLocaleString();
+    return number.toLocaleString();
 }
 
 
@@ -235,12 +297,17 @@ async function fetchJson(url) {
     const controller =
         new AbortController();
 
-    const timer =
-        setTimeout(() => {
+    const timeout =
+        window.setTimeout(() => {
             controller.abort();
         }, REQUEST_TIMEOUT);
 
     try {
+        console.log(
+            "EPA request:",
+            url
+        );
+
         const response =
             await fetch(url, {
                 method: "GET",
@@ -253,21 +320,29 @@ async function fetchJson(url) {
 
         if (!response.ok) {
             throw new Error(
-                `EPA returned status ${response.status}`
+                `EPA returned status ${response.status}.`
             );
         }
 
-        return await response.json();
+        const data =
+            await response.json();
+
+        console.log(
+            "EPA response:",
+            data
+        );
+
+        return data;
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error(
-                "EPA request timed out."
+                "The EPA request timed out."
             );
         }
 
         throw error;
     } finally {
-        clearTimeout(timer);
+        window.clearTimeout(timeout);
     }
 }
 
@@ -278,15 +353,23 @@ async function fetchJson(url) {
 |--------------------------------------------------------------------------
 */
 
-function geographicUrl(zip) {
+function createCountyUrl(countyName) {
     return (
-        `${EPA_BASE}/GEOGRAPHIC_AREA/` +
-        `ZIP_CODE_SERVED/${encodeURIComponent(zip)}/JSON`
+        `${EPA_BASE}/SDW_COUNTY_SERVED/` +
+        `COUNTYSERVED/${encodeURIComponent(countyName)}/JSON`
     );
 }
 
 
-function detailsUrl(pwsId) {
+function createCityUrl(cityName) {
+    return (
+        `${EPA_BASE}/GEOGRAPHIC_AREA/` +
+        `CITY_SERVED/${encodeURIComponent(cityName)}/JSON`
+    );
+}
+
+
+function createSystemDetailsDataUrl(pwsId) {
     return (
         `${EPA_BASE}/WATER_SYSTEM/` +
         `PWSID/${encodeURIComponent(pwsId)}/JSON`
@@ -294,19 +377,17 @@ function detailsUrl(pwsId) {
 }
 
 
-function epaSystemUrl(pwsId) {
+function createEpaSystemPageUrl(pwsId) {
     return (
-        `${EPA_DETAILS}` +
-        "?p=SDWIS_FED_REPORTS_PUBLIC%3APWS_SEARCH" +
-        "%3A%3A%3A%3A%3APWSID%3A" +
-        encodeURIComponent(pwsId)
+        EPA_PUBLIC_SEARCH +
+        `?pwsid=${encodeURIComponent(pwsId)}`
     );
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| CODE TRANSLATION
+| SYSTEM LABELS
 |--------------------------------------------------------------------------
 */
 
@@ -317,18 +398,13 @@ function translateSystemType(code) {
     const labels = {
         C: "Community water system",
         CWS: "Community water system",
-
         NC: "Non-community water system",
-
         NTNC:
             "Non-transient non-community water system",
-
         NTCWS:
             "Non-transient non-community water system",
-
         TNC:
             "Transient non-community water system",
-
         TNCWS:
             "Transient non-community water system"
     };
@@ -350,7 +426,6 @@ function translateSource(code) {
         SW: "Surface water",
         GWP: "Purchased ground water",
         SWP: "Purchased surface water",
-
         GU:
             "Ground water under direct influence of surface water"
     };
@@ -365,115 +440,302 @@ function translateSource(code) {
 
 /*
 |--------------------------------------------------------------------------
-| LOAD SYSTEM DETAILS
+| SYSTEM RECORD CREATION
 |--------------------------------------------------------------------------
 */
 
-async function loadSystemDetails(
-    pwsId,
-    geographicRecord
-) {
-    const fallback = {
-        pwsId: pwsId,
-
-        name: pwsId,
-
-        systemType:
-            translateSystemType(
-                getValue(
-                    geographicRecord,
-                    [
-                        "PWS_TYPE_CODE",
-                        "PWS_TYPE"
-                    ]
-                )
+function createSystemFromCountyRecord(record) {
+    return {
+        pwsId:
+            normalize(
+                getValue(record, [
+                    "PWSID",
+                    "PWS_ID"
+                ])
             ),
 
-        source: "View EPA details",
+        name:
+            normalize(
+                getValue(record, [
+                    "PWSNAME",
+                    "PWS_NAME",
+                    "SYSTEM_NAME"
+                ])
+            ),
+
+        state:
+            normalize(
+                getValue(record, [
+                    "STATE",
+                    "STATE_SERVED"
+                ])
+            ).toUpperCase(),
+
+        county:
+            normalize(
+                getValue(record, [
+                    "COUNTYSERVED",
+                    "COUNTY_SERVED"
+                ])
+            ),
+
+        population:
+            getValue(record, [
+                "POPULATIONSERVED",
+                "POPULATION_SERVED",
+                "POPULATION_SERVED_COUNT"
+            ]),
+
+        systemType: "Not listed",
+        source: "Not listed"
+    };
+}
+
+
+function createSystemFromCityRecord(record) {
+    return {
+        pwsId:
+            normalize(
+                getValue(record, [
+                    "PWSID",
+                    "PWS_ID"
+                ])
+            ),
+
+        name: "",
+
+        state:
+            normalize(
+                getValue(record, [
+                    "STATE_SERVED",
+                    "STATE"
+                ])
+            ).toUpperCase(),
+
+        city:
+            normalize(
+                getValue(record, [
+                    "CITY_SERVED",
+                    "CITY"
+                ])
+            ),
 
         population: "",
 
-        reportUrl: ""
+        systemType:
+            translateSystemType(
+                getValue(record, [
+                    "PWS_TYPE_CODE",
+                    "PWS_TYPE"
+                ])
+            ),
+
+        source: "Not listed"
     };
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOAD ADDITIONAL SYSTEM DETAILS
+|--------------------------------------------------------------------------
+*/
+
+async function addSystemDetails(system) {
+    if (!system.pwsId) {
+        return system;
+    }
 
     try {
         const records =
             await fetchJson(
-                detailsUrl(pwsId)
+                createSystemDetailsDataUrl(
+                    system.pwsId
+                )
             );
 
         if (
             !Array.isArray(records) ||
             records.length === 0
         ) {
-            return fallback;
+            return system;
         }
 
         const record =
             records[0];
 
         return {
-            pwsId: pwsId,
+            ...system,
 
             name:
                 normalize(
-                    getValue(
-                        record,
-                        [
-                            "PWS_NAME",
-                            "PWSNAME",
-                            "SYSTEM_NAME",
-                            "NAME"
-                        ]
-                    )
-                ) || fallback.name,
+                    getValue(record, [
+                        "PWS_NAME",
+                        "PWSNAME",
+                        "SYSTEM_NAME",
+                        "NAME"
+                    ])
+                ) ||
+                system.name ||
+                system.pwsId,
+
+            population:
+                getValue(record, [
+                    "POPULATION_SERVED_COUNT",
+                    "POPULATION_SERVED",
+                    "POPULATION",
+                    "POP_SERVED"
+                ]) ||
+                system.population,
 
             systemType:
                 translateSystemType(
-                    getValue(
-                        record,
-                        [
-                            "PWS_TYPE_CODE",
-                            "PWS_TYPE",
-                            "SYSTEM_TYPE"
-                        ]
-                    )
+                    getValue(record, [
+                        "PWS_TYPE_CODE",
+                        "PWS_TYPE",
+                        "SYSTEM_TYPE"
+                    ]) ||
+                    system.systemType
                 ),
 
             source:
                 translateSource(
-                    getValue(
-                        record,
-                        [
-                            "PRIMARY_SOURCE_CODE",
-                            "PRIMARY_SOURCE",
-                            "SOURCE_WATER_TYPE_CODE",
-                            "GW_SW_CODE"
-                        ]
-                    )
-                ),
-
-            population:
-                getValue(
-                    record,
-                    [
-                        "POPULATION_SERVED_COUNT",
-                        "POPULATION_SERVED",
-                        "POPULATION",
-                        "POP_SERVED"
-                    ]
-                ),
-
-            reportUrl: ""
+                    getValue(record, [
+                        "PRIMARY_SOURCE_CODE",
+                        "PRIMARY_SOURCE",
+                        "SOURCE_WATER_TYPE_CODE",
+                        "GW_SW_CODE"
+                    ]) ||
+                    system.source
+                )
         };
     } catch (error) {
         console.warn(
-            `Could not load full details for ${pwsId}`,
+            `Full details were unavailable for ${system.pwsId}.`,
             error
         );
 
-        return fallback;
+        return {
+            ...system,
+            name:
+                system.name ||
+                system.pwsId
+        };
     }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SEARCH BY COUNTY
+|--------------------------------------------------------------------------
+*/
+
+async function searchByCounty(
+    state,
+    location
+) {
+    const records =
+        await fetchJson(
+            createCountyUrl(location)
+        );
+
+    if (!Array.isArray(records)) {
+        return [];
+    }
+
+    const wantedCounty =
+        normalizeForComparison(location);
+
+    return records
+        .map(createSystemFromCountyRecord)
+        .filter((system) => {
+            const sameState =
+                !system.state ||
+                system.state === state;
+
+            const sameCounty =
+                normalizeForComparison(
+                    system.county
+                ) === wantedCounty;
+
+            return (
+                system.pwsId &&
+                sameState &&
+                sameCounty
+            );
+        });
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SEARCH BY CITY
+|--------------------------------------------------------------------------
+*/
+
+async function searchByCity(
+    state,
+    location
+) {
+    const records =
+        await fetchJson(
+            createCityUrl(location)
+        );
+
+    if (!Array.isArray(records)) {
+        return [];
+    }
+
+    const wantedCity =
+        normalizeForComparison(location);
+
+    return records
+        .map(createSystemFromCityRecord)
+        .filter((system) => {
+            const sameState =
+                !system.state ||
+                system.state === state;
+
+            const sameCity =
+                normalizeForComparison(
+                    system.city
+                ) === wantedCity;
+
+            return (
+                system.pwsId &&
+                sameState &&
+                sameCity
+            );
+        });
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REMOVE DUPLICATES
+|--------------------------------------------------------------------------
+*/
+
+function removeDuplicateSystems(systems) {
+    const unique =
+        new Map();
+
+    systems.forEach((system) => {
+        if (
+            system.pwsId &&
+            !unique.has(system.pwsId)
+        ) {
+            unique.set(
+                system.pwsId,
+                system
+            );
+        }
+    });
+
+    return Array.from(
+        unique.values()
+    );
 }
 
 
@@ -502,8 +764,11 @@ async function findWaterSystems() {
             .trim()
             .toUpperCase();
 
-    const zip =
-        zipInput.value.trim();
+    const locationType =
+        locationTypeSelect.value;
+
+    const location =
+        locationInput.value.trim();
 
     if (!state) {
         showStatus(
@@ -516,14 +781,14 @@ async function findWaterSystems() {
         return;
     }
 
-    if (!/^\d{5}$/.test(zip)) {
+    if (!location) {
         showStatus(
             statusBox,
-            "Please enter a valid five-digit ZIP code.",
+            "Please enter a city, town, or county name.",
             "error"
         );
 
-        zipInput.focus();
+        locationInput.focus();
         return;
     }
 
@@ -538,87 +803,30 @@ async function findWaterSystems() {
     );
 
     try {
-        const records =
-            await fetchJson(
-                geographicUrl(zip)
-            );
-        console.log("EPA URL:", geographicUrl(zip));
-console.log("EPA records:", records);
+        let systems = [];
 
-        if (!Array.isArray(records)) {
-            throw new Error(
-                "EPA returned an unexpected response."
-            );
+        if (locationType === "county") {
+            systems =
+                await searchByCounty(
+                    state,
+                    location
+                );
+        } else {
+            systems =
+                await searchByCity(
+                    state,
+                    location
+                );
         }
 
-        const unique =
-            new Map();
+        systems =
+            removeDuplicateSystems(systems);
 
-        records.forEach((record) => {
-            const pwsId =
-                normalize(
-                    getValue(
-                        record,
-                        [
-                            "PWSID",
-                            "PWS_ID"
-                        ]
-                    )
-                );
-
-            const stateServed =
-                normalize(
-                    getValue(
-                        record,
-                        [
-                            "STATE_SERVED",
-                            "STATE_CODE",
-                            "STATE"
-                        ]
-                    )
-                ).toUpperCase();
-
-            if (
-                pwsId &&
-                (
-                    !stateServed ||
-                    stateServed === state
-                )
-            ) {
-                if (!unique.has(pwsId)) {
-                    unique.set(
-                        pwsId,
-                        record
-                    );
-                }
-            }
-        });
-
-        if (unique.size === 0) {
-            showStatusHtml(
-                statusBox,
-                `
-                    No public water systems were returned for
-                    <strong>
-                        ${escapeHtml(zip)},
-                        ${escapeHtml(state)}
-                    </strong>.
-
-                    EPA service-area records may be incomplete,
-                    the utility may use a nearby ZIP code, or the
-                    property may use a private well.
-
-                    <br><br>
-
-                    <a
-                        href="${EPA_SEARCH}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Search EPA drinking-water records
-                    </a>
-                `,
-                "warning"
+        if (systems.length === 0) {
+            showNoResults(
+                state,
+                location,
+                locationType
             );
 
             return;
@@ -626,60 +834,40 @@ console.log("EPA records:", records);
 
         showStatus(
             statusBox,
-            "Systems found. Loading names and details...",
+            "Possible systems found. Loading names and system details...",
             "info"
         );
 
-        const requests =
-            Array.from(
-                unique.entries()
-            ).map(
-                ([pwsId, record]) => {
-                    return loadSystemDetails(
-                        pwsId,
-                        record
-                    );
-                }
+        const detailRequests =
+            systems.map((system) => {
+                return addSystemDetails(system);
+            });
+
+        currentSystems =
+            await Promise.all(
+                detailRequests
             );
 
         currentSystems =
-            await Promise.all(requests);
+            currentSystems
+                .filter((system) => {
+                    return Boolean(system.pwsId);
+                })
+                .sort((first, second) => {
+                    const firstName =
+                        first.name ||
+                        first.pwsId;
 
-        currentSystems.sort(
-            (first, second) => {
-                const firstName =
-                    first.name ||
-                    first.pwsId;
+                    const secondName =
+                        second.name ||
+                        second.pwsId;
 
-                const secondName =
-                    second.name ||
-                    second.pwsId;
-
-                return firstName.localeCompare(
-                    secondName
-                );
-            }
-        );
-
-        currentSystems.forEach(
-            (system, index) => {
-                const option =
-                    document.createElement(
-                        "option"
+                    return firstName.localeCompare(
+                        secondName
                     );
+                });
 
-                option.value =
-                    String(index);
-
-                option.textContent =
-                    `${system.name || system.pwsId}` +
-                    ` — ${system.pwsId}`;
-
-                systemSelect.appendChild(
-                    option
-                );
-            }
-        );
+        populateSystemDropdown();
 
         const word =
             currentSystems.length === 1
@@ -688,15 +876,13 @@ console.log("EPA records:", records);
 
         showStatus(
             statusBox,
-            `${currentSystems.length} possible water ${word} found. Select the provider that matches your water bill.`,
+            `${currentSystems.length} possible water ${word} found. Confirm the correct provider using your water bill.`,
             "info"
         );
 
         resultsBox.classList.add("show");
 
-        if (
-            currentSystems.length === 1
-        ) {
+        if (currentSystems.length === 1) {
             systemSelect.value = "0";
             displaySelectedSystem();
         }
@@ -709,15 +895,14 @@ console.log("EPA records:", records);
         showStatusHtml(
             statusBox,
             `
-                The live EPA lookup could not be completed.
-
-                EPA may be temporarily unavailable or may be
-                blocking requests from this webpage.
+                The EPA lookup could not be completed. EPA may be
+                temporarily unavailable or may not allow this request
+                from the browser.
 
                 <br><br>
 
                 <a
-                    href="${EPA_SEARCH}"
+                    href="${EPA_PUBLIC_SEARCH}"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -736,6 +921,80 @@ console.log("EPA records:", records);
 
 /*
 |--------------------------------------------------------------------------
+| NO RESULTS
+|--------------------------------------------------------------------------
+*/
+
+function showNoResults(
+    state,
+    location,
+    locationType
+) {
+    const safeState =
+        escapeHtml(state);
+
+    const safeLocation =
+        escapeHtml(location);
+
+    const typeLabel =
+        locationType === "county"
+            ? "county"
+            : "city or town";
+
+    showStatusHtml(
+        statusBox,
+        `
+            No public water systems were returned for the
+            ${typeLabel}
+            <strong>${safeLocation}, ${safeState}</strong>.
+
+            Try checking the spelling, removing the word
+            “County,” or searching by the other location type.
+
+            <br><br>
+
+            <a
+                href="${EPA_PUBLIC_SEARCH}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Search EPA drinking-water records
+            </a>
+        `,
+        "warning"
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| POPULATE DROPDOWN
+|--------------------------------------------------------------------------
+*/
+
+function populateSystemDropdown() {
+    currentSystems.forEach(
+        (system, index) => {
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                String(index);
+
+            option.textContent =
+                `${system.name || system.pwsId}` +
+                ` — ${system.pwsId}`;
+
+            systemSelect.appendChild(option);
+        }
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
 | DISPLAY SELECTED SYSTEM
 |--------------------------------------------------------------------------
 */
@@ -746,11 +1005,11 @@ function displaySelectedSystem() {
         return;
     }
 
-    const selectedIndex =
+    const index =
         Number(systemSelect.value);
 
     const system =
-        currentSystems[selectedIndex];
+        currentSystems[index];
 
     if (!system) {
         systemCard.hidden = true;
@@ -779,29 +1038,8 @@ function displaySelectedSystem() {
             system.population
         );
 
-    if (system.reportUrl) {
-        annualReportButton.href =
-            system.reportUrl;
-
-        annualReportButton.hidden =
-            false;
-
-        annualReportUnavailable.hidden =
-            true;
-    } else {
-        annualReportButton.removeAttribute(
-            "href"
-        );
-
-        annualReportButton.hidden =
-            true;
-
-        annualReportUnavailable.hidden =
-            false;
-    }
-
-    epaButton.href =
-        epaSystemUrl(
+    epaSystemButton.href =
+        createEpaSystemPageUrl(
             system.pwsId
         );
 
@@ -817,7 +1055,10 @@ function displaySelectedSystem() {
 
 function clearFinder() {
     stateSelect.value = "";
-    zipInput.value = "";
+    locationTypeSelect.value =
+        "city";
+
+    locationInput.value = "";
 
     systemSelect.innerHTML = `
         <option value="">
@@ -836,7 +1077,7 @@ function clearFinder() {
 
 /*
 |--------------------------------------------------------------------------
-| REPORT EXPLAINER
+| REPORT EXPLAINER TERMS
 |--------------------------------------------------------------------------
 */
 
@@ -893,7 +1134,7 @@ const reportTerms = [
             /violation|violated|noncompliance|non-compliance/i,
 
         explanation:
-            "The text mentions a possible regulatory or monitoring violation. Check the dates, contaminant, corrective action, and current status."
+            "The text mentions a possible regulatory or monitoring violation. Review the dates, contaminant, corrective action, and current status."
     },
 
     {
@@ -930,6 +1171,12 @@ const reportTerms = [
     }
 ];
 
+
+/*
+|--------------------------------------------------------------------------
+| REPORT EXPLAINER
+|--------------------------------------------------------------------------
+*/
 
 function createExplanationCard(
     title,
@@ -1005,7 +1252,7 @@ function explainReport() {
             /\b(?:mg\s*\/\s*l|[µμu]g\s*\/\s*l|ng\s*\/\s*l|ppm|ppb|ppt|ntu|pci\s*\/\s*l)\b/gi
         ) || [];
 
-    const units =
+    const uniqueUnits =
         Array.from(
             new Set(
                 unitMatches.map((unit) => {
@@ -1016,11 +1263,11 @@ function explainReport() {
             )
         );
 
-    if (units.length > 0) {
+    if (uniqueUnits.length > 0) {
         explanationResults.appendChild(
             createExplanationCard(
                 "Units found",
-                `${units.join(", ")}. Compare a result with a standard only when both use compatible units.`
+                `${uniqueUnits.join(", ")}. Compare a result with a standard only when both use compatible units.`
             )
         );
 
@@ -1056,7 +1303,7 @@ function explainReport() {
         explanationResults.appendChild(
             createExplanationCard(
                 "Possible exceedance",
-                "The text may describe a result above a limit or action level. Review the original report for the affected contaminant, dates, required actions, and health information."
+                "The text may describe a result above a limit or action level. Review the original report for the contaminant, dates, required actions, and health information."
             )
         );
 
@@ -1103,71 +1350,46 @@ function clearReport() {
 
 /*
 |--------------------------------------------------------------------------
-| EVENT LISTENERS
+| EVENTS
 |--------------------------------------------------------------------------
 */
 
-if (findButton) {
-    findButton.addEventListener(
-        "click",
-        findWaterSystems
-    );
-}
+findButton.addEventListener(
+    "click",
+    findWaterSystems
+);
 
-if (clearButton) {
-    clearButton.addEventListener(
-        "click",
-        clearFinder
-    );
-}
+clearButton.addEventListener(
+    "click",
+    clearFinder
+);
 
-if (systemSelect) {
-    systemSelect.addEventListener(
-        "change",
-        displaySelectedSystem
-    );
-}
+systemSelect.addEventListener(
+    "change",
+    displaySelectedSystem
+);
 
-if (zipInput) {
-    zipInput.addEventListener(
-        "input",
-        () => {
-            zipInput.value =
-                zipInput.value
-                    .replace(/\D/g, "")
-                    .slice(0, 5);
+locationInput.addEventListener(
+    "keydown",
+    (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            findWaterSystems();
         }
-    );
+    }
+);
 
-    zipInput.addEventListener(
-        "keydown",
-        (event) => {
-            if (event.key === "Enter") {
-                event.preventDefault();
+explainButton.addEventListener(
+    "click",
+    explainReport
+);
 
-                findWaterSystems();
-            }
-        }
-    );
-}
+exampleButton.addEventListener(
+    "click",
+    loadExample
+);
 
-if (explainButton) {
-    explainButton.addEventListener(
-        "click",
-        explainReport
-    );
-}
-
-if (exampleButton) {
-    exampleButton.addEventListener(
-        "click",
-        loadExample
-    );
-}
-
-if (clearTextButton) {
-    clearTextButton.addEventListener(
-        "click",
-        clearReport
-    );
-}
+clearTextButton.addEventListener(
+    "click",
+    clearReport
+);
