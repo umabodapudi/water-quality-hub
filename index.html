@@ -10,737 +10,12 @@
 
     <meta
         name="description"
-        content="Understand drinking-water results, contaminants, treatment options, private wells, and water emergencies."
+        content="Simple tools to understand drinking-water results, contaminants, treatment options, private wells, and water advisories."
     >
 
     <title>Water Quality Hub</title>
 
-    <style>
-        :root {
-            --primary: #086b72;
-            --primary-dark: #064f55;
-            --primary-light: #e8f5f5;
-
-            --background: #f5f8f9;
-            --surface: #ffffff;
-            --surface-soft: #f0f7f7;
-
-            --text: #173238;
-            --muted: #5f7074;
-            --border: #d7e1e3;
-
-            --warning-bg: #fff8e5;
-            --warning-border: #ead59c;
-            --warning-text: #765000;
-
-            --danger-bg: #fff1f0;
-            --danger-border: #f0b7b2;
-            --danger-text: #9c251b;
-
-            --shadow: 0 12px 35px rgba(32, 62, 67, 0.09);
-            --radius: 16px;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            margin: 0;
-            background: var(--background);
-            color: var(--text);
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-            line-height: 1.6;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        img {
-            max-width: 100%;
-        }
-
-        .skip-link {
-            position: absolute;
-            top: -60px;
-            left: 16px;
-            z-index: 1000;
-            padding: 10px 16px;
-            border-radius: 8px;
-            background: #ffffff;
-            color: var(--primary-dark);
-            font-weight: 700;
-        }
-
-        .skip-link:focus {
-            top: 12px;
-        }
-
-        .container {
-            width: min(1120px, calc(100% - 36px));
-            margin: auto;
-        }
-
-        /* Header */
-
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-container {
-            width: min(1120px, calc(100% - 36px));
-            min-height: 70px;
-            margin: auto;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 28px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            color: var(--primary-dark);
-            font-size: 1.05rem;
-            font-weight: 800;
-            text-decoration: none;
-        }
-
-        .brand-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 50% 50% 50% 12px;
-            background: var(--primary);
-            transform: rotate(45deg);
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .brand-icon::after {
-            content: "";
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            top: 9px;
-            left: 9px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.75);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-links a {
-            padding: 9px 13px;
-            border-radius: 8px;
-            color: #38565c;
-            font-weight: 650;
-            text-decoration: none;
-        }
-
-        .nav-links a:hover,
-        .nav-links a:focus-visible {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .nav-links a[aria-current="page"] {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .menu-button {
-            display: none;
-            min-width: 44px;
-            min-height: 44px;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            background: #ffffff;
-            color: var(--primary-dark);
-            cursor: pointer;
-        }
-
-        .menu-button span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            margin: 4px auto;
-            background: currentColor;
-        }
-
-        /* Hero */
-
-        .hero {
-            padding: 78px 0 54px;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1.2fr) minmax(330px, 0.8fr);
-            gap: 48px;
-            align-items: center;
-        }
-
-        .eyebrow {
-            margin-bottom: 11px;
-            color: var(--primary);
-            font-size: 0.82rem;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            max-width: 760px;
-            margin: 0;
-            font-size: clamp(2.7rem, 6vw, 4.8rem);
-            line-height: 1.05;
-            letter-spacing: -0.045em;
-        }
-
-        .hero-text {
-            max-width: 690px;
-            margin: 22px 0 0;
-            color: var(--muted);
-            font-size: 1.15rem;
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .primary-button,
-        .secondary-button {
-            min-height: 50px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 11px 20px;
-            border-radius: 10px;
-            font-weight: 800;
-            text-decoration: none;
-            transition: 0.2s ease;
-        }
-
-        .primary-button {
-            border: 1px solid var(--primary);
-            background: var(--primary);
-            color: #ffffff;
-        }
-
-        .primary-button:hover {
-            border-color: var(--primary-dark);
-            background: var(--primary-dark);
-        }
-
-        .secondary-button {
-            border: 1px solid #b7c7ca;
-            background: #ffffff;
-            color: var(--text);
-        }
-
-        .secondary-button:hover {
-            background: #f3f6f7;
-        }
-
-        .hero-card {
-            padding: 28px;
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffffff 0%,
-                    #edf7f7 100%
-                );
-            box-shadow: var(--shadow);
-        }
-
-        .hero-card-icon {
-            width: 62px;
-            height: 62px;
-            display: grid;
-            place-items: center;
-            margin-bottom: 22px;
-            border-radius: 18px;
-            background: var(--primary);
-            color: #ffffff;
-            font-size: 1.7rem;
-            font-weight: 800;
-        }
-
-        .hero-card h2 {
-            margin: 0 0 8px;
-            font-size: 1.45rem;
-        }
-
-        .hero-card p {
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .hero-card-list {
-            margin: 22px 0 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .hero-card-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
-            color: #3e595e;
-        }
-
-        .hero-card-list li::before {
-            content: "✓";
-            width: 22px;
-            height: 22px;
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            border-radius: 50%;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-size: 0.78rem;
-            font-weight: 900;
-        }
-
-        /* Main actions */
-
-        .actions-section {
-            padding: 32px 0 72px;
-        }
-
-        .section-heading {
-            max-width: 720px;
-            margin-bottom: 28px;
-        }
-
-        .section-heading h2 {
-            margin: 0 0 8px;
-            font-size: clamp(1.8rem, 4vw, 2.65rem);
-            letter-spacing: -0.025em;
-        }
-
-        .section-heading p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 1.03rem;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .action-card {
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            padding: 25px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-            box-shadow: var(--shadow);
-            text-decoration: none;
-            transition:
-                transform 0.2s ease,
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-
-        .action-card:hover,
-        .action-card:focus-visible {
-            transform: translateY(-4px);
-            border-color: #a8c8cb;
-            box-shadow: 0 17px 40px rgba(32, 62, 67, 0.12);
-        }
-
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            display: grid;
-            place-items: center;
-            margin-bottom: 20px;
-            border-radius: 13px;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-size: 1.35rem;
-            font-weight: 800;
-        }
-
-        .action-card h3 {
-            margin: 0 0 8px;
-            font-size: 1.23rem;
-        }
-
-        .action-card p {
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .card-link {
-            margin-top: auto;
-            padding-top: 22px;
-            color: var(--primary-dark);
-            font-weight: 800;
-        }
-
-        /* Quick help */
-
-        .quick-help {
-            padding: 68px 0;
-            background: var(--surface-soft);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .quick-help-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-            gap: 45px;
-            align-items: start;
-        }
-
-        .quick-help-title h2 {
-            margin: 0 0 10px;
-            font-size: clamp(1.8rem, 4vw, 2.65rem);
-        }
-
-        .quick-help-title p {
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .help-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .help-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 18px 20px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #ffffff;
-            text-decoration: none;
-        }
-
-        .help-item:hover {
-            border-color: #a8c8cb;
-        }
-
-        .help-item-content strong {
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .help-item-content span {
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .help-arrow {
-            color: var(--primary);
-            font-size: 1.25rem;
-            font-weight: 800;
-        }
-
-        /* Emergency */
-
-        .emergency-section {
-            padding: 68px 0;
-        }
-
-        .emergency-card {
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            gap: 22px;
-            align-items: center;
-            padding: 25px 28px;
-            border: 1px solid var(--danger-border);
-            border-radius: var(--radius);
-            background: var(--danger-bg);
-        }
-
-        .emergency-icon {
-            width: 52px;
-            height: 52px;
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            background: #ffffff;
-            color: var(--danger-text);
-            font-size: 1.45rem;
-            font-weight: 900;
-        }
-
-        .emergency-card h2 {
-            margin: 0 0 5px;
-            color: var(--danger-text);
-            font-size: 1.28rem;
-        }
-
-        .emergency-card p {
-            margin: 0;
-            color: #6f3833;
-        }
-
-        .emergency-link {
-            white-space: nowrap;
-            color: var(--danger-text);
-            font-weight: 800;
-            text-decoration: none;
-        }
-
-        .emergency-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Information section */
-
-        .information-section {
-            padding: 0 0 76px;
-        }
-
-        .information-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .information-card {
-            padding: 25px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-        }
-
-        .information-card h3 {
-            margin: 0 0 8px;
-            font-size: 1.15rem;
-        }
-
-        .information-card p {
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .information-card a {
-            display: inline-block;
-            margin-top: 14px;
-            color: var(--primary-dark);
-            font-weight: 800;
-        }
-
-        /* Footer */
-
-        .site-footer {
-            border-top: 1px solid var(--border);
-            background: #ffffff;
-        }
-
-        .footer-content {
-            width: min(1120px, calc(100% - 36px));
-            margin: auto;
-            padding: 32px 0;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .footer-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .footer-brand {
-            color: var(--text);
-            font-weight: 800;
-        }
-
-        .footer-description {
-            max-width: 680px;
-            margin: 7px 0 0;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .footer-links a {
-            color: var(--primary-dark);
-            font-weight: 700;
-        }
-
-        .copyright {
-            margin: 24px 0 0;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        /* Responsive */
-
-        @media (max-width: 900px) {
-            .hero-grid,
-            .quick-help-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                padding-top: 58px;
-            }
-
-            .hero-card {
-                max-width: 620px;
-            }
-
-            .action-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .nav-links {
-                gap: 2px;
-            }
-
-            .nav-links a {
-                padding: 8px 9px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 700px) {
-            .menu-button {
-                display: block;
-            }
-
-            .nav-container {
-                position: relative;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: calc(100% + 1px);
-                left: 0;
-                right: 0;
-
-                display: none;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 3px;
-
-                padding: 12px;
-                border: 1px solid var(--border);
-                border-radius: 0 0 12px 12px;
-                background: #ffffff;
-                box-shadow: var(--shadow);
-            }
-
-            .nav-links.is-open {
-                display: flex;
-            }
-
-            .nav-links a {
-                width: 100%;
-                padding: 11px 12px;
-            }
-
-            .action-grid,
-            .information-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .emergency-card {
-                grid-template-columns: auto 1fr;
-            }
-
-            .emergency-link {
-                grid-column: 2;
-            }
-
-            .footer-top {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 520px) {
-            .container,
-            .nav-container,
-            .footer-content {
-                width: min(100% - 24px, 1120px);
-            }
-
-            .hero {
-                padding: 45px 0 36px;
-            }
-
-            h1 {
-                font-size: 2.6rem;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-            }
-
-            .primary-button,
-            .secondary-button {
-                width: 100%;
-            }
-
-            .action-card {
-                min-height: 220px;
-            }
-
-            .emergency-card {
-                grid-template-columns: 1fr;
-                text-align: left;
-            }
-
-            .emergency-link {
-                grid-column: 1;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -748,10 +23,19 @@
         Skip to main content
     </a>
 
+    <!-- Header -->
     <header class="site-header">
-        <div class="nav-container">
-            <a class="brand" href="index.html">
-                <span class="brand-icon" aria-hidden="true"></span>
+        <div class="header-inner">
+            <a
+                class="brand"
+                href="#home"
+                data-route="home"
+                aria-label="Water Quality Hub home"
+            >
+                <span class="brand-icon" aria-hidden="true">
+                    <span class="water-drop"></span>
+                </span>
+
                 <span>Water Quality Hub</span>
             </a>
 
@@ -759,7 +43,7 @@
                 id="menu-button"
                 class="menu-button"
                 type="button"
-                aria-label="Open navigation menu"
+                aria-label="Open menu"
                 aria-expanded="false"
                 aria-controls="main-navigation"
             >
@@ -770,519 +54,1265 @@
 
             <nav
                 id="main-navigation"
-                class="nav-links"
+                class="main-navigation"
                 aria-label="Main navigation"
             >
                 <a
-                    href="index.html"
-                    aria-current="page"
+                    href="#home"
+                    class="nav-link active"
+                    data-route="home"
                 >
                     Home
                 </a>
 
-                <a href="calculator.html">
+                <a
+                    href="#calculator"
+                    class="nav-link"
+                    data-route="calculator"
+                >
                     Check a Result
                 </a>
 
-                <a href="contaminants.html">
+                <a
+                    href="#contaminants"
+                    class="nav-link"
+                    data-route="contaminants"
+                >
                     Contaminants
                 </a>
 
-                <a href="treatment.html">
+                <a
+                    href="#treatment"
+                    class="nav-link"
+                    data-route="treatment"
+                >
                     Treatment
                 </a>
 
-                <a href="private-wells.html">
+                <a
+                    href="#well"
+                    class="nav-link"
+                    data-route="well"
+                >
                     Private Wells
                 </a>
 
-                <a href="emergencies.html">
-                    Emergencies
+                <a
+                    href="#emergency"
+                    class="nav-link"
+                    data-route="emergency"
+                >
+                    Advisories
                 </a>
             </nav>
         </div>
     </header>
 
     <main id="main-content">
-        <!-- Hero -->
-        <section class="hero">
-            <div class="container hero-grid">
-                <div>
-                    <div class="eyebrow">
-                        Clear drinking-water information
+
+        <!-- Home -->
+        <section
+            id="view-home"
+            class="app-view active"
+            data-view="home"
+        >
+            <div class="hero">
+                <div class="page-width hero-grid">
+                    <div class="hero-content">
+                        <p class="eyebrow">
+                            Clear water information
+                        </p>
+
+                        <h1>
+                            Know what’s in your water.
+                        </h1>
+
+                        <p class="hero-text">
+                            Check a result, learn what it means, and find
+                            your next step.
+                        </p>
+
+                        <div class="hero-actions">
+                            <button
+                                class="button button-primary"
+                                type="button"
+                                data-go-to="calculator"
+                            >
+                                Check my result
+                            </button>
+
+                            <button
+                                class="button button-light"
+                                type="button"
+                                data-go-to="contaminants"
+                            >
+                                Browse contaminants
+                            </button>
+                        </div>
                     </div>
 
-                    <h1>
-                        Understand your water before deciding what to do.
-                    </h1>
+                    <div class="hero-card">
+                        <div class="hero-card-top">
+                            <span class="hero-card-icon" aria-hidden="true">
+                                H₂O
+                            </span>
 
-                    <p class="hero-text">
-                        Check a laboratory result, learn about common
-                        contaminants, compare treatment options, and find
-                        practical guidance for public water and private wells.
-                    </p>
+                            <span class="small-label">
+                                Water result
+                            </span>
+                        </div>
 
-                    <div class="hero-actions">
-                        <a
-                            class="primary-button"
-                            href="calculator.html"
+                        <div class="sample-result">
+                            <span>Arsenic</span>
+
+                            <strong>12 ppb</strong>
+                        </div>
+
+                        <div class="result-line">
+                            <span class="result-dot"></span>
+
+                            <span>
+                                Above the drinking-water limit
+                            </span>
+                        </div>
+
+                        <button
+                            class="card-button"
+                            type="button"
+                            data-go-to="calculator"
                         >
-                            Check my water result
+                            See what this means
                             <span aria-hidden="true">→</span>
-                        </a>
-
-                        <a
-                            class="secondary-button"
-                            href="contaminants.html"
-                        >
-                            Explore contaminants
-                        </a>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <aside class="hero-card">
-                    <div class="hero-card-icon" aria-hidden="true">
-                        H₂O
+            <!-- Main tools -->
+            <section class="main-tools">
+                <div class="page-width">
+                    <div class="section-heading">
+                        <p class="eyebrow">
+                            Start here
+                        </p>
+
+                        <h2>
+                            What can we help with?
+                        </h2>
                     </div>
 
-                    <h2>
-                        Start with the question you have
-                    </h2>
+                    <div class="main-tool-grid">
+                        <button
+                            class="main-tool-card"
+                            type="button"
+                            data-go-to="calculator"
+                        >
+                            <span class="tool-number">
+                                01
+                            </span>
 
-                    <p>
-                        You do not need to understand technical water
-                        terminology before using this website.
+                            <span class="tool-icon" aria-hidden="true">
+                                #
+                            </span>
+
+                            <span class="tool-title">
+                                Check a result
+                            </span>
+
+                            <span class="tool-description">
+                                Enter the number from your water report.
+                            </span>
+
+                            <span class="tool-link">
+                                Start checking
+                                <span aria-hidden="true">→</span>
+                            </span>
+                        </button>
+
+                        <button
+                            class="main-tool-card"
+                            type="button"
+                            data-go-to="contaminants"
+                        >
+                            <span class="tool-number">
+                                02
+                            </span>
+
+                            <span class="tool-icon" aria-hidden="true">
+                                i
+                            </span>
+
+                            <span class="tool-title">
+                                Learn about a contaminant
+                            </span>
+
+                            <span class="tool-description">
+                                Find simple answers about lead, arsenic,
+                                nitrate, PFAS, and more.
+                            </span>
+
+                            <span class="tool-link">
+                                Search the library
+                                <span aria-hidden="true">→</span>
+                            </span>
+                        </button>
+
+                        <button
+                            class="main-tool-card"
+                            type="button"
+                            data-go-to="treatment"
+                        >
+                            <span class="tool-number">
+                                03
+                            </span>
+
+                            <span class="tool-icon" aria-hidden="true">
+                                ◌
+                            </span>
+
+                            <span class="tool-title">
+                                Find a treatment
+                            </span>
+
+                            <span class="tool-description">
+                                Compare filters and treatment options.
+                            </span>
+
+                            <span class="tool-link">
+                                Find an option
+                                <span aria-hidden="true">→</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Smaller tools -->
+            <section class="more-help">
+                <div class="page-width more-help-grid">
+                    <div class="more-help-intro">
+                        <p class="eyebrow">
+                            More help
+                        </p>
+
+                        <h2>
+                            Looking for something else?
+                        </h2>
+                    </div>
+
+                    <div class="small-tool-list">
+                        <button
+                            class="small-tool-item"
+                            type="button"
+                            data-go-to="well"
+                        >
+                            <span class="small-tool-icon" aria-hidden="true">
+                                W
+                            </span>
+
+                            <span>
+                                <strong>Private wells</strong>
+
+                                <small>
+                                    Testing, flooding, and maintenance
+                                </small>
+                            </span>
+
+                            <span class="small-tool-arrow" aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+
+                        <button
+                            class="small-tool-item"
+                            type="button"
+                            data-go-to="emergency"
+                        >
+                            <span class="small-tool-icon" aria-hidden="true">
+                                !
+                            </span>
+
+                            <span>
+                                <strong>Water advisories</strong>
+
+                                <small>
+                                    Boil-water and do-not-drink notices
+                                </small>
+                            </span>
+
+                            <span class="small-tool-arrow" aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+
+                        <button
+                            class="small-tool-item"
+                            type="button"
+                            data-go-to="report"
+                        >
+                            <span class="small-tool-icon" aria-hidden="true">
+                                R
+                            </span>
+
+                            <span>
+                                <strong>Water report help</strong>
+
+                                <small>
+                                    Understand common report terms
+                                </small>
+                            </span>
+
+                            <span class="small-tool-arrow" aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick questions -->
+            <section class="quick-questions">
+                <div class="page-width">
+                    <div class="section-heading compact-heading">
+                        <p class="eyebrow">
+                            Common questions
+                        </p>
+
+                        <h2>
+                            Start with what you noticed.
+                        </h2>
+                    </div>
+
+                    <div class="question-grid">
+                        <button
+                            class="question-card"
+                            type="button"
+                            data-contaminant-open="lead"
+                        >
+                            <span>
+                                My report shows lead
+                            </span>
+
+                            <span aria-hidden="true">→</span>
+                        </button>
+
+                        <button
+                            class="question-card"
+                            type="button"
+                            data-contaminant-open="arsenic"
+                        >
+                            <span>
+                                My well has arsenic
+                            </span>
+
+                            <span aria-hidden="true">→</span>
+                        </button>
+
+                        <button
+                            class="question-card"
+                            type="button"
+                            data-emergency-open="boil-water"
+                        >
+                            <span>
+                                I received a boil notice
+                            </span>
+
+                            <span aria-hidden="true">→</span>
+                        </button>
+
+                        <button
+                            class="question-card"
+                            type="button"
+                            data-contaminant-open="taste-smell"
+                        >
+                            <span>
+                                My water smells or looks different
+                            </span>
+
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notice -->
+            <section class="notice-section">
+                <div class="page-width">
+                    <div class="notice-card">
+                        <span class="notice-icon" aria-hidden="true">
+                            !
+                        </span>
+
+                        <div>
+                            <strong>
+                                Have an active water advisory?
+                            </strong>
+
+                            <p>
+                                Follow the instructions from your utility
+                                or local health department first.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            data-go-to="emergency"
+                        >
+                            View guidance
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Result Checker -->
+        <section
+            id="view-calculator"
+            class="app-view"
+            data-view="calculator"
+            hidden
+        >
+            <div class="page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
+
+                    <p class="eyebrow">
+                        Result checker
                     </p>
 
-                    <ul class="hero-card-list">
-                        <li>
-                            Compare a test result with a drinking-water benchmark
-                        </li>
+                    <h1>
+                        Check your water result.
+                    </h1>
 
-                        <li>
-                            Learn which treatment technologies may help
-                        </li>
+                    <p>
+                        Enter the number exactly as it appears on your report.
+                    </p>
+                </div>
+            </div>
 
-                        <li>
-                            Understand what actions may be appropriate
-                        </li>
-                    </ul>
+            <div class="page-width checker-layout">
+                <section class="panel form-panel">
+                    <form id="water-calculator" novalidate>
+                        <div
+                            id="calculator-error"
+                            class="form-error"
+                            role="alert"
+                            hidden
+                        ></div>
+
+                        <div class="form-group">
+                            <label for="calculator-contaminant">
+                                Contaminant
+                            </label>
+
+                            <select
+                                id="calculator-contaminant"
+                                name="contaminant"
+                                required
+                            >
+                                <option value="">
+                                    Choose one
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="calculator-value">
+                                    Result
+                                </label>
+
+                                <input
+                                    id="calculator-value"
+                                    name="resultValue"
+                                    type="number"
+                                    min="0"
+                                    step="any"
+                                    inputmode="decimal"
+                                    placeholder="Example: 12"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="calculator-unit">
+                                    Unit
+                                </label>
+
+                                <select
+                                    id="calculator-unit"
+                                    name="resultUnit"
+                                    disabled
+                                    required
+                                >
+                                    <option value="">
+                                        Choose unit
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <fieldset class="form-group">
+                            <legend>
+                                Water source
+                                <span>Optional</span>
+                            </legend>
+
+                            <div class="radio-row">
+                                <label class="radio-card">
+                                    <input
+                                        type="radio"
+                                        name="waterSource"
+                                        value="public"
+                                    >
+
+                                    <span>Public water</span>
+                                </label>
+
+                                <label class="radio-card">
+                                    <input
+                                        type="radio"
+                                        name="waterSource"
+                                        value="private"
+                                    >
+
+                                    <span>Private well</span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-buttons">
+                            <button
+                                class="button button-primary"
+                                type="submit"
+                            >
+                                Explain my result
+                            </button>
+
+                            <button
+                                id="calculator-reset"
+                                class="button button-light"
+                                type="button"
+                            >
+                                Clear
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <aside class="result-column">
+                    <section
+                        id="calculator-empty-result"
+                        class="panel empty-result"
+                    >
+                        <span class="empty-result-icon" aria-hidden="true">
+                            ≈
+                        </span>
+
+                        <h2>
+                            Your result will appear here.
+                        </h2>
+
+                        <p>
+                            Choose a contaminant and enter your number.
+                        </p>
+                    </section>
+
+                    <section
+                        id="calculator-result-panel"
+                        class="panel result-panel"
+                        aria-live="polite"
+                        hidden
+                    >
+                        <div class="result-header">
+                            <span
+                                id="calculator-status"
+                                class="status-badge"
+                            ></span>
+
+                            <h2 id="calculator-result-title"></h2>
+
+                            <p id="calculator-result-summary"></p>
+                        </div>
+
+                        <div class="result-comparison">
+                            <div>
+                                <span>Your result</span>
+
+                                <strong
+                                    id="calculator-result-value"
+                                ></strong>
+                            </div>
+
+                            <div>
+                                <span
+                                    id="calculator-benchmark-type"
+                                >
+                                    Limit
+                                </span>
+
+                                <strong
+                                    id="calculator-benchmark-value"
+                                ></strong>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h3>
+                                What it means
+                            </h3>
+
+                            <p id="calculator-explanation"></p>
+                        </div>
+
+                        <div class="result-section">
+                            <h3>
+                                What to do next
+                            </h3>
+
+                            <ul
+                                id="calculator-next-steps"
+                                class="result-list"
+                            ></ul>
+                        </div>
+
+                        <p
+                            id="calculator-limitation"
+                            class="result-note"
+                        ></p>
+
+                        <a
+                            id="calculator-source"
+                            class="source-link"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Read the official guidance
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </section>
                 </aside>
             </div>
         </section>
 
-        <!-- Main actions -->
-        <section class="actions-section">
-            <div class="container">
-                <div class="section-heading">
-                    <h2>
-                        What would you like help with?
-                    </h2>
+        <!-- Contaminants -->
+        <section
+            id="view-contaminants"
+            class="app-view"
+            data-view="contaminants"
+            hidden
+        >
+            <div class="page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
 
-                    <p>
-                        Choose the option that best matches your situation.
+                    <p class="eyebrow">
+                        Contaminant library
                     </p>
-                </div>
 
-                <div class="action-grid">
-                    <a
-                        class="action-card"
-                        href="calculator.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            #
-                        </div>
-
-                        <h3>
-                            Check a test result
-                        </h3>
-
-                        <p>
-                            Enter a contaminant, result, and unit to see
-                            how the number compares with an educational
-                            benchmark.
-                        </p>
-
-                        <span class="card-link">
-                            Check my result →
-                        </span>
-                    </a>
-
-                    <a
-                        class="action-card"
-                        href="contaminants.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            i
-                        </div>
-
-                        <h3>
-                            Learn about a contaminant
-                        </h3>
-
-                        <p>
-                            Understand where contaminants come from,
-                            why they matter, and what common results mean.
-                        </p>
-
-                        <span class="card-link">
-                            Browse contaminants →
-                        </span>
-                    </a>
-
-                    <a
-                        class="action-card"
-                        href="treatment.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            ⚙
-                        </div>
-
-                        <h3>
-                            Compare treatment options
-                        </h3>
-
-                        <p>
-                            Learn whether filtration, reverse osmosis,
-                            disinfection, or another method may be appropriate.
-                        </p>
-
-                        <span class="card-link">
-                            View treatment guide →
-                        </span>
-                    </a>
-
-                    <a
-                        class="action-card"
-                        href="private-wells.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            W
-                        </div>
-
-                        <h3>
-                            Manage a private well
-                        </h3>
-
-                        <p>
-                            Find guidance about routine testing, flooding,
-                            disinfection, maintenance, and common well concerns.
-                        </p>
-
-                        <span class="card-link">
-                            Private well guidance →
-                        </span>
-                    </a>
-
-                    <a
-                        class="action-card"
-                        href="public-water.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            P
-                        </div>
-
-                        <h3>
-                            Understand public water
-                        </h3>
-
-                        <p>
-                            Learn how water systems test water, report results,
-                            issue notices, and respond to violations.
-                        </p>
-
-                        <span class="card-link">
-                            Public water information →
-                        </span>
-                    </a>
-
-                    <a
-                        class="action-card"
-                        href="emergencies.html"
-                    >
-                        <div class="card-icon" aria-hidden="true">
-                            !
-                        </div>
-
-                        <h3>
-                            Respond to a water emergency
-                        </h3>
-
-                        <p>
-                            Find immediate guidance for boil-water advisories,
-                            contamination, flooding, and loss of water pressure.
-                        </p>
-
-                        <span class="card-link">
-                            Emergency guidance →
-                        </span>
-                    </a>
+                    <h1>
+                        What are you looking for?
+                    </h1>
                 </div>
             </div>
-        </section>
 
-        <!-- Quick help -->
-        <section class="quick-help">
-            <div class="container quick-help-grid">
-                <div class="quick-help-title">
-                    <div class="eyebrow">
-                        Common questions
-                    </div>
+            <div class="page-width content-area">
+                <div class="search-box">
+                    <span aria-hidden="true">⌕</span>
 
-                    <h2>
-                        Find help without knowing the technical term.
-                    </h2>
-
-                    <p>
-                        Start with what you noticed or what your report says.
-                    </p>
+                    <input
+                        id="contaminant-search"
+                        type="search"
+                        placeholder="Search lead, arsenic, nitrate..."
+                        autocomplete="off"
+                    >
                 </div>
 
-                <div class="help-list">
-                    <a
-                        class="help-item"
-                        href="contaminants.html#lead"
+                <div
+                    id="contaminant-filters"
+                    class="filter-row"
+                >
+                    <button
+                        class="filter-button active"
+                        type="button"
+                        data-filter="all"
                     >
-                        <div class="help-item-content">
-                            <strong>
-                                My report detected lead
-                            </strong>
+                        All
+                    </button>
 
-                            <span>
-                                Learn about plumbing sources and exposure reduction.
-                            </span>
-                        </div>
-
-                        <span class="help-arrow" aria-hidden="true">
-                            →
-                        </span>
-                    </a>
-
-                    <a
-                        class="help-item"
-                        href="contaminants.html#arsenic"
+                    <button
+                        class="filter-button"
+                        type="button"
+                        data-filter="metals"
                     >
-                        <div class="help-item-content">
-                            <strong>
-                                My well has arsenic
-                            </strong>
+                        Metals
+                    </button>
 
-                            <span>
-                                Understand results, retesting, and treatment options.
-                            </span>
-                        </div>
-
-                        <span class="help-arrow" aria-hidden="true">
-                            →
-                        </span>
-                    </a>
-
-                    <a
-                        class="help-item"
-                        href="emergencies.html#boil-water"
+                    <button
+                        class="filter-button"
+                        type="button"
+                        data-filter="microbial"
                     >
-                        <div class="help-item-content">
-                            <strong>
-                                I received a boil-water notice
-                            </strong>
+                        Bacteria
+                    </button>
 
-                            <span>
-                                See what water uses require boiling or an alternative source.
-                            </span>
-                        </div>
-
-                        <span class="help-arrow" aria-hidden="true">
-                            →
-                        </span>
-                    </a>
-
-                    <a
-                        class="help-item"
-                        href="contaminants.html#taste-smell"
+                    <button
+                        class="filter-button"
+                        type="button"
+                        data-filter="chemicals"
                     >
-                        <div class="help-item-content">
-                            <strong>
-                                My water looks, smells, or tastes unusual
-                            </strong>
+                        Chemicals
+                    </button>
 
-                            <span>
-                                Explore common causes and when testing may be needed.
-                            </span>
-                        </div>
-
-                        <span class="help-arrow" aria-hidden="true">
-                            →
-                        </span>
-                    </a>
+                    <button
+                        class="filter-button"
+                        type="button"
+                        data-filter="aesthetic"
+                    >
+                        Taste and appearance
+                    </button>
                 </div>
-            </div>
-        </section>
 
-        <!-- Emergency notice -->
-        <section class="emergency-section">
-            <div class="container">
-                <div class="emergency-card">
-                    <div class="emergency-icon" aria-hidden="true">
-                        !
-                    </div>
-
+                <div class="library-layout">
                     <div>
-                        <h2>
-                            Is there an active water advisory?
-                        </h2>
+                        <div class="library-title-row">
+                            <h2>
+                                Browse
+                            </h2>
 
-                        <p>
-                            Follow instructions from your water utility,
-                            health department, or emergency officials before
-                            relying on general website guidance.
-                        </p>
+                            <span id="contaminant-count"></span>
+                        </div>
+
+                        <div
+                            id="contaminant-list"
+                            class="contaminant-list"
+                        ></div>
+
+                        <div
+                            id="contaminant-no-results"
+                            class="panel empty-result"
+                            hidden
+                        >
+                            <h2>
+                                Nothing found.
+                            </h2>
+
+                            <p>
+                                Try another name or spelling.
+                            </p>
+                        </div>
                     </div>
 
-                    <a
-                        class="emergency-link"
-                        href="emergencies.html"
+                    <aside
+                        id="contaminant-detail"
+                        class="panel contaminant-detail"
                     >
-                        View emergency guidance →
-                    </a>
+                        <div class="empty-result">
+                            <span class="empty-result-icon" aria-hidden="true">
+                                i
+                            </span>
+
+                            <h2>
+                                Choose a contaminant.
+                            </h2>
+
+                            <p>
+                                The details will appear here.
+                            </p>
+                        </div>
+                    </aside>
                 </div>
             </div>
         </section>
 
-        <!-- Additional information -->
-        <section class="information-section">
-            <div class="container">
-                <div class="section-heading">
+        <!-- Treatment -->
+        <section
+            id="view-treatment"
+            class="app-view"
+            data-view="treatment"
+            hidden
+        >
+            <div class="page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
+
+                    <p class="eyebrow">
+                        Treatment finder
+                    </p>
+
+                    <h1>
+                        Find a treatment option.
+                    </h1>
+
+                    <p>
+                        Choose what you want to remove.
+                    </p>
+                </div>
+            </div>
+
+            <div class="page-width checker-layout">
+                <section class="panel form-panel">
+                    <form id="treatment-form">
+                        <div class="form-group">
+                            <label for="treatment-contaminant">
+                                Contaminant
+                            </label>
+
+                            <select
+                                id="treatment-contaminant"
+                                required
+                            >
+                                <option value="">
+                                    Choose one
+                                </option>
+                            </select>
+                        </div>
+
+                        <fieldset class="form-group">
+                            <legend>
+                                Where do you want treatment?
+                            </legend>
+
+                            <div class="radio-row">
+                                <label class="radio-card">
+                                    <input
+                                        type="radio"
+                                        name="treatmentLocation"
+                                        value="point-of-use"
+                                        checked
+                                    >
+
+                                    <span>Drinking-water tap</span>
+                                </label>
+
+                                <label class="radio-card">
+                                    <input
+                                        type="radio"
+                                        name="treatmentLocation"
+                                        value="whole-house"
+                                    >
+
+                                    <span>Whole house</span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <legend>
+                                Budget
+                            </legend>
+
+                            <div class="budget-row">
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="budget"
+                                        value="low"
+                                        checked
+                                    >
+
+                                    <span>Under $200</span>
+                                </label>
+
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="budget"
+                                        value="medium"
+                                    >
+
+                                    <span>$200–$500</span>
+                                </label>
+
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="budget"
+                                        value="high"
+                                    >
+
+                                    <span>$500+</span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <button
+                            class="button button-primary full-button"
+                            type="submit"
+                        >
+                            Show options
+                        </button>
+                    </form>
+                </section>
+
+                <aside>
+                    <section
+                        id="treatment-empty"
+                        class="panel empty-result"
+                    >
+                        <span class="empty-result-icon" aria-hidden="true">
+                            ◌
+                        </span>
+
+                        <h2>
+                            Your options will appear here.
+                        </h2>
+                    </section>
+
+                    <section
+                        id="treatment-results"
+                        class="treatment-results"
+                        aria-live="polite"
+                        hidden
+                    ></section>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Private wells -->
+        <section
+            id="view-well"
+            class="app-view"
+            data-view="well"
+            hidden
+        >
+            <div class="page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
+
+                    <p class="eyebrow">
+                        Private wells
+                    </p>
+
+                    <h1>
+                        What happened with your well?
+                    </h1>
+                </div>
+            </div>
+
+            <div class="page-width content-area">
+                <div
+                    id="well-situation-grid"
+                    class="situation-grid"
+                >
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="routine"
+                    >
+                        <span aria-hidden="true">✓</span>
+
+                        <strong>
+                            Routine testing
+                        </strong>
+                    </button>
+
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="flood"
+                    >
+                        <span aria-hidden="true">≈</span>
+
+                        <strong>
+                            My well flooded
+                        </strong>
+                    </button>
+
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="bacteria"
+                    >
+                        <span aria-hidden="true">!</span>
+
+                        <strong>
+                            Bacteria was found
+                        </strong>
+                    </button>
+
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="taste"
+                    >
+                        <span aria-hidden="true">?</span>
+
+                        <strong>
+                            Water changed
+                        </strong>
+                    </button>
+
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="repair"
+                    >
+                        <span aria-hidden="true">◌</span>
+
+                        <strong>
+                            The well was repaired
+                        </strong>
+                    </button>
+
+                    <button
+                        class="situation-card"
+                        type="button"
+                        data-well-situation="property"
+                    >
+                        <span aria-hidden="true">H</span>
+
+                        <strong>
+                            Buying a home
+                        </strong>
+                    </button>
+                </div>
+
+                <section
+                    id="well-guidance"
+                    class="panel guidance-panel"
+                    hidden
+                ></section>
+            </div>
+        </section>
+
+        <!-- Emergency -->
+        <section
+            id="view-emergency"
+            class="app-view"
+            data-view="emergency"
+            hidden
+        >
+            <div class="page-top advisory-page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
+
+                    <p class="eyebrow">
+                        Water advisories
+                    </p>
+
+                    <h1>
+                        What notice did you receive?
+                    </h1>
+                </div>
+            </div>
+
+            <div class="page-width content-area">
+                <div class="advisory-grid">
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="boil-water"
+                    >
+                        <span aria-hidden="true">!</span>
+
+                        <strong>
+                            Boil-water advisory
+                        </strong>
+                    </button>
+
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="do-not-drink"
+                    >
+                        <span aria-hidden="true">×</span>
+
+                        <strong>
+                            Do-not-drink advisory
+                        </strong>
+                    </button>
+
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="do-not-use"
+                    >
+                        <span aria-hidden="true">⊘</span>
+
+                        <strong>
+                            Do-not-use advisory
+                        </strong>
+                    </button>
+
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="pressure-loss"
+                    >
+                        <span aria-hidden="true">↓</span>
+
+                        <strong>
+                            Loss of pressure
+                        </strong>
+                    </button>
+
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="flood"
+                    >
+                        <span aria-hidden="true">≈</span>
+
+                        <strong>
+                            Flooding or storm damage
+                        </strong>
+                    </button>
+
+                    <button
+                        class="advisory-card"
+                        type="button"
+                        data-emergency="unknown"
+                    >
+                        <span aria-hidden="true">?</span>
+
+                        <strong>
+                            I am not sure
+                        </strong>
+                    </button>
+                </div>
+
+                <section
+                    id="emergency-guidance"
+                    class="panel guidance-panel"
+                    aria-live="polite"
+                    hidden
+                ></section>
+            </div>
+        </section>
+
+        <!-- Report -->
+        <section
+            id="view-report"
+            class="app-view"
+            data-view="report"
+            hidden
+        >
+            <div class="page-top">
+                <div class="page-width">
+                    <button
+                        class="back-link"
+                        type="button"
+                        data-go-to="home"
+                    >
+                        ← Home
+                    </button>
+
+                    <p class="eyebrow">
+                        Water reports
+                    </p>
+
+                    <h1>
+                        Understand your report.
+                    </h1>
+                </div>
+            </div>
+
+            <div class="page-width content-area">
+                <section class="panel coming-soon">
+                    <span class="empty-result-icon" aria-hidden="true">
+                        R
+                    </span>
+
                     <h2>
-                        Understand how to use this website
+                        This tool is coming soon.
                     </h2>
 
                     <p>
-                        Water results depend on the sample, location,
-                        laboratory method, and type of water system.
+                        For now, use the result checker for one contaminant
+                        at a time.
                     </p>
-                </div>
 
-                <div class="information-grid">
-                    <article class="information-card">
-                        <h3>
-                            Public water and private wells are different
-                        </h3>
-
-                        <p>
-                            Public water systems have regulatory monitoring
-                            requirements. Private well owners are generally
-                            responsible for testing and maintaining their wells.
-                        </p>
-
-                        <a href="private-wells.html">
-                            Learn about private wells →
-                        </a>
-                    </article>
-
-                    <article class="information-card">
-                        <h3>
-                            One result does not describe all water quality
-                        </h3>
-
-                        <p>
-                            A result usually represents one contaminant,
-                            one sample location, and one point in time.
-                            It does not prove that every use of the water is safe.
-                        </p>
-
-                        <a href="calculator.html">
-                            Check a specific result →
-                        </a>
-                    </article>
-                </div>
+                    <button
+                        class="button button-primary"
+                        type="button"
+                        data-go-to="calculator"
+                    >
+                        Check a result
+                    </button>
+                </section>
             </div>
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-top">
-                <div>
-                    <div class="footer-brand">
-                        Water Quality Hub
-                    </div>
+        <div class="page-width footer-main">
+            <div>
+                <strong>
+                    Water Quality Hub
+                </strong>
 
-                    <p class="footer-description">
-                        An independent educational resource for understanding
-                        drinking-water results, contaminants, treatment methods,
-                        public water, and private wells.
-                    </p>
-                </div>
-
-                <div class="footer-links">
-                    <a href="calculator.html">
-                        Check a Result
-                    </a>
-
-                    <a href="treatment.html">
-                        Treatment
-                    </a>
-
-                    <a href="emergencies.html">
-                        Emergencies
-                    </a>
-                </div>
+                <p>
+                    Simple tools for understanding drinking water.
+                </p>
             </div>
 
-            <p class="copyright">
-                This website does not replace advice from a certified laboratory,
-                water utility, health department, or medical professional.
+            <div class="footer-links">
+                <button type="button" data-go-to="calculator">
+                    Check a Result
+                </button>
+
+                <button type="button" data-go-to="contaminants">
+                    Contaminants
+                </button>
+
+                <button type="button" data-go-to="treatment">
+                    Treatment
+                </button>
+
+                <button type="button" data-go-to="emergency">
+                    Advisories
+                </button>
+            </div>
+        </div>
+
+        <div class="page-width footer-bottom">
+            <p>
+                This website is for general education and does not replace
+                guidance from your water provider, laboratory, health
+                department, or medical professional.
+            </p>
+
+            <p>
                 © <span id="current-year"></span> Uma Bodapudi
             </p>
         </div>
     </footer>
 
-    <script>
-        "use strict";
-
-        const menuButton = document.getElementById("menu-button");
-        const mainNavigation =
-            document.getElementById("main-navigation");
-
-        menuButton.addEventListener("click", function () {
-            const isOpen =
-                mainNavigation.classList.toggle("is-open");
-
-            menuButton.setAttribute(
-                "aria-expanded",
-                String(isOpen)
-            );
-
-            menuButton.setAttribute(
-                "aria-label",
-                isOpen
-                    ? "Close navigation menu"
-                    : "Open navigation menu"
-            );
-        });
-
-        mainNavigation.addEventListener("click", function (event) {
-            if (event.target.tagName !== "A") {
-                return;
-            }
-
-            mainNavigation.classList.remove("is-open");
-            menuButton.setAttribute("aria-expanded", "false");
-            menuButton.setAttribute(
-                "aria-label",
-                "Open navigation menu"
-            );
-        });
-
-        window.addEventListener("resize", function () {
-            if (window.innerWidth > 700) {
-                mainNavigation.classList.remove("is-open");
-                menuButton.setAttribute("aria-expanded", "false");
-            }
-        });
-
-        document.getElementById("current-year").textContent =
-            new Date().getFullYear();
-    </script>
+    <script src="app-data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
