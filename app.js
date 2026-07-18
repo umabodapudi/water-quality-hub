@@ -2145,7 +2145,7 @@ function startRotatingExamples() {
     rotatingExampleTimer =
         window.setInterval(
             showNextRotatingExample,
-            4000
+            2000
         );
 }
 
