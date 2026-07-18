@@ -542,6 +542,8 @@ async function findWaterSystems() {
             await fetchJson(
                 geographicUrl(zip)
             );
+        console.log("EPA URL:", geographicUrl(zip));
+console.log("EPA records:", records);
 
         if (!Array.isArray(records)) {
             throw new Error(
