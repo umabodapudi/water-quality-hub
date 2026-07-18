@@ -10,7 +10,7 @@
 
     <meta
         name="description"
-        content="Simple tools to understand drinking-water results, contaminants, treatment options, private wells, and water advisories."
+        content="Simple tools for understanding drinking-water test results, contaminants, treatment options, private wells, and water advisories."
     >
 
     <title>Water Quality Hub</title>
@@ -23,17 +23,23 @@
         Skip to main content
     </a>
 
-    <!-- Header -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
     <header class="site-header">
-        <div class="header-inner">
+        <div class="page-width header-inner">
+
             <a
-                class="brand"
+                class="site-brand"
                 href="#home"
                 data-route="home"
-                aria-label="Water Quality Hub home"
             >
-                <span class="brand-icon" aria-hidden="true">
-                    <span class="water-drop"></span>
+                <span
+                    class="brand-mark"
+                    aria-hidden="true"
+                >
+                    H₂O
                 </span>
 
                 <span>Water Quality Hub</span>
@@ -43,9 +49,9 @@
                 id="menu-button"
                 class="menu-button"
                 type="button"
-                aria-label="Open menu"
                 aria-expanded="false"
                 aria-controls="main-navigation"
+                aria-label="Open navigation"
             >
                 <span></span>
                 <span></span>
@@ -59,7 +65,6 @@
             >
                 <a
                     href="#home"
-                    class="nav-link active"
                     data-route="home"
                 >
                     Home
@@ -67,7 +72,6 @@
 
                 <a
                     href="#calculator"
-                    class="nav-link"
                     data-route="calculator"
                 >
                     Check a Result
@@ -75,7 +79,6 @@
 
                 <a
                     href="#contaminants"
-                    class="nav-link"
                     data-route="contaminants"
                 >
                     Contaminants
@@ -83,7 +86,6 @@
 
                 <a
                     href="#treatment"
-                    class="nav-link"
                     data-route="treatment"
                 >
                     Treatment
@@ -91,7 +93,6 @@
 
                 <a
                     href="#well"
-                    class="nav-link"
                     data-route="well"
                 >
                     Private Wells
@@ -99,26 +100,36 @@
 
                 <a
                     href="#emergency"
-                    class="nav-link"
                     data-route="emergency"
                 >
                     Advisories
                 </a>
             </nav>
+
         </div>
     </header>
 
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
     <main id="main-content">
 
-        <!-- Home -->
+        <!-- =================================================
+             HOME PAGE
+        ================================================== -->
+
         <section
-            id="view-home"
-            class="app-view active"
+            class="app-view"
             data-view="home"
         >
-            <div class="hero">
-                <div class="page-width hero-grid">
-                    <div class="hero-content">
+
+            <!-- HERO -->
+
+            <section class="hero-section">
+                <div class="page-width hero-layout">
+
+                    <div class="hero-copy">
                         <p class="eyebrow">
                             Clear water information
                         </p>
@@ -127,14 +138,14 @@
                             Know what’s in your water.
                         </h1>
 
-                        <p class="hero-text">
-                            Check a result, learn what it means, and find
-                            your next step.
+                        <p>
+                            Check a result, understand what it means,
+                            and find a practical next step.
                         </p>
 
-                        <div class="hero-actions">
+                        <div class="button-row">
                             <button
-                                class="button button-primary"
+                                class="primary-button"
                                 type="button"
                                 data-go-to="calculator"
                             >
@@ -142,7 +153,7 @@
                             </button>
 
                             <button
-                                class="button button-light"
+                                class="secondary-button"
                                 type="button"
                                 data-go-to="contaminants"
                             >
@@ -151,404 +162,460 @@
                         </div>
                     </div>
 
-                    <div class="hero-card rotating-result-card">
-    <div class="hero-card-top">
-        <span class="hero-card-icon" aria-hidden="true">
-            H₂O
-        </span>
+                    <!-- ROTATING RESULT CARD -->
 
-        <span class="small-label">
-            Example water result
-        </span>
-    </div>
+                    <aside
+                        class="hero-result-card"
+                        aria-label="Example drinking-water result"
+                    >
 
-    <div
-        id="rotating-result"
-        class="rotating-result"
-        aria-live="polite"
-    >
-        <div class="rotating-result-heading">
-            <span id="rotating-contaminant">
-                Arsenic
-            </span>
-
-            <strong id="rotating-value">
-                12 ppb
-            </strong>
-        </div>
-
-        <div
-            id="rotating-status-row"
-            class="result-line"
-        >
-            <span
-                id="rotating-status-dot"
-                class="result-dot"
-            ></span>
-
-            <span id="rotating-status">
-                Above the drinking-water limit
-            </span>
-        </div>
-
-        <p
-            id="rotating-description"
-            class="rotating-result-description"
-        >
-            Compare a test result with the drinking-water limit.
-        </p>
-    </div>
-
-    <div
-        class="rotating-result-dots"
-        aria-hidden="true"
-    >
-        <span class="active"></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-
-    <button
-        class="card-button"
-        type="button"
-        data-go-to="calculator"
-    >
-        Check your own result
-        <span aria-hidden="true">→</span>
-    </button>
-</div>
-                        <button
-                            class="card-button"
-                            type="button"
-                            data-go-to="calculator"
-                        >
-                            See what this means
-                            <span aria-hidden="true">→</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main tools -->
-            <section class="main-tools">
-                <div class="page-width">
-                    <div class="section-heading">
-                        <p class="eyebrow">
-                            Start here
-                        </p>
-
-                        <h2>
-                            What can we help with?
-                        </h2>
-                    </div>
-
-                    <div class="main-tool-grid">
-                        <button
-                            class="main-tool-card"
-                            type="button"
-                            data-go-to="calculator"
-                        >
-                            <span class="tool-number">
-                                01
-                            </span>
-
-                            <span class="tool-icon" aria-hidden="true">
-                                #
-                            </span>
-
-                            <span class="tool-title">
-                                Check a result
-                            </span>
-
-                            <span class="tool-description">
-                                Enter the number from your water report.
-                            </span>
-
-                            <span class="tool-link">
-                                Start checking
-                                <span aria-hidden="true">→</span>
-                            </span>
-                        </button>
-
-                        <button
-                            class="main-tool-card"
-                            type="button"
-                            data-go-to="contaminants"
-                        >
-                            <span class="tool-number">
-                                02
-                            </span>
-
-                            <span class="tool-icon" aria-hidden="true">
-                                i
-                            </span>
-
-                            <span class="tool-title">
-                                Learn about a contaminant
-                            </span>
-
-                            <span class="tool-description">
-                                Find simple answers about lead, arsenic,
-                                nitrate, PFAS, and more.
-                            </span>
-
-                            <span class="tool-link">
-                                Search the library
-                                <span aria-hidden="true">→</span>
-                            </span>
-                        </button>
-
-                        <button
-                            class="main-tool-card"
-                            type="button"
-                            data-go-to="treatment"
-                        >
-                            <span class="tool-number">
-                                03
-                            </span>
-
-                            <span class="tool-icon" aria-hidden="true">
-                                ◌
-                            </span>
-
-                            <span class="tool-title">
-                                Find a treatment
-                            </span>
-
-                            <span class="tool-description">
-                                Compare filters and treatment options.
-                            </span>
-
-                            <span class="tool-link">
-                                Find an option
-                                <span aria-hidden="true">→</span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Smaller tools -->
-            <section class="more-help">
-                <div class="page-width more-help-grid">
-                    <div class="more-help-intro">
-                        <p class="eyebrow">
-                            More help
-                        </p>
-
-                        <h2>
-                            Looking for something else?
-                        </h2>
-                    </div>
-
-                    <div class="small-tool-list">
-                        <button
-                            class="small-tool-item"
-                            type="button"
-                            data-go-to="well"
-                        >
-                            <span class="small-tool-icon" aria-hidden="true">
-                                W
+                        <div class="hero-card-label">
+                            <span
+                                class="hero-card-icon"
+                                aria-hidden="true"
+                            >
+                                H₂O
                             </span>
 
                             <span>
-                                <strong>Private wells</strong>
-
                                 <small>
-                                    Testing, flooding, and maintenance
+                                    Example water result
                                 </small>
-                            </span>
 
-                            <span class="small-tool-arrow" aria-hidden="true">
-                                →
+                                <strong>
+                                    See how different results are explained
+                                </strong>
                             </span>
-                        </button>
+                        </div>
 
-                        <button
-                            class="small-tool-item"
-                            type="button"
-                            data-go-to="emergency"
+                        <div
+                            id="rotating-result"
+                            class="rotating-result"
+                            aria-live="polite"
                         >
-                            <span class="small-tool-icon" aria-hidden="true">
-                                !
-                            </span>
 
-                            <span>
-                                <strong>Water advisories</strong>
+                            <div class="rotating-result-heading">
+                                <span id="rotating-contaminant">
+                                    Arsenic
+                                </span>
 
-                                <small>
-                                    Boil-water and do-not-drink notices
-                                </small>
-                            </span>
+                                <strong id="rotating-value">
+                                    12 ppb
+                                </strong>
+                            </div>
 
-                            <span class="small-tool-arrow" aria-hidden="true">
-                                →
-                            </span>
-                        </button>
+                            <div
+                                id="rotating-status-row"
+                                class="result-line"
+                                data-level="above"
+                            >
+                                <span
+                                    class="result-dot"
+                                    aria-hidden="true"
+                                ></span>
 
-                        <button
-                            class="small-tool-item"
-                            type="button"
-                            data-go-to="report"
-                        >
-                            <span class="small-tool-icon" aria-hidden="true">
-                                R
-                            </span>
+                                <span id="rotating-status">
+                                    Above the drinking-water limit
+                                </span>
+                            </div>
 
-                            <span>
-                                <strong>Water report help</strong>
-
-                                <small>
-                                    Understand common report terms
-                                </small>
-                            </span>
-
-                            <span class="small-tool-arrow" aria-hidden="true">
-                                →
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quick questions -->
-            <section class="quick-questions">
-                <div class="page-width">
-                    <div class="section-heading compact-heading">
-                        <p class="eyebrow">
-                            Common questions
-                        </p>
-
-                        <h2>
-                            Start with what you noticed.
-                        </h2>
-                    </div>
-
-                    <div class="question-grid">
-                        <button
-                            class="question-card"
-                            type="button"
-                            data-contaminant-open="lead"
-                        >
-                            <span>
-                                My report shows lead
-                            </span>
-
-                            <span aria-hidden="true">→</span>
-                        </button>
-
-                        <button
-                            class="question-card"
-                            type="button"
-                            data-contaminant-open="arsenic"
-                        >
-                            <span>
-                                My well has arsenic
-                            </span>
-
-                            <span aria-hidden="true">→</span>
-                        </button>
-
-                        <button
-                            class="question-card"
-                            type="button"
-                            data-emergency-open="boil-water"
-                        >
-                            <span>
-                                I received a boil notice
-                            </span>
-
-                            <span aria-hidden="true">→</span>
-                        </button>
-
-                        <button
-                            class="question-card"
-                            type="button"
-                            data-contaminant-open="taste-smell"
-                        >
-                            <span>
-                                My water smells or looks different
-                            </span>
-
-                            <span aria-hidden="true">→</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Notice -->
-            <section class="notice-section">
-                <div class="page-width">
-                    <div class="notice-card">
-                        <span class="notice-icon" aria-hidden="true">
-                            !
-                        </span>
-
-                        <div>
-                            <strong>
-                                Have an active water advisory?
-                            </strong>
-
-                            <p>
-                                Follow the instructions from your utility
-                                or local health department first.
+                            <p
+                                id="rotating-description"
+                                class="rotating-result-description"
+                            >
+                                Arsenic at this level is above the federal
+                                drinking-water limit of 10 ppb.
                             </p>
                         </div>
 
-                        <button
-                            type="button"
-                            data-go-to="emergency"
+                        <div
+                            class="rotating-result-dots"
+                            aria-hidden="true"
                         >
-                            View guidance
-                            <span aria-hidden="true">→</span>
+                            <span class="active"></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <button
+                            class="hero-result-button"
+                            type="button"
+                            data-go-to="calculator"
+                        >
+                            Check your own result
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
                         </button>
-                    </div>
+
+                    </aside>
                 </div>
             </section>
+
+            <!-- START HERE -->
+
+            <section class="page-width home-section">
+                <div class="section-header">
+                    <p class="eyebrow">
+                        Start here
+                    </p>
+
+                    <h2>
+                        What can we help with?
+                    </h2>
+                </div>
+
+                <div class="card-grid">
+
+                    <article class="tool-card">
+                        <span class="card-number">
+                            01
+                        </span>
+
+                        <span
+                            class="tool-icon"
+                            aria-hidden="true"
+                        >
+                            #
+                        </span>
+
+                        <h3>
+                            Check a result
+                        </h3>
+
+                        <p>
+                            Enter the number and unit from your water
+                            test result or water-quality report.
+                        </p>
+
+                        <button
+                            class="text-button"
+                            type="button"
+                            data-go-to="calculator"
+                        >
+                            Start checking
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+                    </article>
+
+                    <article class="tool-card">
+                        <span class="card-number">
+                            02
+                        </span>
+
+                        <span
+                            class="tool-icon"
+                            aria-hidden="true"
+                        >
+                            i
+                        </span>
+
+                        <h3>
+                            Learn about a contaminant
+                        </h3>
+
+                        <p>
+                            Find simple information about lead,
+                            arsenic, nitrate, PFAS, bacteria, and more.
+                        </p>
+
+                        <button
+                            class="text-button"
+                            type="button"
+                            data-go-to="contaminants"
+                        >
+                            Search the library
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+                    </article>
+
+                    <article class="tool-card">
+                        <span class="card-number">
+                            03
+                        </span>
+
+                        <span
+                            class="tool-icon"
+                            aria-hidden="true"
+                        >
+                            ◌
+                        </span>
+
+                        <h3>
+                            Find a treatment
+                        </h3>
+
+                        <p>
+                            Compare common treatment technologies
+                            based on setup, location, and budget.
+                        </p>
+
+                        <button
+                            class="text-button"
+                            type="button"
+                            data-go-to="treatment"
+                        >
+                            Find an option
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </button>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- MORE HELP -->
+
+            <section class="page-width home-section">
+                <div class="section-header">
+                    <p class="eyebrow">
+                        More help
+                    </p>
+
+                    <h2>
+                        Looking for something else?
+                    </h2>
+                </div>
+
+                <div class="support-grid">
+
+                    <button
+                        class="support-card"
+                        type="button"
+                        data-go-to="well"
+                    >
+                        <span
+                            class="support-icon"
+                            aria-hidden="true"
+                        >
+                            W
+                        </span>
+
+                        <span>
+                            <strong>
+                                Private wells
+                            </strong>
+
+                            <small>
+                                Testing, flooding, repairs, and maintenance
+                            </small>
+                        </span>
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                    <button
+                        class="support-card"
+                        type="button"
+                        data-go-to="emergency"
+                    >
+                        <span
+                            class="support-icon warning-icon"
+                            aria-hidden="true"
+                        >
+                            !
+                        </span>
+
+                        <span>
+                            <strong>
+                                Water advisories
+                            </strong>
+
+                            <small>
+                                Boil-water, do-not-drink, and emergency notices
+                            </small>
+                        </span>
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                    <button
+                        class="support-card"
+                        type="button"
+                        data-go-to="report"
+                    >
+                        <span
+                            class="support-icon"
+                            aria-hidden="true"
+                        >
+                            R
+                        </span>
+
+                        <span>
+                            <strong>
+                                Water report help
+                            </strong>
+
+                            <small>
+                                Understand common report terms and measurements
+                            </small>
+                        </span>
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                </div>
+            </section>
+
+            <!-- COMMON QUESTIONS -->
+
+            <section class="page-width home-section">
+                <div class="section-header">
+                    <p class="eyebrow">
+                        Common questions
+                    </p>
+
+                    <h2>
+                        Start with what you noticed.
+                    </h2>
+                </div>
+
+                <div class="question-grid">
+
+                    <button
+                        type="button"
+                        data-contaminant-open="lead"
+                    >
+                        My report shows lead
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        data-contaminant-open="arsenic"
+                    >
+                        My well has arsenic
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        data-emergency-open="boil-water"
+                    >
+                        I received a boil-water notice
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        data-contaminant-open="taste-smell"
+                    >
+                        My water smells or looks different
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                </div>
+            </section>
+
+            <!-- ADVISORY NOTICE -->
+
+            <section class="page-width home-section">
+                <div class="advisory-banner">
+
+                    <span
+                        class="advisory-icon"
+                        aria-hidden="true"
+                    >
+                        !
+                    </span>
+
+                    <div>
+                        <strong>
+                            Have an active water advisory?
+                        </strong>
+
+                        <p>
+                            Follow instructions from your utility or local
+                            health department before using this website.
+                        </p>
+                    </div>
+
+                    <button
+                        class="light-button"
+                        type="button"
+                        data-go-to="emergency"
+                    >
+                        View guidance
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </button>
+
+                </div>
+            </section>
+
         </section>
 
-        <!-- Result Checker -->
+        <!-- =================================================
+             RESULT CALCULATOR
+        ================================================== -->
+
         <section
-            id="view-calculator"
             class="app-view"
             data-view="calculator"
             hidden
         >
-            <div class="page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Result checker
                     </p>
 
-                    <h1>
+                    <h1 class="page-title">
                         Check your water result.
                     </h1>
 
-                    <p>
-                        Enter the number exactly as it appears on your report.
+                    <p class="section-intro">
+                        Enter the result exactly as it appears on your
+                        laboratory report or water-quality report.
                     </p>
                 </div>
-            </div>
 
-            <div class="page-width checker-layout">
-                <section class="panel form-panel">
-                    <form id="water-calculator" novalidate>
-                        <div
-                            id="calculator-error"
-                            class="form-error"
-                            role="alert"
-                            hidden
-                        ></div>
+                <div class="calculator-layout">
+
+                    <form
+                        id="water-calculator"
+                        class="panel"
+                    >
 
                         <div class="form-group">
                             <label for="calculator-contaminant">
@@ -557,16 +624,16 @@
 
                             <select
                                 id="calculator-contaminant"
-                                name="contaminant"
                                 required
                             >
                                 <option value="">
-                                    Choose one
+                                    Choose contaminant
                                 </option>
                             </select>
                         </div>
 
                         <div class="form-row">
+
                             <div class="form-group">
                                 <label for="calculator-value">
                                     Result
@@ -574,13 +641,11 @@
 
                                 <input
                                     id="calculator-value"
-                                    name="resultValue"
                                     type="number"
                                     min="0"
                                     step="any"
                                     inputmode="decimal"
-                                    placeholder="Example: 12"
-                                    required
+                                    placeholder="Enter result"
                                 >
                             </div>
 
@@ -591,24 +656,27 @@
 
                                 <select
                                     id="calculator-unit"
-                                    name="resultUnit"
                                     disabled
-                                    required
                                 >
                                     <option value="">
                                         Choose unit
                                     </option>
                                 </select>
                             </div>
+
                         </div>
 
-                        <fieldset class="form-group">
+                        <fieldset>
                             <legend>
                                 Water source
-                                <span>Optional</span>
+
+                                <span class="optional-label">
+                                    Optional
+                                </span>
                             </legend>
 
-                            <div class="radio-row">
+                            <div class="radio-grid two-options">
+
                                 <label class="radio-card">
                                     <input
                                         type="radio"
@@ -616,7 +684,9 @@
                                         value="public"
                                     >
 
-                                    <span>Public water</span>
+                                    <span>
+                                        Public water
+                                    </span>
                                 </label>
 
                                 <label class="radio-card">
@@ -626,14 +696,23 @@
                                         value="private"
                                     >
 
-                                    <span>Private well</span>
+                                    <span>
+                                        Private well
+                                    </span>
                                 </label>
+
                             </div>
                         </fieldset>
 
-                        <div class="form-buttons">
+                        <p
+                            id="calculator-error"
+                            class="form-error"
+                            hidden
+                        ></p>
+
+                        <div class="button-row">
                             <button
-                                class="button button-primary"
+                                class="primary-button"
                                 type="submit"
                             >
                                 Explain my result
@@ -641,148 +720,165 @@
 
                             <button
                                 id="calculator-reset"
-                                class="button button-light"
+                                class="secondary-button"
                                 type="button"
                             >
                                 Clear
                             </button>
                         </div>
+
                     </form>
-                </section>
 
-                <aside class="result-column">
-                    <section
-                        id="calculator-empty-result"
-                        class="panel empty-result"
-                    >
-                        <span class="empty-result-icon" aria-hidden="true">
-                            ≈
-                        </span>
+                    <div>
 
-                        <h2>
-                            Your result will appear here.
-                        </h2>
+                        <section
+                            id="calculator-empty-result"
+                            class="panel empty-result"
+                        >
+                            <span
+                                class="empty-result-icon"
+                                aria-hidden="true"
+                            >
+                                ≈
+                            </span>
 
-                        <p>
-                            Choose a contaminant and enter your number.
-                        </p>
-                    </section>
+                            <h2>
+                                Your result will appear here.
+                            </h2>
 
-                    <section
-                        id="calculator-result-panel"
-                        class="panel result-panel"
-                        aria-live="polite"
-                        hidden
-                    >
-                        <div class="result-header">
+                            <p>
+                                Choose a contaminant and enter your number.
+                            </p>
+                        </section>
+
+                        <section
+                            id="calculator-result-panel"
+                            class="panel"
+                            hidden
+                        >
                             <span
                                 id="calculator-status"
-                                class="status-badge"
+                                class="result-status"
                             ></span>
 
                             <h2 id="calculator-result-title"></h2>
 
                             <p id="calculator-result-summary"></p>
-                        </div>
 
-                        <div class="result-comparison">
-                            <div>
-                                <span>Your result</span>
+                            <div class="result-comparison">
 
-                                <strong
-                                    id="calculator-result-value"
-                                ></strong>
+                                <div>
+                                    <small>
+                                        Your result
+                                    </small>
+
+                                    <strong id="calculator-result-value"></strong>
+                                </div>
+
+                                <div>
+                                    <small id="calculator-benchmark-type">
+                                        Limit
+                                    </small>
+
+                                    <strong id="calculator-benchmark-value"></strong>
+                                </div>
+
                             </div>
 
-                            <div>
-                                <span
-                                    id="calculator-benchmark-type"
-                                >
-                                    Limit
+                            <div class="detail-section">
+                                <h3>
+                                    What it means
+                                </h3>
+
+                                <p id="calculator-explanation"></p>
+                            </div>
+
+                            <div class="detail-section">
+                                <h3>
+                                    What to do next
+                                </h3>
+
+                                <ul
+                                    id="calculator-next-steps"
+                                    class="result-list"
+                                ></ul>
+                            </div>
+
+                            <p
+                                id="calculator-limitation"
+                                class="result-note"
+                            ></p>
+
+                            <a
+                                id="calculator-source"
+                                class="source-link"
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Read official guidance
+
+                                <span aria-hidden="true">
+                                    →
                                 </span>
+                            </a>
 
-                                <strong
-                                    id="calculator-benchmark-value"
-                                ></strong>
-                            </div>
-                        </div>
+                        </section>
 
-                        <div class="result-section">
-                            <h3>
-                                What it means
-                            </h3>
-
-                            <p id="calculator-explanation"></p>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>
-                                What to do next
-                            </h3>
-
-                            <ul
-                                id="calculator-next-steps"
-                                class="result-list"
-                            ></ul>
-                        </div>
-
-                        <p
-                            id="calculator-limitation"
-                            class="result-note"
-                        ></p>
-
-                        <a
-                            id="calculator-source"
-                            class="source-link"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Read the official guidance
-                            <span aria-hidden="true">→</span>
-                        </a>
-                    </section>
-                </aside>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Contaminants -->
+        <!-- =================================================
+             CONTAMINANT LIBRARY
+        ================================================== -->
+
         <section
-            id="view-contaminants"
             class="app-view"
             data-view="contaminants"
             hidden
         >
-            <div class="page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Contaminant library
                     </p>
 
-                    <h1>
+                    <h1 class="page-title">
                         What are you looking for?
                     </h1>
+
+                    <p class="section-intro">
+                        Search for a contaminant, health concern,
+                        taste issue, odor, or visible change.
+                    </p>
                 </div>
-            </div>
 
-            <div class="page-width content-area">
-                <div class="search-box">
-                    <span aria-hidden="true">⌕</span>
+                <div class="library-toolbar">
 
-                    <input
-                        id="contaminant-search"
-                        type="search"
-                        placeholder="Search lead, arsenic, nitrate..."
-                        autocomplete="off"
-                    >
+                    <label class="search-box">
+                        <span aria-hidden="true">
+                            ⌕
+                        </span>
+
+                        <input
+                            id="contaminant-search"
+                            type="search"
+                            placeholder="Search contaminants or concerns"
+                            aria-label="Search contaminants"
+                        >
+                    </label>
+
                 </div>
 
                 <div
@@ -830,92 +926,104 @@
                     </button>
                 </div>
 
-                <div class="library-layout">
-                    <div>
-                        <div class="library-title-row">
+                <div class="contaminant-layout">
+
+                    <section class="panel contaminant-list-panel">
+
+                        <div class="contaminant-list-header">
                             <h2>
                                 Browse
                             </h2>
 
-                            <span id="contaminant-count"></span>
+                            <span
+                                id="contaminant-count"
+                                class="count-label"
+                            ></span>
                         </div>
 
-                        <div
-                            id="contaminant-list"
-                            class="contaminant-list"
-                        ></div>
+                        <div id="contaminant-list"></div>
 
                         <div
                             id="contaminant-no-results"
-                            class="panel empty-result"
+                            class="small-empty-state"
                             hidden
                         >
-                            <h2>
+                            <h3>
                                 Nothing found.
-                            </h2>
+                            </h3>
 
                             <p>
                                 Try another name or spelling.
                             </p>
                         </div>
-                    </div>
 
-                    <aside
+                    </section>
+
+                    <section
                         id="contaminant-detail"
-                        class="panel contaminant-detail"
+                        class="panel empty-result"
                     >
-                        <div class="empty-result">
-                            <span class="empty-result-icon" aria-hidden="true">
-                                i
-                            </span>
+                        <span
+                            class="empty-result-icon"
+                            aria-hidden="true"
+                        >
+                            i
+                        </span>
 
-                            <h2>
-                                Choose a contaminant.
-                            </h2>
+                        <h2>
+                            Choose a contaminant.
+                        </h2>
 
-                            <p>
-                                The details will appear here.
-                            </p>
-                        </div>
-                    </aside>
+                        <p>
+                            The contaminant details will appear here.
+                        </p>
+                    </section>
+
                 </div>
             </div>
         </section>
 
-        <!-- Treatment -->
+        <!-- =================================================
+             TREATMENT FINDER
+        ================================================== -->
+
         <section
-            id="view-treatment"
             class="app-view"
             data-view="treatment"
             hidden
         >
-            <div class="page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Treatment finder
                     </p>
 
-                    <h1>
+                    <h1 class="page-title">
                         Find a treatment option.
                     </h1>
 
-                    <p>
-                        Choose what you want to remove.
+                    <p class="section-intro">
+                        Choose what you want to reduce and where
+                        you want the treatment installed.
                     </p>
                 </div>
-            </div>
 
-            <div class="page-width checker-layout">
-                <section class="panel form-panel">
-                    <form id="treatment-form">
+                <div class="treatment-layout">
+
+                    <form
+                        id="treatment-form"
+                        class="panel"
+                    >
+
                         <div class="form-group">
                             <label for="treatment-contaminant">
                                 Contaminant
@@ -926,26 +1034,28 @@
                                 required
                             >
                                 <option value="">
-                                    Choose one
+                                    Choose contaminant
                                 </option>
                             </select>
                         </div>
 
-                        <fieldset class="form-group">
+                        <fieldset>
                             <legend>
                                 Where do you want treatment?
                             </legend>
 
-                            <div class="radio-row">
+                            <div class="radio-grid two-options">
+
                                 <label class="radio-card">
                                     <input
                                         type="radio"
                                         name="treatmentLocation"
                                         value="point-of-use"
-                                        checked
                                     >
 
-                                    <span>Drinking-water tap</span>
+                                    <span>
+                                        Drinking-water tap
+                                    </span>
                                 </label>
 
                                 <label class="radio-card">
@@ -955,26 +1065,31 @@
                                         value="whole-house"
                                     >
 
-                                    <span>Whole house</span>
+                                    <span>
+                                        Whole house
+                                    </span>
                                 </label>
+
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group">
+                        <fieldset>
                             <legend>
                                 Budget
                             </legend>
 
                             <div class="budget-row">
+
                                 <label>
                                     <input
                                         type="radio"
                                         name="budget"
                                         value="low"
-                                        checked
                                     >
 
-                                    <span>Under $200</span>
+                                    <span>
+                                        Under $200
+                                    </span>
                                 </label>
 
                                 <label>
@@ -984,7 +1099,9 @@
                                         value="medium"
                                     >
 
-                                    <span>$200–$500</span>
+                                    <span>
+                                        $200–$500
+                                    </span>
                                 </label>
 
                                 <label>
@@ -994,82 +1111,99 @@
                                         value="high"
                                     >
 
-                                    <span>$500+</span>
+                                    <span>
+                                        $500+
+                                    </span>
                                 </label>
+
                             </div>
                         </fieldset>
 
                         <button
-                            class="button button-primary full-button"
+                            class="primary-button full-button"
                             type="submit"
                         >
-                            Show options
+                            Show treatment options
                         </button>
+
                     </form>
-                </section>
 
-                <aside>
-                    <section
-                        id="treatment-empty"
-                        class="panel empty-result"
-                    >
-                        <span class="empty-result-icon" aria-hidden="true">
-                            ◌
-                        </span>
+                    <div>
 
-                        <h2>
-                            Your options will appear here.
-                        </h2>
-                    </section>
+                        <section
+                            id="treatment-empty"
+                            class="panel empty-result"
+                        >
+                            <span
+                                class="empty-result-icon"
+                                aria-hidden="true"
+                            >
+                                ◌
+                            </span>
 
-                    <section
-                        id="treatment-results"
-                        class="treatment-results"
-                        aria-live="polite"
-                        hidden
-                    ></section>
-                </aside>
+                            <h2>
+                                Your options will appear here.
+                            </h2>
+
+                            <p>
+                                Select a contaminant, location, and budget.
+                            </p>
+                        </section>
+
+                        <div
+                            id="treatment-results"
+                            hidden
+                        ></div>
+
+                    </div>
+
+                </div>
             </div>
         </section>
 
-        <!-- Private wells -->
+        <!-- =================================================
+             PRIVATE WELLS
+        ================================================== -->
+
         <section
-            id="view-well"
             class="app-view"
             data-view="well"
             hidden
         >
-            <div class="page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Private wells
                     </p>
 
-                    <h1>
+                    <h1 class="page-title">
                         What happened with your well?
                     </h1>
-                </div>
-            </div>
 
-            <div class="page-width content-area">
-                <div
-                    id="well-situation-grid"
-                    class="situation-grid"
-                >
+                    <p class="section-intro">
+                        Choose the situation that best matches your concern.
+                    </p>
+                </div>
+
+                <div class="situation-grid">
+
                     <button
                         class="situation-card"
                         type="button"
                         data-well-situation="routine"
                     >
-                        <span aria-hidden="true">✓</span>
+                        <span aria-hidden="true">
+                            ✓
+                        </span>
 
                         <strong>
                             Routine testing
@@ -1081,7 +1215,9 @@
                         type="button"
                         data-well-situation="flood"
                     >
-                        <span aria-hidden="true">≈</span>
+                        <span aria-hidden="true">
+                            ≈
+                        </span>
 
                         <strong>
                             My well flooded
@@ -1093,7 +1229,9 @@
                         type="button"
                         data-well-situation="bacteria"
                     >
-                        <span aria-hidden="true">!</span>
+                        <span aria-hidden="true">
+                            !
+                        </span>
 
                         <strong>
                             Bacteria was found
@@ -1103,9 +1241,11 @@
                     <button
                         class="situation-card"
                         type="button"
-                        data-well-situation="taste"
+                        data-well-situation="taste-smell"
                     >
-                        <span aria-hidden="true">?</span>
+                        <span aria-hidden="true">
+                            ?
+                        </span>
 
                         <strong>
                             Water changed
@@ -1117,7 +1257,9 @@
                         type="button"
                         data-well-situation="repair"
                     >
-                        <span aria-hidden="true">◌</span>
+                        <span aria-hidden="true">
+                            ◌
+                        </span>
 
                         <strong>
                             The well was repaired
@@ -1127,59 +1269,71 @@
                     <button
                         class="situation-card"
                         type="button"
-                        data-well-situation="property"
+                        data-well-situation="buying"
                     >
-                        <span aria-hidden="true">H</span>
+                        <span aria-hidden="true">
+                            H
+                        </span>
 
                         <strong>
                             Buying a home
                         </strong>
                     </button>
+
                 </div>
 
                 <section
                     id="well-guidance"
-                    class="panel guidance-panel"
+                    class="panel"
                     hidden
                 ></section>
+
             </div>
         </section>
 
-        <!-- Emergency -->
+        <!-- =================================================
+             WATER ADVISORIES
+        ================================================== -->
+
         <section
-            id="view-emergency"
             class="app-view"
             data-view="emergency"
             hidden
         >
-            <div class="page-top advisory-page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Water advisories
                     </p>
 
-                    <h1>
+                    <h1 class="page-title">
                         What notice did you receive?
                     </h1>
-                </div>
-            </div>
 
-            <div class="page-width content-area">
+                    <p class="section-intro">
+                        Follow the exact wording of your notice whenever possible.
+                    </p>
+                </div>
+
                 <div class="advisory-grid">
+
                     <button
                         class="advisory-card"
                         type="button"
                         data-emergency="boil-water"
                     >
-                        <span aria-hidden="true">!</span>
+                        <span aria-hidden="true">
+                            !
+                        </span>
 
                         <strong>
                             Boil-water advisory
@@ -1191,7 +1345,9 @@
                         type="button"
                         data-emergency="do-not-drink"
                     >
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">
+                            ×
+                        </span>
 
                         <strong>
                             Do-not-drink advisory
@@ -1203,7 +1359,9 @@
                         type="button"
                         data-emergency="do-not-use"
                     >
-                        <span aria-hidden="true">⊘</span>
+                        <span aria-hidden="true">
+                            ⊘
+                        </span>
 
                         <strong>
                             Do-not-use advisory
@@ -1215,7 +1373,9 @@
                         type="button"
                         data-emergency="pressure-loss"
                     >
-                        <span aria-hidden="true">↓</span>
+                        <span aria-hidden="true">
+                            ↓
+                        </span>
 
                         <strong>
                             Loss of pressure
@@ -1225,9 +1385,11 @@
                     <button
                         class="advisory-card"
                         type="button"
-                        data-emergency="flood"
+                        data-emergency="flooding"
                     >
-                        <span aria-hidden="true">≈</span>
+                        <span aria-hidden="true">
+                            ≈
+                        </span>
 
                         <strong>
                             Flooding or storm damage
@@ -1239,53 +1401,61 @@
                         type="button"
                         data-emergency="unknown"
                     >
-                        <span aria-hidden="true">?</span>
+                        <span aria-hidden="true">
+                            ?
+                        </span>
 
                         <strong>
                             I am not sure
                         </strong>
                     </button>
+
                 </div>
 
                 <section
                     id="emergency-guidance"
-                    class="panel guidance-panel"
-                    aria-live="polite"
+                    class="panel"
                     hidden
                 ></section>
+
             </div>
         </section>
 
-        <!-- Report -->
+        <!-- =================================================
+             REPORT HELP
+        ================================================== -->
+
         <section
-            id="view-report"
             class="app-view"
             data-view="report"
             hidden
         >
-            <div class="page-top">
-                <div class="page-width">
-                    <button
-                        class="back-link"
-                        type="button"
-                        data-go-to="home"
-                    >
-                        ← Home
-                    </button>
+            <div class="page-width">
 
+                <button
+                    class="back-button"
+                    type="button"
+                    data-go-to="home"
+                >
+                    ← Home
+                </button>
+
+                <div class="section-header">
                     <p class="eyebrow">
                         Water reports
                     </p>
 
-                    <h1>
-                        Understand your report.
+                    <h1 class="page-title">
+                        Understand your water report.
                     </h1>
                 </div>
-            </div>
 
-            <div class="page-width content-area">
-                <section class="panel coming-soon">
-                    <span class="empty-result-icon" aria-hidden="true">
+                <section class="panel empty-result">
+
+                    <span
+                        class="empty-result-icon"
+                        aria-hidden="true"
+                    >
                         R
                     </span>
 
@@ -1294,25 +1464,33 @@
                     </h2>
 
                     <p>
-                        For now, use the result checker for one contaminant
-                        at a time.
+                        For now, use the result checker to understand
+                        one contaminant at a time.
                     </p>
 
                     <button
-                        class="button button-primary"
+                        class="primary-button"
                         type="button"
                         data-go-to="calculator"
                     >
                         Check a result
                     </button>
+
                 </section>
+
             </div>
         </section>
+
     </main>
 
-    <!-- Footer -->
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
     <footer class="site-footer">
-        <div class="page-width footer-main">
+
+        <div class="page-width footer-inner">
+
             <div>
                 <strong>
                     Water Quality Hub
@@ -1323,37 +1501,60 @@
                 </p>
             </div>
 
-            <div class="footer-links">
-                <button type="button" data-go-to="calculator">
+            <nav
+                class="footer-links"
+                aria-label="Footer navigation"
+            >
+                <a
+                    href="#calculator"
+                    data-route="calculator"
+                >
                     Check a Result
-                </button>
+                </a>
 
-                <button type="button" data-go-to="contaminants">
+                <a
+                    href="#contaminants"
+                    data-route="contaminants"
+                >
                     Contaminants
-                </button>
+                </a>
 
-                <button type="button" data-go-to="treatment">
+                <a
+                    href="#treatment"
+                    data-route="treatment"
+                >
                     Treatment
-                </button>
+                </a>
 
-                <button type="button" data-go-to="emergency">
+                <a
+                    href="#emergency"
+                    data-route="emergency"
+                >
                     Advisories
-                </button>
-            </div>
+                </a>
+            </nav>
+
         </div>
 
         <div class="page-width footer-bottom">
+
             <p>
                 This website is for general education and does not replace
-                guidance from your water provider, laboratory, health
-                department, or medical professional.
+                guidance from your water provider, laboratory, local health
+                department, state agency, or medical professional.
             </p>
 
             <p>
                 © <span id="current-year"></span> Uma Bodapudi
             </p>
+
         </div>
+
     </footer>
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
 
     <script src="app-data.js"></script>
     <script src="app.js"></script>
