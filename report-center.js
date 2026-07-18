@@ -379,8 +379,10 @@ function createSystemDetailsDataUrl(pwsId) {
 
 function createEpaSystemPageUrl(pwsId) {
     return (
-        EPA_PUBLIC_SEARCH +
-        `?pwsid=${encodeURIComponent(pwsId)}`
+        "https://sdwis.epa.gov/ords/sfdw_pub/f" +
+        "?p=SDWIS_FED_REPORTS_PUBLIC:PWS_SEARCH" +
+        ":::::PWSID:" +
+        encodeURIComponent(pwsId)
     );
 }
 
