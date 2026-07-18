@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = window.WATER_HUB_DATA;
 
     if (!data) {
-        console.error("WATER_HUB_DATA was not found.");
+        console.error(
+            "WATER_HUB_DATA was not found. Make sure app-data.js loads before app.js."
+        );
         return;
     }
 
@@ -49,35 +51,50 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     function getRouteFromHash() {
-        const route = window.location.hash.replace("#", "").trim();
+        const route = window.location.hash
+            .replace("#", "")
+            .trim();
 
-        return validRoutes.includes(route) ? route : "home";
+        return validRoutes.includes(route)
+            ? route
+            : "home";
     }
 
     function showRoute(route, updateHash = true) {
-        const safeRoute = validRoutes.includes(route) ? route : "home";
+        const safeRoute = validRoutes.includes(route)
+            ? route
+            : "home";
 
         views.forEach((view) => {
-            const isActive = view.dataset.view === safeRoute;
+            const isActive =
+                view.dataset.view === safeRoute;
 
             view.hidden = !isActive;
             view.classList.toggle("active", isActive);
         });
 
         navigationLinks.forEach((link) => {
-            const isActive = link.dataset.route === safeRoute;
+            const isActive =
+                link.dataset.route === safeRoute;
 
             link.classList.toggle("active", isActive);
 
             if (isActive) {
-                link.setAttribute("aria-current", "page");
+                link.setAttribute(
+                    "aria-current",
+                    "page"
+                );
             } else {
                 link.removeAttribute("aria-current");
             }
         });
 
         if (updateHash) {
-            history.pushState(null, "", `#${safeRoute}`);
+            history.pushState(
+                null,
+                "",
+                `#${safeRoute}`
+            );
         }
 
         closeMenu();
@@ -91,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     navigationLinks.forEach((link) => {
         link.addEventListener("click", (event) => {
             event.preventDefault();
+
             showRoute(link.dataset.route);
         });
     });
@@ -121,8 +139,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         mainNavigation.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("menu-open");
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        document.body.classList.remove(
+            "menu-open"
+        );
     }
 
     function openMenu() {
@@ -131,14 +156,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         mainNavigation.classList.add("open");
-        menuButton.setAttribute("aria-expanded", "true");
-        document.body.classList.add("menu-open");
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        document.body.classList.add(
+            "menu-open"
+        );
     }
 
     if (menuButton && mainNavigation) {
         menuButton.addEventListener("click", () => {
             const isOpen =
-                menuButton.getAttribute("aria-expanded") === "true";
+                menuButton.getAttribute(
+                    "aria-expanded"
+                ) === "true";
 
             if (isOpen) {
                 closeMenu();
@@ -147,15 +181,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        document.addEventListener("click", (event) => {
-            const clickedInsideMenu =
-                mainNavigation.contains(event.target) ||
-                menuButton.contains(event.target);
+        document.addEventListener(
+            "click",
+            (event) => {
+                const clickedInsideMenu =
+                    mainNavigation.contains(
+                        event.target
+                    ) ||
+                    menuButton.contains(
+                        event.target
+                    );
 
-            if (!clickedInsideMenu) {
-                closeMenu();
+                if (!clickedInsideMenu) {
+                    closeMenu();
+                }
             }
-        });
+        );
 
         window.addEventListener("resize", () => {
             if (window.innerWidth > 760) {
@@ -172,7 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function findContaminant(id) {
         return data.contaminants.find(
-            (contaminant) => contaminant.id === id
+            (contaminant) =>
+                contaminant.id === id
         );
     }
 
@@ -186,20 +228,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (number < 0.01) {
-            return number.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+            return number
+                .toFixed(3)
+                .replace(/0+$/, "")
+                .replace(/\.$/, "");
         }
 
         if (number < 1) {
-            return number.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+            return number
+                .toFixed(2)
+                .replace(/0+$/, "")
+                .replace(/\.$/, "");
         }
 
         if (number < 100) {
-            return number.toFixed(1).replace(/\.0$/, "");
+            return number
+                .toFixed(1)
+                .replace(/\.0$/, "");
         }
 
-        return number.toLocaleString(undefined, {
-            maximumFractionDigits: 1
-        });
+        return number.toLocaleString(
+            undefined,
+            {
+                maximumFractionDigits: 1
+            }
+        );
     }
 
     function escapeHtml(value) {
@@ -213,7 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function createList(items) {
         return items
-            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .map(
+                (item) =>
+                    `<li>${escapeHtml(item)}</li>`
+            )
             .join("");
     }
 
@@ -227,6 +283,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return value * unitData.toPpb;
     }
 
+    function scrollToElement(element) {
+        if (!element) {
+            return;
+        }
+
+        setTimeout(() => {
+            element.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 100);
+    }
+
     /*
     =====================================================
     RESULT CHECKER
@@ -234,88 +303,141 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     const calculatorForm =
-        document.getElementById("water-calculator");
+        document.getElementById(
+            "water-calculator"
+        );
 
     const calculatorContaminant =
-        document.getElementById("calculator-contaminant");
+        document.getElementById(
+            "calculator-contaminant"
+        );
 
     const calculatorValue =
-        document.getElementById("calculator-value");
+        document.getElementById(
+            "calculator-value"
+        );
 
     const calculatorUnit =
-        document.getElementById("calculator-unit");
+        document.getElementById(
+            "calculator-unit"
+        );
 
     const calculatorError =
-        document.getElementById("calculator-error");
+        document.getElementById(
+            "calculator-error"
+        );
 
     const calculatorReset =
-        document.getElementById("calculator-reset");
+        document.getElementById(
+            "calculator-reset"
+        );
 
     const calculatorEmptyResult =
-        document.getElementById("calculator-empty-result");
+        document.getElementById(
+            "calculator-empty-result"
+        );
 
     const calculatorResultPanel =
-        document.getElementById("calculator-result-panel");
+        document.getElementById(
+            "calculator-result-panel"
+        );
 
     const calculatorStatus =
-        document.getElementById("calculator-status");
+        document.getElementById(
+            "calculator-status"
+        );
 
     const calculatorResultTitle =
-        document.getElementById("calculator-result-title");
+        document.getElementById(
+            "calculator-result-title"
+        );
 
     const calculatorResultSummary =
-        document.getElementById("calculator-result-summary");
+        document.getElementById(
+            "calculator-result-summary"
+        );
 
     const calculatorResultValue =
-        document.getElementById("calculator-result-value");
+        document.getElementById(
+            "calculator-result-value"
+        );
 
     const calculatorBenchmarkType =
-        document.getElementById("calculator-benchmark-type");
+        document.getElementById(
+            "calculator-benchmark-type"
+        );
 
     const calculatorBenchmarkValue =
-        document.getElementById("calculator-benchmark-value");
+        document.getElementById(
+            "calculator-benchmark-value"
+        );
 
     const calculatorExplanation =
-        document.getElementById("calculator-explanation");
+        document.getElementById(
+            "calculator-explanation"
+        );
 
     const calculatorNextSteps =
-        document.getElementById("calculator-next-steps");
+        document.getElementById(
+            "calculator-next-steps"
+        );
 
     const calculatorLimitation =
-        document.getElementById("calculator-limitation");
+        document.getElementById(
+            "calculator-limitation"
+        );
 
     const calculatorSource =
-        document.getElementById("calculator-source");
+        document.getElementById(
+            "calculator-source"
+        );
 
     function populateCalculatorContaminants() {
         if (!calculatorContaminant) {
             return;
         }
 
-        const numericalContaminants = data.contaminants.filter(
-            (contaminant) =>
-                !contaminant.textResult &&
-                contaminant.benchmark.valuePpb !== null
+        calculatorContaminant.innerHTML =
+            '<option value="">Choose contaminant</option>';
+
+        const numericalContaminants =
+            data.contaminants.filter(
+                (contaminant) =>
+                    !contaminant.textResult &&
+                    contaminant.benchmark
+                        .valuePpb !== null
+            );
+
+        numericalContaminants.forEach(
+            (contaminant) => {
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value = contaminant.id;
+                option.textContent =
+                    contaminant.name;
+
+                calculatorContaminant.appendChild(
+                    option
+                );
+            }
         );
-
-        numericalContaminants.forEach((contaminant) => {
-            const option = document.createElement("option");
-
-            option.value = contaminant.id;
-            option.textContent = contaminant.name;
-
-            calculatorContaminant.appendChild(option);
-        });
     }
 
     function updateCalculatorUnits() {
-        if (!calculatorContaminant || !calculatorUnit) {
+        if (
+            !calculatorContaminant ||
+            !calculatorUnit
+        ) {
             return;
         }
 
-        const contaminant = findContaminant(
-            calculatorContaminant.value
-        );
+        const contaminant =
+            findContaminant(
+                calculatorContaminant.value
+            );
 
         calculatorUnit.innerHTML =
             '<option value="">Choose unit</option>';
@@ -325,22 +447,37 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        contaminant.acceptedUnits.forEach((unit) => {
-            const unitInformation = data.units[unit];
-            const option = document.createElement("option");
+        contaminant.acceptedUnits.forEach(
+            (unit) => {
+                const unitInformation =
+                    data.units[unit];
 
-            option.value = unit;
-            option.textContent = unitInformation
-                ? `${unitInformation.label} — ${unitInformation.fullName}`
-                : unit;
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-            calculatorUnit.appendChild(option);
-        });
+                option.value = unit;
+
+                option.textContent =
+                    unitInformation
+                        ? `${unitInformation.label} — ${unitInformation.fullName}`
+                        : unit;
+
+                calculatorUnit.appendChild(
+                    option
+                );
+            }
+        );
 
         calculatorUnit.disabled = false;
 
-        if (contaminant.acceptedUnits.length === 1) {
-            calculatorUnit.value = contaminant.acceptedUnits[0];
+        if (
+            contaminant.acceptedUnits.length ===
+            1
+        ) {
+            calculatorUnit.value =
+                contaminant.acceptedUnits[0];
         }
     }
 
@@ -362,8 +499,12 @@ document.addEventListener("DOMContentLoaded", () => {
         calculatorError.textContent = "";
     }
 
-    function getResultLevel(valuePpb, benchmarkPpb) {
-        const ratio = valuePpb / benchmarkPpb;
+    function getResultLevel(
+        valuePpb,
+        benchmarkPpb
+    ) {
+        const ratio =
+            valuePpb / benchmarkPpb;
 
         if (ratio > 1) {
             return "above";
@@ -376,52 +517,86 @@ document.addEventListener("DOMContentLoaded", () => {
         return "below";
     }
 
-    function getResultContent(contaminant, level) {
+    function getResultContent(
+        contaminant,
+        level
+    ) {
         if (level === "above") {
             return {
-                status: "Above benchmark",
-                title: "This result needs attention.",
-                summary: contaminant.aboveMessage,
+                status: "Above limit",
+                title:
+                    "This result needs attention.",
+                summary:
+                    contaminant.aboveMessage,
                 explanation:
                     `Your result is above the ${contaminant.benchmark.shortType.toLowerCase()} shown for ${contaminant.name}.`,
-                stepGroup: contaminant.aboveSteps
+                stepGroup:
+                    contaminant.aboveSteps
             };
         }
 
         if (level === "near") {
             return {
-                status: "Close to benchmark",
-                title: "This result is close to the benchmark.",
-                summary: contaminant.nearMessage,
+                status: "Close to limit",
+                title:
+                    "This result is close to the limit.",
+                summary:
+                    contaminant.nearMessage,
                 explanation:
-                    `Your result is within 20% of the ${contaminant.benchmark.shortType.toLowerCase()}. A second result may help confirm what is happening.`,
-                stepGroup: contaminant.nearSteps
+                    `Your result is within 20% of the ${contaminant.benchmark.shortType.toLowerCase()}. A confirmation test may help.`,
+                stepGroup:
+                    contaminant.nearSteps
             };
         }
 
         return {
-            status: "Below benchmark",
-            title: "This result is below the benchmark.",
-            summary: contaminant.belowMessage,
+            status: "Below limit",
+            title:
+                "This result is below the limit.",
+            summary:
+                contaminant.belowMessage,
             explanation:
                 `Your result is below the ${contaminant.benchmark.shortType.toLowerCase()} shown for ${contaminant.name}.`,
-            stepGroup: contaminant.belowSteps
+            stepGroup:
+                contaminant.belowSteps
         };
     }
 
     function getWaterSource() {
-        const selectedSource = document.querySelector(
-            'input[name="waterSource"]:checked'
-        );
+        const selectedSource =
+            document.querySelector(
+                'input[name="waterSource"]:checked'
+            );
 
-        return selectedSource ? selectedSource.value : "general";
+        return selectedSource
+            ? selectedSource.value
+            : "general";
     }
 
-    function combineNextSteps(stepGroup, waterSource) {
-        const generalSteps = stepGroup.general || [];
-        const sourceSteps = stepGroup[waterSource] || [];
+    /*
+    FIX:
+    Previously general steps could be included twice.
+    Set removes any accidental duplicate sentences.
+    */
 
-        return [...sourceSteps, ...generalSteps];
+    function combineNextSteps(
+        stepGroup,
+        waterSource
+    ) {
+        let steps = [];
+
+        if (waterSource === "general") {
+            steps =
+                stepGroup.general || [];
+        } else {
+            steps = [
+                ...(stepGroup[waterSource] ||
+                    []),
+                ...(stepGroup.general || [])
+            ];
+        }
+
+        return [...new Set(steps)];
     }
 
     function displayCalculatorResult(
@@ -430,42 +605,97 @@ document.addEventListener("DOMContentLoaded", () => {
         originalUnit,
         valuePpb
     ) {
-        const benchmarkPpb = contaminant.benchmark.valuePpb;
-        const level = getResultLevel(valuePpb, benchmarkPpb);
-        const content = getResultContent(contaminant, level);
-        const waterSource = getWaterSource();
+        if (
+            !calculatorResultPanel ||
+            !calculatorEmptyResult
+        ) {
+            return;
+        }
 
-        const nextSteps = combineNextSteps(
-            content.stepGroup,
-            waterSource
+        const benchmarkPpb =
+            contaminant.benchmark.valuePpb;
+
+        const level = getResultLevel(
+            valuePpb,
+            benchmarkPpb
         );
 
-        calculatorStatus.textContent = content.status;
-        calculatorStatus.dataset.level = level;
+        const content =
+            getResultContent(
+                contaminant,
+                level
+            );
 
-        calculatorResultTitle.textContent = content.title;
-        calculatorResultSummary.textContent = content.summary;
+        const waterSource =
+            getWaterSource();
 
-        calculatorResultValue.textContent =
-            `${formatNumber(originalValue)} ${originalUnit}`;
+        const nextSteps =
+            combineNextSteps(
+                content.stepGroup,
+                waterSource
+            );
 
-        calculatorBenchmarkType.textContent =
-            contaminant.benchmark.shortType;
+        if (calculatorStatus) {
+            calculatorStatus.textContent =
+                content.status;
 
-        calculatorBenchmarkValue.textContent =
-            contaminant.benchmark.displayValue;
+            calculatorStatus.dataset.level =
+                level;
+        }
 
-        calculatorExplanation.textContent = content.explanation;
+        if (calculatorResultTitle) {
+            calculatorResultTitle.textContent =
+                content.title;
+        }
 
-        calculatorNextSteps.innerHTML = createList(nextSteps);
+        if (calculatorResultSummary) {
+            calculatorResultSummary.textContent =
+                content.summary;
+        }
 
-        calculatorLimitation.textContent =
-            "One result cannot describe every tap or your exposure over time. Sampling method, timing, plumbing, and laboratory instructions can affect the result.";
+        if (calculatorResultValue) {
+            calculatorResultValue.textContent =
+                `${formatNumber(originalValue)} ${originalUnit}`;
+        }
 
-        calculatorSource.href = contaminant.officialUrl;
+        if (calculatorBenchmarkType) {
+            calculatorBenchmarkType.textContent =
+                contaminant.benchmark
+                    .shortType;
+        }
+
+        if (calculatorBenchmarkValue) {
+            calculatorBenchmarkValue.textContent =
+                contaminant.benchmark
+                    .displayValue;
+        }
+
+        if (calculatorExplanation) {
+            calculatorExplanation.textContent =
+                content.explanation;
+        }
+
+        if (calculatorNextSteps) {
+            calculatorNextSteps.innerHTML =
+                createList(nextSteps);
+        }
+
+        if (calculatorLimitation) {
+            calculatorLimitation.textContent =
+                "One result cannot describe every tap or your exposure over time. Sampling method, timing, plumbing, and laboratory instructions can affect the result.";
+        }
+
+        if (calculatorSource) {
+            calculatorSource.href =
+                contaminant.officialUrl;
+        }
 
         calculatorEmptyResult.hidden = true;
         calculatorResultPanel.hidden = false;
+
+        scrollToElement(
+            calculatorResultPanel
+        );
     }
 
     function resetCalculator() {
@@ -475,15 +705,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         calculatorForm.reset();
 
-        calculatorUnit.innerHTML =
-            '<option value="">Choose unit</option>';
+        if (calculatorUnit) {
+            calculatorUnit.innerHTML =
+                '<option value="">Choose unit</option>';
 
-        calculatorUnit.disabled = true;
+            calculatorUnit.disabled = true;
+        }
 
         hideCalculatorError();
 
-        calculatorResultPanel.hidden = true;
-        calculatorEmptyResult.hidden = false;
+        if (calculatorResultPanel) {
+            calculatorResultPanel.hidden = true;
+        }
+
+        if (calculatorEmptyResult) {
+            calculatorEmptyResult.hidden = false;
+        }
     }
 
     if (calculatorContaminant) {
@@ -494,58 +731,84 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (calculatorForm) {
-        calculatorForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            hideCalculatorError();
+        calculatorForm.addEventListener(
+            "submit",
+            (event) => {
+                event.preventDefault();
 
-            const contaminant = findContaminant(
-                calculatorContaminant.value
-            );
+                hideCalculatorError();
 
-            const enteredValue = Number(calculatorValue.value);
-            const enteredUnit = calculatorUnit.value;
+                const contaminant =
+                    findContaminant(
+                        calculatorContaminant
+                            ?.value
+                    );
 
-            if (!contaminant) {
-                showCalculatorError("Choose a contaminant.");
-                calculatorContaminant.focus();
-                return;
-            }
+                const enteredValue =
+                    Number(
+                        calculatorValue?.value
+                    );
 
-            if (
-                calculatorValue.value.trim() === "" ||
-                !Number.isFinite(enteredValue) ||
-                enteredValue < 0
-            ) {
-                showCalculatorError("Enter a valid result.");
-                calculatorValue.focus();
-                return;
-            }
+                const enteredUnit =
+                    calculatorUnit?.value;
 
-            if (!enteredUnit) {
-                showCalculatorError("Choose the unit from your report.");
-                calculatorUnit.focus();
-                return;
-            }
+                if (!contaminant) {
+                    showCalculatorError(
+                        "Choose a contaminant."
+                    );
 
-            const valuePpb = convertToPpb(
-                enteredValue,
-                enteredUnit
-            );
+                    calculatorContaminant?.focus();
+                    return;
+                }
 
-            if (valuePpb === null) {
-                showCalculatorError(
-                    "The selected unit could not be converted."
+                if (
+                    !calculatorValue ||
+                    calculatorValue.value.trim() ===
+                        "" ||
+                    !Number.isFinite(
+                        enteredValue
+                    ) ||
+                    enteredValue < 0
+                ) {
+                    showCalculatorError(
+                        "Enter a valid result."
+                    );
+
+                    calculatorValue?.focus();
+                    return;
+                }
+
+                if (!enteredUnit) {
+                    showCalculatorError(
+                        "Choose the unit shown on your report."
+                    );
+
+                    calculatorUnit?.focus();
+                    return;
+                }
+
+                const valuePpb =
+                    convertToPpb(
+                        enteredValue,
+                        enteredUnit
+                    );
+
+                if (valuePpb === null) {
+                    showCalculatorError(
+                        "The selected unit could not be converted."
+                    );
+
+                    return;
+                }
+
+                displayCalculatorResult(
+                    contaminant,
+                    enteredValue,
+                    enteredUnit,
+                    valuePpb
                 );
-                return;
             }
-
-            displayCalculatorResult(
-                contaminant,
-                enteredValue,
-                enteredUnit,
-                valuePpb
-            );
-        });
+        );
     }
 
     if (calculatorReset) {
@@ -562,19 +825,29 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     const contaminantSearch =
-        document.getElementById("contaminant-search");
+        document.getElementById(
+            "contaminant-search"
+        );
 
     const contaminantList =
-        document.getElementById("contaminant-list");
+        document.getElementById(
+            "contaminant-list"
+        );
 
     const contaminantCount =
-        document.getElementById("contaminant-count");
+        document.getElementById(
+            "contaminant-count"
+        );
 
     const contaminantDetail =
-        document.getElementById("contaminant-detail");
+        document.getElementById(
+            "contaminant-detail"
+        );
 
     const contaminantNoResults =
-        document.getElementById("contaminant-no-results");
+        document.getElementById(
+            "contaminant-no-results"
+        );
 
     const contaminantFilterButtons =
         document.querySelectorAll(
@@ -584,17 +857,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeContaminantFilter = "all";
     let selectedContaminantId = null;
 
-    function matchesContaminantSearch(contaminant, query) {
+    function matchesContaminantSearch(
+        contaminant,
+        query
+    ) {
         const searchableText = [
             contaminant.name,
             contaminant.description,
             contaminant.source,
-            ...contaminant.searchTerms
+            ...(contaminant.searchTerms ||
+                [])
         ]
             .join(" ")
             .toLowerCase();
 
-        return searchableText.includes(query.toLowerCase());
+        return searchableText.includes(
+            query.toLowerCase()
+        );
     }
 
     function getFilteredContaminants() {
@@ -602,25 +881,36 @@ document.addEventListener("DOMContentLoaded", () => {
             ? contaminantSearch.value.trim()
             : "";
 
-        return data.contaminants.filter((contaminant) => {
-            const matchesFilter =
-                activeContaminantFilter === "all" ||
-                contaminant.category === activeContaminantFilter;
+        return data.contaminants.filter(
+            (contaminant) => {
+                const matchesFilter =
+                    activeContaminantFilter ===
+                        "all" ||
+                    contaminant.category ===
+                        activeContaminantFilter;
 
-            const matchesSearch =
-                query === "" ||
-                matchesContaminantSearch(contaminant, query);
+                const matchesSearch =
+                    query === "" ||
+                    matchesContaminantSearch(
+                        contaminant,
+                        query
+                    );
 
-            return matchesFilter && matchesSearch;
-        });
+                return (
+                    matchesFilter &&
+                    matchesSearch
+                );
+            }
+        );
     }
 
     function getCategoryLabel(category) {
         const labels = {
             metals: "Metal",
-            microbial: "Bacteria",
+            microbial: "Microbial",
             chemicals: "Chemical",
-            aesthetic: "Taste or appearance"
+            aesthetic:
+                "Taste or appearance"
         };
 
         return labels[category] || category;
@@ -631,14 +921,17 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const contaminants = getFilteredContaminants();
+        const contaminants =
+            getFilteredContaminants();
 
         contaminantList.innerHTML = "";
 
         if (contaminantCount) {
             contaminantCount.textContent =
                 `${contaminants.length} result${
-                    contaminants.length === 1 ? "" : "s"
+                    contaminants.length === 1
+                        ? ""
+                        : "s"
                 }`;
         }
 
@@ -647,103 +940,238 @@ document.addEventListener("DOMContentLoaded", () => {
                 contaminants.length !== 0;
         }
 
-        contaminants.forEach((contaminant) => {
-            const button = document.createElement("button");
+        contaminants.forEach(
+            (contaminant) => {
+                const button =
+                    document.createElement(
+                        "button"
+                    );
 
-            button.type = "button";
-            button.className = "contaminant-item";
-            button.dataset.contaminantId = contaminant.id;
+                button.type = "button";
+                button.className =
+                    "contaminant-item";
 
-            if (selectedContaminantId === contaminant.id) {
-                button.classList.add("active");
+                button.dataset.contaminantId =
+                    contaminant.id;
+
+                if (
+                    selectedContaminantId ===
+                    contaminant.id
+                ) {
+                    button.classList.add(
+                        "active"
+                    );
+                }
+
+                button.innerHTML = `
+                    <span>
+                        <strong>
+                            ${escapeHtml(contaminant.name)}
+                        </strong>
+
+                        <small>
+                            ${escapeHtml(
+                                getCategoryLabel(
+                                    contaminant.category
+                                )
+                            )}
+                        </small>
+                    </span>
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+                `;
+
+                button.addEventListener(
+                    "click",
+                    () => {
+                        openContaminant(
+                            contaminant.id
+                        );
+                    }
+                );
+
+                contaminantList.appendChild(
+                    button
+                );
             }
-
-            button.innerHTML = `
-                <span>
-                    <strong>${escapeHtml(contaminant.name)}</strong>
-                    <small>${escapeHtml(
-                        getCategoryLabel(contaminant.category)
-                    )}</small>
-                </span>
-
-                <span aria-hidden="true">→</span>
-            `;
-
-            button.addEventListener("click", () => {
-                openContaminant(contaminant.id);
-            });
-
-            contaminantList.appendChild(button);
-        });
+        );
     }
 
-    function createTreatmentNames(contaminant) {
+    function createTreatmentSummary(
+        contaminant
+    ) {
         if (
-            !contaminant.treatments ||
-            contaminant.treatments.length === 0
+            Array.isArray(
+                contaminant.treatments
+            ) &&
+            contaminant.treatments.length >
+                0
         ) {
-            return "Treatment depends on the cause. Testing should come first.";
+            return {
+                available: true,
+                text: contaminant.treatments
+                    .map(
+                        (treatment) =>
+                            treatment.name
+                    )
+                    .join(", ")
+            };
         }
 
-        return contaminant.treatments
-            .map((treatment) => treatment.name)
-            .join(", ");
+        const customMessages = {
+            "e-coli":
+                "Disinfection may be needed, but the contamination source should also be identified and corrected.",
+
+            "taste-smell":
+                "The correct treatment depends on what is causing the taste, odor, color, or cloudiness."
+        };
+
+        return {
+            available: false,
+            text:
+                customMessages[
+                    contaminant.id
+                ] ||
+                "Testing is needed before choosing a treatment."
+        };
     }
 
-    function renderContaminantDetail(contaminant) {
+    function renderContaminantDetail(
+        contaminant
+    ) {
         if (!contaminantDetail) {
             return;
         }
 
         const benchmarkText =
-            contaminant.benchmark.displayValue;
+            contaminant.benchmark
+                .displayValue;
+
+        const treatmentSummary =
+            createTreatmentSummary(
+                contaminant
+            );
 
         contaminantDetail.innerHTML = `
             <div class="detail-header">
                 <p class="eyebrow">
                     ${escapeHtml(
-                        getCategoryLabel(contaminant.category)
+                        getCategoryLabel(
+                            contaminant.category
+                        )
                     )}
                 </p>
 
-                <h2>${escapeHtml(contaminant.name)}</h2>
+                <h2>
+                    ${escapeHtml(contaminant.name)}
+                </h2>
 
-                <p>${escapeHtml(contaminant.description)}</p>
+                <p>
+                    ${escapeHtml(
+                        contaminant.description
+                    )}
+                </p>
             </div>
 
             <div class="detail-section">
-                <h3>Benchmark</h3>
-                <p>
-                    <strong>${escapeHtml(benchmarkText)}</strong>
-                    — ${escapeHtml(contaminant.benchmark.type)}
+                <h3>
+                    ${escapeHtml(
+                        contaminant.benchmark
+                            .shortType
+                    )}
+                </h3>
+
+                <p class="limit-number">
+                    ${escapeHtml(benchmarkText)}
                 </p>
+
+                <small class="detail-help-text">
+                    ${escapeHtml(
+                        contaminant.benchmark.type
+                    )}
+                </small>
             </div>
 
             <div class="detail-section">
                 <h3>Where it comes from</h3>
-                <p>${escapeHtml(contaminant.source)}</p>
+
+                <p>
+                    ${escapeHtml(
+                        contaminant.source
+                    )}
+                </p>
             </div>
 
             <div class="detail-section">
                 <h3>Why it matters</h3>
-                <p>${escapeHtml(contaminant.health)}</p>
+
+                <p>
+                    ${escapeHtml(
+                        contaminant.health
+                    )}
+                </p>
+            </div>
+
+            <div class="detail-section">
+                <h3>Who may be more sensitive</h3>
+
+                <p>
+                    ${escapeHtml(
+                        contaminant.sensitiveGroups
+                    )}
+                </p>
             </div>
 
             <div class="detail-section">
                 <h3>Does boiling help?</h3>
-                <p>${escapeHtml(contaminant.boiling)}</p>
+
+                <p>
+                    ${escapeHtml(
+                        contaminant.boiling
+                    )}
+                </p>
             </div>
 
             <div class="detail-section">
-                <h3>Treatment to research</h3>
-                <p>${escapeHtml(
-                    createTreatmentNames(contaminant)
-                )}</p>
+                <h3>
+                    ${
+                        treatmentSummary.available
+                            ? "Treatment options"
+                            : "Before choosing treatment"
+                    }
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        treatmentSummary.text
+                    )}
+                </p>
+
+                ${
+                    treatmentSummary.available
+                        ? `
+                            <button
+                                class="inline-action-button"
+                                type="button"
+                                data-open-treatment="${escapeHtml(
+                                    contaminant.id
+                                )}"
+                            >
+                                Compare treatment options
+                                <span aria-hidden="true">→</span>
+                            </button>
+                        `
+                        : ""
+                }
             </div>
 
             <a
                 class="source-link"
-                href="${escapeHtml(contaminant.officialUrl)}"
+                href="${escapeHtml(
+                    contaminant.officialUrl
+                )}"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -751,31 +1179,77 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span aria-hidden="true">→</span>
             </a>
         `;
+
+        /*
+        This code must be AFTER the closing `; above.
+        It connects the dynamically created treatment button.
+        */
+
+        const treatmentButton =
+            contaminantDetail.querySelector(
+                "[data-open-treatment]"
+            );
+
+        if (treatmentButton) {
+            treatmentButton.addEventListener(
+                "click",
+                () => {
+                    const contaminantId =
+                        treatmentButton.dataset
+                            .openTreatment;
+
+                    showRoute("treatment");
+
+                    if (
+                        treatmentContaminant
+                    ) {
+                        treatmentContaminant.value =
+                            contaminantId;
+
+                        treatmentContaminant.focus();
+                    }
+
+                    if (treatmentEmpty) {
+                        treatmentEmpty.hidden =
+                            false;
+                    }
+
+                    if (treatmentResults) {
+                        treatmentResults.hidden =
+                            true;
+                    }
+                }
+            );
+        }
     }
 
-    function openContaminant(contaminantId) {
-        const contaminant = findContaminant(contaminantId);
+    function openContaminant(
+        contaminantId
+    ) {
+        const contaminant =
+            findContaminant(contaminantId);
 
         if (!contaminant) {
             return;
         }
 
-        selectedContaminantId = contaminantId;
+        selectedContaminantId =
+            contaminantId;
 
         showRoute("contaminants");
+
         renderContaminantList();
-        renderContaminantDetail(contaminant);
+        renderContaminantDetail(
+            contaminant
+        );
 
         if (
             window.innerWidth <= 940 &&
             contaminantDetail
         ) {
-            setTimeout(() => {
-                contaminantDetail.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            }, 100);
+            scrollToElement(
+                contaminantDetail
+            );
         }
     }
 
@@ -786,32 +1260,44 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-    contaminantFilterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            activeContaminantFilter = button.dataset.filter;
+    contaminantFilterButtons.forEach(
+        (button) => {
+            button.addEventListener(
+                "click",
+                () => {
+                    activeContaminantFilter =
+                        button.dataset.filter;
 
-            contaminantFilterButtons.forEach(
-                (filterButton) => {
-                    filterButton.classList.toggle(
-                        "active",
-                        filterButton === button
+                    contaminantFilterButtons.forEach(
+                        (filterButton) => {
+                            filterButton.classList.toggle(
+                                "active",
+                                filterButton ===
+                                    button
+                            );
+                        }
+                    );
+
+                    renderContaminantList();
+                }
+            );
+        }
+    );
+
+    document
+        .querySelectorAll(
+            "[data-contaminant-open]"
+        )
+        .forEach((button) => {
+            button.addEventListener(
+                "click",
+                () => {
+                    openContaminant(
+                        button.dataset
+                            .contaminantOpen
                     );
                 }
             );
-
-            renderContaminantList();
-        });
-    });
-
-    document
-        .querySelectorAll("[data-contaminant-open]")
-        .forEach((button) => {
-            button.addEventListener("click", () => {
-                const contaminantId =
-                    button.dataset.contaminantOpen;
-
-                openContaminant(contaminantId);
-            });
         });
 
     /*
@@ -821,90 +1307,184 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     const treatmentForm =
-        document.getElementById("treatment-form");
+        document.getElementById(
+            "treatment-form"
+        );
 
     const treatmentContaminant =
-        document.getElementById("treatment-contaminant");
+        document.getElementById(
+            "treatment-contaminant"
+        );
 
     const treatmentEmpty =
-        document.getElementById("treatment-empty");
+        document.getElementById(
+            "treatment-empty"
+        );
 
     const treatmentResults =
-        document.getElementById("treatment-results");
+        document.getElementById(
+            "treatment-results"
+        );
 
     function populateTreatmentContaminants() {
         if (!treatmentContaminant) {
             return;
         }
 
+        treatmentContaminant.innerHTML =
+            '<option value="">Choose contaminant</option>';
+
         data.contaminants
             .filter(
                 (contaminant) =>
-                    Array.isArray(contaminant.treatments) &&
-                    contaminant.treatments.length > 0
+                    Array.isArray(
+                        contaminant.treatments
+                    ) &&
+                    contaminant.treatments
+                        .length > 0
             )
             .forEach((contaminant) => {
-                const option = document.createElement("option");
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-                option.value = contaminant.id;
-                option.textContent = contaminant.name;
+                option.value =
+                    contaminant.id;
 
-                treatmentContaminant.appendChild(option);
+                option.textContent =
+                    contaminant.name;
+
+                treatmentContaminant.appendChild(
+                    option
+                );
             });
     }
 
     function getSelectedRadioValue(name) {
-        const selected = document.querySelector(
-            `input[name="${name}"]:checked`
-        );
+        const selected =
+            document.querySelector(
+                `input[name="${name}"]:checked`
+            );
 
-        return selected ? selected.value : "";
+        return selected
+            ? selected.value
+            : "";
     }
+
+    /*
+    Treatment matching now checks both:
+    1. Location
+    2. Budget
+
+    If no exact match exists, it clearly tells the user
+    whether the alternatives match location or budget.
+    */
 
     function rankTreatments(
         treatments,
         selectedLocation,
         selectedBudget
     ) {
-        return treatments
-            .map((treatment) => {
-                let score = 0;
-
-                if (
+        const exactMatches =
+            treatments.filter(
+                (treatment) =>
                     treatment.locations.includes(
                         selectedLocation
-                    )
-                ) {
-                    score += 2;
-                }
-
-                if (
+                    ) &&
                     treatment.budgets.includes(
                         selectedBudget
                     )
-                ) {
-                    score += 1;
-                }
+            );
 
-                return {
-                    ...treatment,
-                    score
-                };
-            })
-            .filter((treatment) => treatment.score > 0)
-            .sort((first, second) => second.score - first.score);
+        if (exactMatches.length > 0) {
+            return {
+                matchType: "exact",
+                treatments: exactMatches
+            };
+        }
+
+        const locationMatches =
+            treatments.filter(
+                (treatment) =>
+                    treatment.locations.includes(
+                        selectedLocation
+                    )
+            );
+
+        if (locationMatches.length > 0) {
+            return {
+                matchType: "location",
+                treatments:
+                    locationMatches
+            };
+        }
+
+        const budgetMatches =
+            treatments.filter(
+                (treatment) =>
+                    treatment.budgets.includes(
+                        selectedBudget
+                    )
+            );
+
+        if (budgetMatches.length > 0) {
+            return {
+                matchType: "budget",
+                treatments:
+                    budgetMatches
+            };
+        }
+
+        return {
+            matchType: "none",
+            treatments: []
+        };
     }
 
     function renderTreatmentResults(
         contaminant,
         treatments,
-        selectedLocation
+        selectedLocation,
+        selectedBudget,
+        matchType
     ) {
+        if (!treatmentResults) {
+            return;
+        }
+
         treatmentResults.innerHTML = "";
+
+        const locationLabels = {
+            "point-of-use":
+                "Drinking-water tap",
+            "whole-house":
+                "Whole house"
+        };
+
+        const budgetLabels = {
+            low: "Lower budget",
+            medium: "Moderate budget",
+            high: "Higher budget"
+        };
+
+        const matchMessages = {
+            exact:
+                "These options match both your selected treatment location and budget.",
+
+            location:
+                "No option matched both choices. These options match your treatment location but may require a different budget.",
+
+            budget:
+                "No option matched both choices. These options match your budget but may use a different treatment location.",
+
+            none:
+                "No matching treatment was found for the selected choices."
+        };
 
         if (treatments.length === 0) {
             treatmentResults.innerHTML = `
-                <section class="panel empty-result">
+                <section class="panel empty-result treatment-no-match">
                     <span
                         class="empty-result-icon"
                         aria-hidden="true"
@@ -912,129 +1492,316 @@ document.addEventListener("DOMContentLoaded", () => {
                         ?
                     </span>
 
-                    <h2>No close match</h2>
+                    <p class="eyebrow">
+                        No close match
+                    </p>
+
+                    <h2>
+                        Try different treatment choices
+                    </h2>
 
                     <p>
-                        Try another budget or treatment location.
-                        A qualified professional can also evaluate
-                        options for ${escapeHtml(contaminant.name)}.
+                        No option in this guide matches both
+                        your selected setup and budget for
+                        ${escapeHtml(
+                            contaminant.name
+                        )}.
+                    </p>
+
+                    <p>
+                        Try another budget or treatment
+                        location. A qualified water-treatment
+                        professional can also evaluate your
+                        complete water test.
                     </p>
                 </section>
             `;
 
-            treatmentEmpty.hidden = true;
+            if (treatmentEmpty) {
+                treatmentEmpty.hidden = true;
+            }
+
             treatmentResults.hidden = false;
+
+            scrollToElement(
+                treatmentResults
+            );
+
             return;
         }
 
-        const heading = document.createElement("section");
+        const heading =
+            document.createElement(
+                "section"
+            );
 
-        heading.className = "panel treatment-card";
+        heading.className =
+            "panel treatment-results-heading";
+
         heading.innerHTML = `
-            <p class="eyebrow">Suggested research</p>
+            <div class="treatment-updated-label">
+                <span aria-hidden="true">✓</span>
+                Treatment suggestions updated
+            </div>
 
             <h2>
-                Options for ${escapeHtml(contaminant.name)}
+                Options for
+                ${escapeHtml(
+                    contaminant.name
+                )}
             </h2>
 
-            <p>
-                These are technologies to compare, not product
-                recommendations. Look for a verified contaminant-
-                reduction claim.
+            <div class="selected-treatment-choices">
+                <span>
+                    ${escapeHtml(
+                        locationLabels[
+                            selectedLocation
+                        ] ||
+                            selectedLocation
+                    )}
+                </span>
+
+                <span>
+                    ${escapeHtml(
+                        budgetLabels[
+                            selectedBudget
+                        ] ||
+                            selectedBudget
+                    )}
+                </span>
+            </div>
+
+            <p class="treatment-match-message">
+                ${escapeHtml(
+                    matchMessages[matchType]
+                )}
+            </p>
+
+            <p class="treatment-disclaimer">
+                These are treatment technologies to
+                compare, not specific product
+                recommendations. Check the product’s
+                certified contaminant-reduction claim.
             </p>
         `;
 
-        treatmentResults.appendChild(heading);
+        treatmentResults.appendChild(
+            heading
+        );
 
-        treatments.forEach((treatment, index) => {
-            const card = document.createElement("article");
+        treatments.forEach(
+            (treatment, index) => {
+                const card =
+                    document.createElement(
+                        "article"
+                    );
 
-            card.className = "treatment-card";
+                card.className =
+                    "panel treatment-card";
 
-            const matchText =
-                treatment.locations.includes(selectedLocation)
-                    ? "Matches location"
-                    : "Alternative setup";
+                const locationMatches =
+                    treatment.locations.includes(
+                        selectedLocation
+                    );
 
-            card.innerHTML = `
-                <p class="eyebrow">
-                    ${index === 0 ? "Best match" : "Another option"}
-                </p>
+                const budgetMatches =
+                    treatment.budgets.includes(
+                        selectedBudget
+                    );
 
-                <h3>${escapeHtml(treatment.name)}</h3>
+                let matchLabel =
+                    "Alternative option";
 
-                <p>${escapeHtml(treatment.fit)}</p>
+                if (
+                    locationMatches &&
+                    budgetMatches
+                ) {
+                    matchLabel =
+                        "Matches both choices";
+                } else if (
+                    locationMatches
+                ) {
+                    matchLabel =
+                        "Matches treatment location";
+                } else if (
+                    budgetMatches
+                ) {
+                    matchLabel =
+                        "Matches budget";
+                }
 
-                <div class="treatment-meta">
-                    <span>${escapeHtml(matchText)}</span>
+                card.innerHTML = `
+                    <div class="treatment-card-top">
+                        <p class="eyebrow">
+                            ${
+                                index === 0
+                                    ? "Top suggestion"
+                                    : "Another suggestion"
+                            }
+                        </p>
 
-                    <span>
+                        <span class="match-badge">
+                            ${escapeHtml(
+                                matchLabel
+                            )}
+                        </span>
+                    </div>
+
+                    <h3>
                         ${escapeHtml(
-                            treatment.locations
-                                .map((location) =>
-                                    location === "point-of-use"
-                                        ? "Tap treatment"
-                                        : "Whole house"
-                                )
-                                .join(" / ")
+                            treatment.name
                         )}
-                    </span>
-                </div>
+                    </h3>
 
-                <div class="detail-section">
-                    <h3>What to look for</h3>
-                    <p>${escapeHtml(treatment.certification)}</p>
-                </div>
+                    <p>
+                        ${escapeHtml(
+                            treatment.fit
+                        )}
+                    </p>
 
-                <div class="detail-section">
-                    <h3>Maintenance</h3>
-                    <p>${escapeHtml(treatment.maintenance)}</p>
-                </div>
+                    <div class="treatment-meta">
+                        <span>
+                            ${escapeHtml(
+                                treatment.locations
+                                    .map(
+                                        (
+                                            location
+                                        ) =>
+                                            location ===
+                                            "point-of-use"
+                                                ? "Tap treatment"
+                                                : "Whole house"
+                                    )
+                                    .join(" / ")
+                            )}
+                        </span>
 
-                <div class="detail-section">
-                    <h3>Keep in mind</h3>
-                    <p>${escapeHtml(treatment.limitation)}</p>
-                </div>
-            `;
+                        <span>
+                            ${escapeHtml(
+                                treatment.budgets
+                                    .map(
+                                        (
+                                            budget
+                                        ) =>
+                                            budgetLabels[
+                                                budget
+                                            ] ||
+                                            budget
+                                    )
+                                    .join(" / ")
+                            )}
+                        </span>
+                    </div>
 
-            treatmentResults.appendChild(card);
-        });
+                    <div class="detail-section">
+                        <h4>
+                            What to look for
+                        </h4>
 
-        treatmentEmpty.hidden = true;
+                        <p>
+                            ${escapeHtml(
+                                treatment.certification
+                            )}
+                        </p>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Maintenance</h4>
+
+                        <p>
+                            ${escapeHtml(
+                                treatment.maintenance
+                            )}
+                        </p>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>
+                            Keep in mind
+                        </h4>
+
+                        <p>
+                            ${escapeHtml(
+                                treatment.limitation
+                            )}
+                        </p>
+                    </div>
+                `;
+
+                treatmentResults.appendChild(
+                    card
+                );
+            }
+        );
+
+        if (treatmentEmpty) {
+            treatmentEmpty.hidden = true;
+        }
+
         treatmentResults.hidden = false;
+
+        scrollToElement(
+            treatmentResults
+        );
     }
 
     if (treatmentForm) {
-        treatmentForm.addEventListener("submit", (event) => {
-            event.preventDefault();
+        treatmentForm.addEventListener(
+            "submit",
+            (event) => {
+                event.preventDefault();
 
-            const contaminant = findContaminant(
-                treatmentContaminant.value
-            );
+                const contaminant =
+                    findContaminant(
+                        treatmentContaminant
+                            ?.value
+                    );
 
-            if (!contaminant) {
-                treatmentContaminant.focus();
-                return;
+                if (!contaminant) {
+                    treatmentContaminant?.focus();
+                    return;
+                }
+
+                const selectedLocation =
+                    getSelectedRadioValue(
+                        "treatmentLocation"
+                    );
+
+                const selectedBudget =
+                    getSelectedRadioValue(
+                        "budget"
+                    );
+
+                if (!selectedLocation) {
+                    alert(
+                        "Choose where you want the treatment installed."
+                    );
+                    return;
+                }
+
+                if (!selectedBudget) {
+                    alert(
+                        "Choose a budget range."
+                    );
+                    return;
+                }
+
+                const matchResult =
+                    rankTreatments(
+                        contaminant.treatments,
+                        selectedLocation,
+                        selectedBudget
+                    );
+
+                renderTreatmentResults(
+                    contaminant,
+                    matchResult.treatments,
+                    selectedLocation,
+                    selectedBudget,
+                    matchResult.matchType
+                );
             }
-
-            const selectedLocation =
-                getSelectedRadioValue("treatmentLocation");
-
-            const selectedBudget =
-                getSelectedRadioValue("budget");
-
-            const matches = rankTreatments(
-                contaminant.treatments,
-                selectedLocation,
-                selectedBudget
-            );
-
-            renderTreatmentResults(
-                contaminant,
-                matches,
-                selectedLocation
-            );
-        });
+        );
     }
 
     /*
@@ -1044,27 +1811,45 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     const wellGuidance =
-        document.getElementById("well-guidance");
+        document.getElementById(
+            "well-guidance"
+        );
 
-    function showWellGuidance(situationId) {
-        const guidance = data.wellGuidance[situationId];
+    function showWellGuidance(
+        situationId
+    ) {
+        const guidance =
+            data.wellGuidance[
+                situationId
+            ];
 
-        if (!guidance || !wellGuidance) {
+        if (
+            !guidance ||
+            !wellGuidance
+        ) {
             return;
         }
 
         wellGuidance.innerHTML = `
-            <p class="eyebrow">Private well guidance</p>
+            <p class="eyebrow">
+                Private well guidance
+            </p>
 
-            <h2>${escapeHtml(guidance.title)}</h2>
+            <h2>
+                ${escapeHtml(guidance.title)}
+            </h2>
 
-            <p>${escapeHtml(guidance.intro)}</p>
+            <p>
+                ${escapeHtml(guidance.intro)}
+            </p>
 
             <div class="detail-section">
                 <h3>What to do</h3>
 
                 <ul class="result-list">
-                    ${createList(guidance.steps)}
+                    ${createList(
+                        guidance.steps
+                    )}
                 </ul>
             </div>
 
@@ -1075,22 +1860,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         wellGuidance.hidden = false;
 
-        setTimeout(() => {
-            wellGuidance.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }, 100);
+        scrollToElement(wellGuidance);
     }
 
     document
-        .querySelectorAll("[data-well-situation]")
+        .querySelectorAll(
+            "[data-well-situation]"
+        )
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                showWellGuidance(
-                    button.dataset.wellSituation
-                );
-            });
+            button.addEventListener(
+                "click",
+                () => {
+                    showWellGuidance(
+                        button.dataset
+                            .wellSituation
+                    );
+                }
+            );
         });
 
     /*
@@ -1100,41 +1886,60 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     const emergencyGuidance =
-        document.getElementById("emergency-guidance");
+        document.getElementById(
+            "emergency-guidance"
+        );
 
-    function showEmergencyGuidance(advisoryId) {
+    function showEmergencyGuidance(
+        advisoryId
+    ) {
         const guidance =
-            data.emergencyGuidance[advisoryId];
+            data.emergencyGuidance[
+                advisoryId
+            ];
 
-        if (!guidance || !emergencyGuidance) {
+        if (
+            !guidance ||
+            !emergencyGuidance
+        ) {
             return;
         }
 
         showRoute("emergency");
 
         emergencyGuidance.innerHTML = `
-            <p class="eyebrow">What to do now</p>
+            <p class="eyebrow">
+                What to do now
+            </p>
 
-            <h2>${escapeHtml(guidance.title)}</h2>
+            <h2>
+                ${escapeHtml(guidance.title)}
+            </h2>
 
-            <p>${escapeHtml(guidance.intro)}</p>
+            <p>
+                ${escapeHtml(guidance.intro)}
+            </p>
 
             <div class="detail-section">
                 <h3>Steps</h3>
 
                 <ul class="result-list">
-                    ${createList(guidance.steps)}
+                    ${createList(
+                        guidance.steps
+                    )}
                 </ul>
             </div>
 
-            <div class="result-note">
+            <div class="result-note warning-note">
                 <strong>Important:</strong>
                 ${escapeHtml(guidance.avoid)}
             </div>
 
             <a
                 class="source-link"
-                href="${escapeHtml(guidance.sourceUrl)}"
+                href="${escapeHtml(
+                    guidance.sourceUrl
+                )}"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -1145,32 +1950,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         emergencyGuidance.hidden = false;
 
-        setTimeout(() => {
-            emergencyGuidance.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }, 100);
+        scrollToElement(
+            emergencyGuidance
+        );
     }
 
     document
-        .querySelectorAll("[data-emergency]")
+        .querySelectorAll(
+            "[data-emergency]"
+        )
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                showEmergencyGuidance(
-                    button.dataset.emergency
-                );
-            });
+            button.addEventListener(
+                "click",
+                () => {
+                    showEmergencyGuidance(
+                        button.dataset
+                            .emergency
+                    );
+                }
+            );
         });
 
     document
-        .querySelectorAll("[data-emergency-open]")
+        .querySelectorAll(
+            "[data-emergency-open]"
+        )
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                showEmergencyGuidance(
-                    button.dataset.emergencyOpen
-                );
-            });
+            button.addEventListener(
+                "click",
+                () => {
+                    showEmergencyGuidance(
+                        button.dataset
+                            .emergencyOpen
+                    );
+                }
+            );
         });
 
     /*
@@ -1183,5 +1997,8 @@ document.addEventListener("DOMContentLoaded", () => {
     populateTreatmentContaminants();
     renderContaminantList();
 
-    showRoute(getRouteFromHash(), false);
+    showRoute(
+        getRouteFromHash(),
+        false
+    );
 });
