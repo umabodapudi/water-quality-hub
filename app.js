@@ -935,30 +935,32 @@ function clearUnitConversions() {
         );
     }
 
-    function resetCalculator() {
-        if (!calculatorForm) {
-            return;
-        }
-
-        calculatorForm.reset();
-
-        if (calculatorUnit) {
-            calculatorUnit.innerHTML =
-                '<option value="">Choose unit</option>';
-
-            calculatorUnit.disabled = true;
-        }
-
-        hideCalculatorError();
-
-        if (calculatorResultPanel) {
-            calculatorResultPanel.hidden = true;
-        }
-
-        if (calculatorEmptyResult) {
-            calculatorEmptyResult.hidden = false;
-        }
+   function resetCalculator() {
+    if (!calculatorForm) {
+        return;
     }
+
+    calculatorForm.reset();
+
+    clearUnitConversions();
+
+    if (calculatorUnit) {
+        calculatorUnit.innerHTML =
+            '<option value="">Choose unit</option>';
+
+        calculatorUnit.disabled = true;
+    }
+
+    hideCalculatorError();
+
+    if (calculatorResultPanel) {
+        calculatorResultPanel.hidden = true;
+    }
+
+    if (calculatorEmptyResult) {
+        calculatorEmptyResult.hidden = false;
+    }
+}
 
     if (calculatorContaminant) {
         calculatorContaminant.addEventListener(
@@ -967,86 +969,93 @@ function clearUnitConversions() {
         );
     }
 
-    if (calculatorForm) {
-        calculatorForm.addEventListener(
-            "submit",
-            (event) => {
-                event.preventDefault();
+  if (calculatorForm) {
+    calculatorForm.addEventListener(
+        "submit",
+        (event) => {
+            event.preventDefault();
 
-                hideCalculatorError();
+            hideCalculatorError();
 
-                const contaminant =
-                    findContaminant(
-                        calculatorContaminant
-                            ?.value
-                    );
-
-                const enteredValue =
-                    Number(
-                        calculatorValue?.value
-                    );
-
-                const enteredUnit =
-                    calculatorUnit?.value;
-
-                if (!contaminant) {
-                    showCalculatorError(
-                        "Choose a contaminant."
-                    );
-
-                    calculatorContaminant?.focus();
-                    return;
-                }
-
-                if (
-                    !calculatorValue ||
-                    calculatorValue.value.trim() ===
-                        "" ||
-                    !Number.isFinite(
-                        enteredValue
-                    ) ||
-                    enteredValue < 0
-                ) {
-                    showCalculatorError(
-                        "Enter a valid result."
-                    );
-
-                    calculatorValue?.focus();
-                    return;
-                }
-
-                if (!enteredUnit) {
-                    showCalculatorError(
-                        "Choose the unit shown on your report."
-                    );
-
-                    calculatorUnit?.focus();
-                    return;
-                }
-
-                const valuePpb =
-                    convertToPpb(
-                        enteredValue,
-                        enteredUnit
-                    );
-
-                if (valuePpb === null) {
-                    showCalculatorError(
-                        "The selected unit could not be converted."
-                    );
-
-                    return;
-                }
-
-                displayCalculatorResult(
-                    contaminant,
-                    enteredValue,
-                    enteredUnit,
-                    valuePpb
+            const contaminant =
+                findContaminant(
+                    calculatorContaminant?.value
                 );
+
+            const enteredValue =
+                Number(
+                    calculatorValue?.value
+                );
+
+            const enteredUnit =
+                calculatorUnit?.value;
+
+            if (!contaminant) {
+                showCalculatorError(
+                    "Choose a contaminant."
+                );
+
+                clearUnitConversions();
+                calculatorContaminant?.focus();
+                return;
             }
-        );
-    }
+
+            if (
+                !calculatorValue ||
+                calculatorValue.value.trim() === "" ||
+                !Number.isFinite(enteredValue) ||
+                enteredValue < 0
+            ) {
+                showCalculatorError(
+                    "Enter a valid result."
+                );
+
+                clearUnitConversions();
+                calculatorValue?.focus();
+                return;
+            }
+
+            if (!enteredUnit) {
+                showCalculatorError(
+                    "Choose the unit shown on your report."
+                );
+
+                clearUnitConversions();
+                calculatorUnit?.focus();
+                return;
+            }
+
+            const valuePpb =
+                convertToPpb(
+                    enteredValue,
+                    enteredUnit
+                );
+
+            if (valuePpb === null) {
+                showCalculatorError(
+                    "The selected unit could not be converted."
+                );
+
+                clearUnitConversions();
+                return;
+            }
+
+            displayUnitConversions(
+                enteredValue,
+                enteredUnit
+            );
+
+            displayCalculatorResult(
+                contaminant,
+                enteredValue,
+                enteredUnit,
+                valuePpb
+            );
+        }
+    );
+}
+
+             
 
     if (calculatorReset) {
         calculatorReset.addEventListener(
