@@ -1,449 +1,1288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Public Health Water Quality Dashboard</title>
+    <meta charset="UTF-8">
 
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-body {
-  background: radial-gradient(circle at center, #f4f7f6 0%, #e2e8f0 100%);
-  min-height: 100vh;
-  padding: 20px;
-  margin: 0;
-}
+    <meta
+        name="description"
+        content="Understand drinking-water results, contaminants, treatment options, private wells, and water emergencies."
+    >
 
-/* HEADER */
-header {
-  text-align: center;
-  margin-bottom: 1px;
-}
+    <title>Water Quality Hub</title>
 
-header h1 {
-  color: #1e3a8a;
-  font-size: 2.2rem;
-  font-weight: 800;
-}
+    <style>
+        :root {
+            --primary: #086b72;
+            --primary-dark: #064f55;
+            --primary-light: #e8f5f5;
 
-header p {
-  color: #475569;
-  margin-top: 10px;
-}
+            --background: #f5f8f9;
+            --surface: #ffffff;
+            --surface-soft: #f0f7f7;
 
-.sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    width:260px;
-    height:100vh;
-    background:#1e3a8a;
-    padding:20px;
-}
+            --text: #173238;
+            --muted: #5f7074;
+            --border: #d7e1e3;
 
-.main-content {
-  margin-left: 240px;
-  padding: 10px;
-  width: calc(100% - 240px);
-}
-  
-.sidebar h2{
-    color:white;
-    margin-bottom:25px;
-}
+            --warning-bg: #fff8e5;
+            --warning-border: #ead59c;
+            --warning-text: #765000;
 
-.nav-link{
-    display:block;
-    background:white;
-    color:#1e3a8a;
-    text-decoration:none;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:10px;
-    font-weight:700;
-}
+            --danger-bg: #fff1f0;
+            --danger-border: #f0b7b2;
+            --danger-text: #9c251b;
 
-.nav-link:hover{
-    background:#dbeafe;
-}
+            --shadow: 0 12px 35px rgba(32, 62, 67, 0.09);
+            --radius: 16px;
+        }
 
-/* HUB LAYOUT */
-.hub-container {
-  position: relative;
-  width: 700px;
-  height: 500px;
-  margin: 10px auto;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.hub-grid {
-  position: relative;
-  width: 700px;
-  height: 700px;
-  margin: auto;
-}
-  
-/* CENTER CORE */
-.center-core {
-  
-  position: absolute;
-    width: 170px;
-    height: 170px;
-    top: 220px;
-    left: 350px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white; 
-  font-weight: 800; 
-  text-align: center; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  display: flex; 
-  justify-content: center; align-items: center; color: white; font-weight: 800; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-   
-  
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-/* NODES */
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+            line-height: 1.6;
+        }
 
-.node {
-  position: absolute;
-  width: 170px;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  text-align: center;
-  cursor: pointer;
-}
+        button,
+        input {
+            font: inherit;
+        }
 
-.node:hover {
-  transform: translateY(-5px);
-}
+        a {
+            color: inherit;
+        }
 
-.node:active {
-  transform: scale(0.97);
-}
+        img {
+            max-width: 100%;
+        }
 
+        .skip-link {
+            position: absolute;
+            top: -60px;
+            left: 16px;
+            z-index: 1000;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
 
-/* COLORS */
-.node-contam { border-top: 5px solid #ef4444; }
-.node-matrix { border-top: 5px solid #3b82f6; }
-.node-infra  { border-top: 5px solid #06b6d4; }
-.node-cross  { border-top: 5px solid #f59e0b; }
-.node-filter { border-top: 5px solid #10b981; }
-.node-rights { border-top: 5px solid #8b5cf6; }
+        .skip-link:focus {
+            top: 12px;
+        }
 
-/* POSITIONS */
+        .container {
+            width: min(1120px, calc(100% - 36px));
+            margin: auto;
+        }
 
+        /* Header */
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .hub-container {
-    display:flex;
-    gap: 15px;
-  }
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+        }
 
-  .node {
-    position: relative;
-    width: 100%;
-  }
+        .nav-container {
+            width: min(1120px, calc(100% - 36px));
+            min-height: 70px;
+            margin: auto;
 
-  .center-core {
-    position: relative;
-    transform: none;
-    margin: 20px auto;
-  }
-}
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
 
-footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #64748b;
-  font-size: 0.85rem;
-}
-</style>
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50% 50% 50% 12px;
+            background: var(--primary);
+            transform: rotate(45deg);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .brand-icon::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: 9px;
+            left: 9px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            padding: 9px 13px;
+            border-radius: 8px;
+            color: #38565c;
+            font-weight: 650;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .nav-links a[aria-current="page"] {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .menu-button {
+            display: none;
+            min-width: 44px;
+            min-height: 44px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #ffffff;
+            color: var(--primary-dark);
+            cursor: pointer;
+        }
+
+        .menu-button span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            margin: 4px auto;
+            background: currentColor;
+        }
+
+        /* Hero */
+
+        .hero {
+            padding: 78px 0 54px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(330px, 0.8fr);
+            gap: 48px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            margin-bottom: 11px;
+            color: var(--primary);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            max-width: 760px;
+            margin: 0;
+            font-size: clamp(2.7rem, 6vw, 4.8rem);
+            line-height: 1.05;
+            letter-spacing: -0.045em;
+        }
+
+        .hero-text {
+            max-width: 690px;
+            margin: 22px 0 0;
+            color: var(--muted);
+            font-size: 1.15rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            min-height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .primary-button {
+            border: 1px solid var(--primary);
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .primary-button:hover {
+            border-color: var(--primary-dark);
+            background: var(--primary-dark);
+        }
+
+        .secondary-button {
+            border: 1px solid #b7c7ca;
+            background: #ffffff;
+            color: var(--text);
+        }
+
+        .secondary-button:hover {
+            background: #f3f6f7;
+        }
+
+        .hero-card {
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff 0%,
+                    #edf7f7 100%
+                );
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card-icon {
+            width: 62px;
+            height: 62px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 22px;
+            border-radius: 18px;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        .hero-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.45rem;
+        }
+
+        .hero-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .hero-card-list {
+            margin: 22px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .hero-card-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #3e595e;
+        }
+
+        .hero-card-list li::before {
+            content: "✓";
+            width: 22px;
+            height: 22px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        /* Main actions */
+
+        .actions-section {
+            padding: 32px 0 72px;
+        }
+
+        .section-heading {
+            max-width: 720px;
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 8px;
+            font-size: clamp(1.8rem, 4vw, 2.65rem);
+            letter-spacing: -0.025em;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.03rem;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .action-card {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .action-card:hover,
+        .action-card:focus-visible {
+            transform: translateY(-4px);
+            border-color: #a8c8cb;
+            box-shadow: 0 17px 40px rgba(32, 62, 67, 0.12);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 20px;
+            border-radius: 13px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .action-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.23rem;
+        }
+
+        .action-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .card-link {
+            margin-top: auto;
+            padding-top: 22px;
+            color: var(--primary-dark);
+            font-weight: 800;
+        }
+
+        /* Quick help */
+
+        .quick-help {
+            padding: 68px 0;
+            background: var(--surface-soft);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quick-help-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+            gap: 45px;
+            align-items: start;
+        }
+
+        .quick-help-title h2 {
+            margin: 0 0 10px;
+            font-size: clamp(1.8rem, 4vw, 2.65rem);
+        }
+
+        .quick-help-title p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .help-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .help-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #ffffff;
+            text-decoration: none;
+        }
+
+        .help-item:hover {
+            border-color: #a8c8cb;
+        }
+
+        .help-item-content strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .help-item-content span {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .help-arrow {
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        /* Emergency */
+
+        .emergency-section {
+            padding: 68px 0;
+        }
+
+        .emergency-card {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 22px;
+            align-items: center;
+            padding: 25px 28px;
+            border: 1px solid var(--danger-border);
+            border-radius: var(--radius);
+            background: var(--danger-bg);
+        }
+
+        .emergency-icon {
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #ffffff;
+            color: var(--danger-text);
+            font-size: 1.45rem;
+            font-weight: 900;
+        }
+
+        .emergency-card h2 {
+            margin: 0 0 5px;
+            color: var(--danger-text);
+            font-size: 1.28rem;
+        }
+
+        .emergency-card p {
+            margin: 0;
+            color: #6f3833;
+        }
+
+        .emergency-link {
+            white-space: nowrap;
+            color: var(--danger-text);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .emergency-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Information section */
+
+        .information-section {
+            padding: 0 0 76px;
+        }
+
+        .information-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .information-card {
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+
+        .information-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.15rem;
+        }
+
+        .information-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .information-card a {
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--primary-dark);
+            font-weight: 800;
+        }
+
+        /* Footer */
+
+        .site-footer {
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .footer-content {
+            width: min(1120px, calc(100% - 36px));
+            margin: auto;
+            padding: 32px 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-brand {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .footer-description {
+            max-width: 680px;
+            margin: 7px 0 0;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .copyright {
+            margin: 24px 0 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .hero-grid,
+            .quick-help-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 58px;
+            }
+
+            .hero-card {
+                max-width: 620px;
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .nav-links {
+                gap: 2px;
+            }
+
+            .nav-links a {
+                padding: 8px 9px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .menu-button {
+                display: block;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 1px);
+                left: 0;
+                right: 0;
+
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 3px;
+
+                padding: 12px;
+                border: 1px solid var(--border);
+                border-radius: 0 0 12px 12px;
+                background: #ffffff;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-links.is-open {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: 11px 12px;
+            }
+
+            .action-grid,
+            .information-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .emergency-card {
+                grid-template-columns: auto 1fr;
+            }
+
+            .emergency-link {
+                grid-column: 2;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .container,
+            .nav-container,
+            .footer-content {
+                width: min(100% - 24px, 1120px);
+            }
+
+            .hero {
+                padding: 45px 0 36px;
+            }
+
+            h1 {
+                font-size: 2.6rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .primary-button,
+            .secondary-button {
+                width: 100%;
+            }
+
+            .action-card {
+                min-height: 220px;
+            }
+
+            .emergency-card {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .emergency-link {
+                grid-column: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
-<div class="sidebar">
-    <h2>Water Quality Hub</h2>
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
 
-    <a href="calculator.html" class="nav-link">Calculator</a>
-    <a href="treatment.html" class="nav-link">Treatment Guide</a>
-</div>
-<div class="main-content">
-<header>
-<h1>Public Health Water Quality Dashboard</h1>
-<p>Interactive EPA SDWA Water Safety System</p>
-</header>
+    <header class="site-header">
+        <div class="nav-container">
+            <a class="brand" href="index.html">
+                <span class="brand-icon" aria-hidden="true"></span>
+                <span>Water Quality Hub</span>
+            </a>
 
-  <div class="hub-container">
-  <div class="center-core">Drinking Water</div>
+            <button
+                id="menu-button"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="main-navigation"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-  <div class="node node-contam" data-pack="contam">Contaminants</div>
-  <div class="node node-matrix" data-pack="matrix">Treatment Matrix</div>
-  <div class="node node-infra" data-pack="infra">Infrastructure</div>
-  <div class="node node-cross" data-pack="cross">Backflow</div>
-  <div class="node node-filter" data-pack="filter">Home Filtration</div>
-  <div class="node node-rights" data-pack="rights">Legal Rights</div>
-</div>
+            <nav
+                id="main-navigation"
+                class="nav-links"
+                aria-label="Main navigation"
+            >
+                <a
+                    href="index.html"
+                    aria-current="page"
+                >
+                    Home
+                </a>
 
- 
-  
+                <a href="calculator.html">
+                    Check a Result
+                </a>
 
+                <a href="contaminants.html">
+                    Contaminants
+                </a>
 
-<footer>EPA SDWA Educational Dashboard</footer>
+                <a href="treatment.html">
+                    Treatment
+                </a>
 
-<script>
+                <a href="private-wells.html">
+                    Private Wells
+                </a>
 
-/* TITLE MAP */ /*<a href="calculator.html" target="_blank" style="display:inline-block; padding:10px 20px; background:#1d4ed8; color:white; text-decoration:none; font-weight:bold; border-radius:6px;">Open Health Calculator</a>*/
-const titles = {
-  contam: "Contaminant Encyclopedia",
-  matrix: "Treatment Matrix",
-  infra: "Water Infrastructure",
-  cross: "Cross Connection & Backflow",
-  filter: "Home Filtration",
-  rights: "Consumer Water Rights"
-};
+                <a href="emergencies.html">
+                    Emergencies
+                </a>
+            </nav>
+        </div>
+    </header>
 
-/* FULL CONTENT (NO CUTTING) */
-const dataPacks = {
+    <main id="main-content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="eyebrow">
+                        Clear drinking-water information
+                    </div>
 
-contam: `
-<h1>Contaminant Encyclopedia</h1>
+                    <h1>
+                        Understand your water before deciding what to do.
+                    </h1>
 
-<h3>PFAS / PFOS</h3>
-<p><ul>
-<li><b>What it is:</b> Man-made chemicals used in non-stick pans, waterproof clothes, and firefighting foams. They are called "forever chemicals" because they never break down in nature and build up in human bodies over time.</li>
-<li><b>Legal Limit:</b> 4.0 parts per trillion (ppt).</li>
-<li><b>When to worry:</b> Only if your city’s quarterly testing reports show that these chemicals are consistently trending above the 4.0 ppt marker for an entire year.</li>
-</ul></p>
+                    <p class="hero-text">
+                        Check a laboratory result, learn about common
+                        contaminants, compare treatment options, and find
+                        practical guidance for public water and private wells.
+                    </p>
 
-<h3>Lead</h3>
-<p><ul>
-<li><b>What it is:</b> A dangerous heavy metal that damages the brain and nervous system, especially in children. Lead rarely comes from the city treatment plant. Instead, it scrapes off old brass faucets, home plumbing solder, or lead service lines underground.</li>
-<li><b>Legal Limit:</b> 15 parts per billion (ppb).</li>
-<li><b>When to worry:</b> If you live in a house built before 1986 and drink water that has sat completely still inside your plumbing for more than six hours without being flushed.</li>
-</ul></p>
+                    <div class="hero-actions">
+                        <a
+                            class="primary-button"
+                            href="calculator.html"
+                        >
+                            Check my water result
+                            <span aria-hidden="true">→</span>
+                        </a>
 
-<h3>Copper</h3>
-<p><ul>
-<li><b>What it is:</b> A natural metal that dissolves into water when household copper pipes begin to rust and corrode, often leaving blue-green stains around sink drains.</li>
-<li><b>Legal Limit:</b> 1.3 parts per million (ppm).</li>
-<li><b>When to worry:</b> If your tap water has a sharp metallic taste, causes stomach irritation, or if city data shows widespread plumbing corrosion issues in your neighborhood.</li>
-</ul></p>
+                        <a
+                            class="secondary-button"
+                            href="contaminants.html"
+                        >
+                            Explore contaminants
+                        </a>
+                    </div>
+                </div>
 
-<h3>Cyanotoxins</h3>
-<p><ul>
-<li><b>What it is:</b> Dangerous liver and nerve poisons produced by blue-green algae. These blooms grow rapidly in warm, still lakes or city water reservoirs during summer heatwaves.</li>
-<li><b>Legal Limit:</b> No permanent federal limit, but state health departments step in immediately if any are detected.</li>
-<li><b>When to worry:</b> Only during sudden summer heatwaves if local health officials issue an explicit emergency notice telling your community not to drink the water.Algal bloom toxins during warm water conditions.</li>
-</ul></p>
+                <aside class="hero-card">
+                    <div class="hero-card-icon" aria-hidden="true">
+                        H₂O
+                    </div>
 
-<h3>Nitrates</h3>
-<p><ul>
-<li><b>What it is:</b> Chemical compounds that wash into water supplies from farm fertilizers, animal manure, or leaking underground septic tanks. High levels block oxygen in the blood and can cause "Blue Baby Syndrome" in infants.</li>
-<li><b>Legal Limit:</b> 10 milligrams per liter (mg/L).</li>
-<li><b>When to worry:</b> If you get your drinking water from a shallow private well located close to active farm fields or livestock operations.</li>
-</ul></p>
+                    <h2>
+                        Start with the question you have
+                    </h2>
 
-<h3>Arsenic</h3>
-<p><ul>
-<li><b>What it is:</b> A highly toxic, natural element found in deep rock formations that can slowly dissolve into underground water pockets over time.</li>
-<li><b>Legal Limit:</b> 0.010 mg/L (or 10 parts per billion).</li>
-<li><b>When to worry:</b> If you rely on an unmonitored private well in an arsenic-heavy area and do not use a specialized reverse osmosis system.</li>
-</ul></p>
+                    <p>
+                        You do not need to understand technical water
+                        terminology before using this website.
+                    </p>
 
-<h3>E. coli</h3>
-<p><ul>
-<li><b>What it is:</b> Indicator bacteria that signal sewage, animal feces, or outdoor mud has breached the clean water pipeline loop.</li>
-<li><b>Legal Limit:</b> No more than 5% of a city's monthly samples can test positive. Any single E. coli match triggers an immediate emergency.</li>
-<li><b>When to worry:</b> If a water main pipe breaks or system pressure drops, forcing local utilities to issue a mandatory "Boil Water Advisory."</li>
-</ul></p>
-`,
+                    <ul class="hero-card-list">
+                        <li>
+                            Compare a test result with a drinking-water benchmark
+                        </li>
 
-matrix: `
-<h1>Treatment Matrix</h1>
+                        <li>
+                            Learn which treatment technologies may help
+                        </li>
 
-<h3>Core Process</h3>
-<ul>
-<li><b>Coagulation and Flocculation:</b> Operators mix positive chemicals into raw water. This acts like a magnet, forcing floating dirt and mud to stick together into heavy clumps called floc.</li>
-<li><b>Sedimentation:</b> The water flows into a quiet pool. Because the dirt clumps are heavy, gravity pulls them to the bottom as sludge, separating them from the clean water on top.</li>
-<li><b>Rapid Sand Filtration:</b> The clean water on top drains down through deep beds of sand, gravel, and charcoal. This mechanically traps tiny floating dust, dirt, and parasites.</li>
-<li><b>Primary Disinfection:</b> Chlorine gas or liquid bleach is mixed into the water. This destroys remaining viruses or bacteria so new germs cannot grow while traveling through city pipes.</li>
-</ul>
+                        <li>
+                            Understand what actions may be appropriate
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+        </section>
 
-<h3>Advanced Systems</h3>
-<ul>
-<li><b>Granular Activated Carbon (GAC):</b> Water passes through huge beds of baked carbon. Chemical molecules like PFAS, industrial solvents, and bad odors stick to the internal pores of the carbon through molecular attraction (adsorption).</li>
-<li><b>Chemical Oxidation and Greensand:</b> Plants use this for Arsenic, iron, and manganese. Strong oxidants turn invisible, dissolved metals into solid flakes. The water is then sent through manganese greensand filters to trap the solids.</li>
-<li><b>Ion Exchange Resins:</b> Used to trap Nitrates, heavy metals, or hard minerals. Water flows through tanks filled with charged resin beads. The bad contaminant ions stick to the beads and are swapped out for harmless salt ions.</li>
-<li><b>Industrial Reverse Osmosis:</b> High-pressure pumps force water against a microscopic plastic membrane. Only pure water molecules fit through the pores, while 99% of dissolved chemicals, salts, and heavy metals are blocked and flushed away.</li>
-</ul>
-`,
+        <!-- Main actions -->
+        <section class="actions-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>
+                        What would you like help with?
+                    </h2>
 
-infra: `
+                    <p>
+                        Choose the option that best matches your situation.
+                    </p>
+                </div>
 
-<h1>Water Infrastructure</h1>
-<h3>The Journey from Asset to Tap</h3>
-<p>Water moves through a continuous engineered circle. First, it is drawn from a natural resource asset like an underground aquifer (groundwater) or a lake (surface water). It is pumped into a municipal treatment plant to be purified, pushed up into elevated water towers by high-service pumps, and distributed across thousands of miles of sealed underground water mains. Gravity and pumps keep the water moving at high pressure straight to your property line faucet.</p>
-<p><b>Source → Treatment Plant → Storage Tanks → Distribution Network → Home Tap</b></p>
+                <div class="action-grid">
+                    <a
+                        class="action-card"
+                        href="calculator.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            #
+                        </div>
 
-<h3>Public Water System Types</h3>
-<ul>
-<li><b>Community Water Systems:</b> Systems serving year-round residential connections (like city water networks). They require permanent operators, active repair crews, and continuous water testing pipelines.</li>
-<li><b>Non-Transient Non-Community Systems:</b> Systems that serve the same group of at least 25 people for over six months of the year, but not permanently. Examples include schools, university campuses, factories, and hospital campuses operating independent groundwater wells.</li>
-<li><b>Transient Non-Community Systems:</b> Systems serving places where travelers stop briefly, open for at least 60 days of the year. Examples include highway rest stops, state parks, campgrounds, and rural restaurants utilizing independent wells.</li>
-</ul>
+                        <h3>
+                            Check a test result
+                        </h3>
 
-<h3>Operator Certification Rules:</h3> 
-<ul><li>Public lines cannot be run by uncertified personnel. They must be managed by professionals licensed by state environmental boards. Operators must pass engineering examinations and take ongoing continuing education classes to hold grades (Class 1 through Class 4) matching the population size and plant complexity.
-</ul></li>
-`,
+                        <p>
+                            Enter a contaminant, result, and unit to see
+                            how the number compares with an educational
+                            benchmark.
+                        </p>
 
-cross: `
-<h1>Cross-Connections & Backflow</h1>
-<p><b>What is a Cross-Connection?</b> A cross-connection is any physical link between a pipe carrying clean public drinking water and a system carrying dirty wastewater, chemicals, or non-potable liquids. Examples include a garden hose dropped inside a chemical pesticide mixing tank, a lawn sprinkler system, or a commercial heating boiler tied straight into home pipes.
+                        <span class="card-link">
+                            Check my result →
+                        </span>
+                    </a>
 
-<h3>The Physics of Backflow</h3>
-<p>Backflow is the dangerous reversal of water flow, pulling dirty water backward into clean pipelines. It happens through two pressure errors:
-<ul>
-<li><b>Backsiphonage (Vacuum Suction):</b> Happens when city water main pressure drops rapidly, creating a vacuum in the grid. This can be caused by a massive main pipe break or fire engines pumping heavy flows from hydrants. The vacuum sucks dirty liquids out of hot tubs or hoses backward into the clean city mains.</li>
-<li><b>Backpressure (Overpowering Force):</b> Happens when a downstream private system (like an industrial pump or high-pressure commercial boiler) builds up a higher level of physical pressure than the incoming city water line, forcing wastewater backward into the public grid.</li>
-</ul>
+                    <a
+                        class="action-card"
+                        href="contaminants.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            i
+                        </div>
 
-<h3>Mechanical Prevention Devices</h3>
-<ul>
-<li><b>Physical Air Gap:</b> The safest method. It is a literal open vertical space through the air between the bottom of a water faucet and the top rim of a sink or tank. Because there is an air gap with no physical pipe connection, fluid cannot flow backward.</li>
-<li><b>Reduced Pressure Principle Assembly (RPZ):</b> A heavy mechanical valve system with two independent check valves and an automatic relief valve. If pressure drops or water tries to reverse, the valve drops open and vents the backward-flowing water out an escape port.</li>
-<li><b>Hose Bibb Vacuum Breaker:</b> A small brass valve that screws onto outdoor garden spigots. It vents air into the line if a pressure drop happens, instantly breaking the vacuum suction so hose water cannot enter home plumbing.</li>
-</ul>
-`,
+                        <h3>
+                            Learn about a contaminant
+                        </h3>
 
-filter: `
-<h1>Home Filtration</h1>
+                        <p>
+                            Understand where contaminants come from,
+                            why they matter, and what common results mean.
+                        </p>
 
-<h3>1. Activated Carbon Blocks:</h3> 
-<li><b>How it works:</b> Water travels through tightly packed carbon grains or blocks. Contaminants physically stick to the tiny internal pores of the carbon (adsorption).</li>
-<li><b>What it removes:</b> Excellent for removing chlorine smells, bad tastes, odors, and simple organic chemical solvents. Specialized carbon blocks can reduce lead and PFAS.</li>
-<li><b>What it misses:</b> Cannot remove dissolved minerals, nitrates, arsenic, or hard heavy metals on its own.</li>
-<li><b>Where it is used:</b> Water pitcher carafes, refrigerator lines, and basic faucet-mount adapters.</li>
+                        <span class="card-link">
+                            Browse contaminants →
+                        </span>
+                    </a>
 
+                    <a
+                        class="action-card"
+                        href="treatment.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            ⚙
+                        </div>
 
-<h3>2. Point-of-Use Reverse Osmosis (RO) Systems:</h3> 
-<li><b>How it works:</b> Water pressure forces water molecules through a semi-permeable membrane layer with microscopic holes. Only pure water fits through; everything else is blocked.</li>
-<li><b>What it removes:</b> This is the most comprehensive home filter type. It strips up to 99% of dissolved solids, matching lead, copper, arsenic, nitrates, and PFAS profiles.</li>
-<li><b>What it misses:</b> It removes healthy minerals like calcium and magnesium, which can make water taste flat. It also creates a small amount of wastewater during processing cycles.</li>
-<li><b>Where it is used:</b> Multi-stage filtration setups installed directly underneath kitchen sinks.</li>
+                        <h3>
+                            Compare treatment options
+                        </h3>
 
+                        <p>
+                            Learn whether filtration, reverse osmosis,
+                            disinfection, or another method may be appropriate.
+                        </p>
 
-<h3>3. Ion Exchange Water Softeners</h3>
-<li><b>How it works:</b> Water flows through a tank packed with synthetic resin beads coated in sodium. Hard mineral ions in the water swap places with the sodium ions on the beads.</li>
-<li><b>What it removes:</b> Targets calcium and magnesium to prevent white mineral scale buildup on plumbing fixtures, making soap lather easier.</li>
-<li><b>What it misses:</b> Does not remove chemical pollutants, PFAS, chlorine, lead, or bacteria.</li>
-<li><b>Where it is used:</b> Whole-house tank systems installed at the main incoming water line.</li>
+                        <span class="card-link">
+                            View treatment guide →
+                        </span>
+                    </a>
 
+                    <a
+                        class="action-card"
+                        href="private-wells.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            W
+                        </div>
 
-<h3>4. Distillation Units</h3> 
-<li><b>How it works:</b> Countertop appliances boil water into steam, leaving heavy metals and dirt behind. The steam is then cooled back into a separate sterile chamber as pure liquid.</li>
-<li><b>What it removes:</b> Removes heavy metals, dissolved minerals, salts, and biological bacteria. However, it takes a long time and uses considerable electrical energy per batch.</li>
+                        <h3>
+                            Manage a private well
+                        </h3>
 
-`,
+                        <p>
+                            Find guidance about routine testing, flooding,
+                            disinfection, maintenance, and common well concerns.
+                        </p>
 
-rights: `
-<h1>Legal Consumer Rights</h1>
+                        <span class="card-link">
+                            Private well guidance →
+                        </span>
+                    </a>
 
-<ul>
-<li><b>The Right to an Annual Water Report:</b> By federal law, community suppliers must publish a Consumer Confidence Report (CCR) by July 1st every single year. This document details exactly where your city water originates, lists every detected contaminant, and logs any safety violations.</li>
-<li><b>The Right to Direct Public Notification:</b> The EPA Public Notification Rule requires utilities to alert consumers to water standard failures. Serious Tier 1 violations (acute emergencies like E. coli breaches or sudden main pressure loss) require public notification via local media, text alerts, or door flyers within 24 hours.</li>
-<li><b>The Right to Lead Infrastructure Disclosures:</b> Under the Lead and Copper Rule Improvements (LCRI), public water networks must compile and publish public service line asset maps. Consumers have a legal right to audit these maps to check if the pipes leading to their home contain lead.</li>
-<li><b>The Right to Participatory Governance</b>: Federal mandates guarantee open public comment periods for state infrastructure models. Consumers have a legal right to attend local utility board meetings to review and vote on policy choices, structural changes, and proposed water rate adjustments.</li>
-</ul>
-`
+                    <a
+                        class="action-card"
+                        href="public-water.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            P
+                        </div>
 
-};
-const nodes = document.querySelectorAll(".node");
+                        <h3>
+                            Understand public water
+                        </h3>
 
-const radius = 180;
-const centerX = 350;
-const centerY = 240;
+                        <p>
+                            Learn how water systems test water, report results,
+                            issue notices, and respond to violations.
+                        </p>
 
-nodes.forEach((node, i) => {
-    const angle = (i / nodes.length) * (2 * Math.PI);
+                        <span class="card-link">
+                            Public water information →
+                        </span>
+                    </a>
 
-    const x = centerX + radius * Math.cos(angle) - 85;
-    const y = centerY + radius * Math.sin(angle) - 50;
+                    <a
+                        class="action-card"
+                        href="emergencies.html"
+                    >
+                        <div class="card-icon" aria-hidden="true">
+                            !
+                        </div>
 
-    node.style.left = `${x}px`;
-    node.style.top = `${y}px`;
-});
+                        <h3>
+                            Respond to a water emergency
+                        </h3>
 
-/* OPEN NEW PAGE */
-document.querySelectorAll(".node").forEach(node => {
-  node.addEventListener("click", () => {
+                        <p>
+                            Find immediate guidance for boil-water advisories,
+                            contamination, flooding, and loss of water pressure.
+                        </p>
 
-    const key = node.dataset.pack;
+                        <span class="card-link">
+                            Emergency guidance →
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-    const win = window.open("", "_blank");
+        <!-- Quick help -->
+        <section class="quick-help">
+            <div class="container quick-help-grid">
+                <div class="quick-help-title">
+                    <div class="eyebrow">
+                        Common questions
+                    </div>
 
-    win.document.write(`
-      <html>
-      <head>
-        <title>${titles[key]}</title>
-        <style>
-          body{
-            font-family:Segoe UI;
-            padding:30px;
-            background:linear-gradient(135deg,#f4f7f6,#e2e8f0);
-          }
+                    <h2>
+                        Find help without knowing the technical term.
+                    </h2>
 
-          h1{
-            color:#1e3a8a;
-          }
+                    <p>
+                        Start with what you noticed or what your report says.
+                    </p>
+                </div>
 
-          h3{
-            color:#2563eb;
-            margin-top:20px;
-          }
+                <div class="help-list">
+                    <a
+                        class="help-item"
+                        href="contaminants.html#lead"
+                    >
+                        <div class="help-item-content">
+                            <strong>
+                                My report detected lead
+                            </strong>
 
-          p,li{
-            line-height:1.6;
-            color:#0f172a;
-          }
+                            <span>
+                                Learn about plumbing sources and exposure reduction.
+                            </span>
+                        </div>
 
-          .close{
-            position:fixed;
-            top:15px;
-            right:15px;
-            padding:10px 15px;
-            background:#1d4ed8;
-            color:white;
-            border:none;
-            cursor:pointer;
-            border-radius:6px;
-          }
-        </style>
-      </head>
-      <body>
+                        <span class="help-arrow" aria-hidden="true">
+                            →
+                        </span>
+                    </a>
 
-      <button class="close" onclick="window.close()">Close</button>
+                    <a
+                        class="help-item"
+                        href="contaminants.html#arsenic"
+                    >
+                        <div class="help-item-content">
+                            <strong>
+                                My well has arsenic
+                            </strong>
 
-      ${dataPacks[key]}
+                            <span>
+                                Understand results, retesting, and treatment options.
+                            </span>
+                        </div>
 
-      </body>
-      </html>
-    `);
+                        <span class="help-arrow" aria-hidden="true">
+                            →
+                        </span>
+                    </a>
 
-    win.document.close();
-  });
-});
+                    <a
+                        class="help-item"
+                        href="emergencies.html#boil-water"
+                    >
+                        <div class="help-item-content">
+                            <strong>
+                                I received a boil-water notice
+                            </strong>
 
-</script>
-</div>
+                            <span>
+                                See what water uses require boiling or an alternative source.
+                            </span>
+                        </div>
+
+                        <span class="help-arrow" aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                    <a
+                        class="help-item"
+                        href="contaminants.html#taste-smell"
+                    >
+                        <div class="help-item-content">
+                            <strong>
+                                My water looks, smells, or tastes unusual
+                            </strong>
+
+                            <span>
+                                Explore common causes and when testing may be needed.
+                            </span>
+                        </div>
+
+                        <span class="help-arrow" aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency notice -->
+        <section class="emergency-section">
+            <div class="container">
+                <div class="emergency-card">
+                    <div class="emergency-icon" aria-hidden="true">
+                        !
+                    </div>
+
+                    <div>
+                        <h2>
+                            Is there an active water advisory?
+                        </h2>
+
+                        <p>
+                            Follow instructions from your water utility,
+                            health department, or emergency officials before
+                            relying on general website guidance.
+                        </p>
+                    </div>
+
+                    <a
+                        class="emergency-link"
+                        href="emergencies.html"
+                    >
+                        View emergency guidance →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional information -->
+        <section class="information-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>
+                        Understand how to use this website
+                    </h2>
+
+                    <p>
+                        Water results depend on the sample, location,
+                        laboratory method, and type of water system.
+                    </p>
+                </div>
+
+                <div class="information-grid">
+                    <article class="information-card">
+                        <h3>
+                            Public water and private wells are different
+                        </h3>
+
+                        <p>
+                            Public water systems have regulatory monitoring
+                            requirements. Private well owners are generally
+                            responsible for testing and maintaining their wells.
+                        </p>
+
+                        <a href="private-wells.html">
+                            Learn about private wells →
+                        </a>
+                    </article>
+
+                    <article class="information-card">
+                        <h3>
+                            One result does not describe all water quality
+                        </h3>
+
+                        <p>
+                            A result usually represents one contaminant,
+                            one sample location, and one point in time.
+                            It does not prove that every use of the water is safe.
+                        </p>
+
+                        <a href="calculator.html">
+                            Check a specific result →
+                        </a>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand">
+                        Water Quality Hub
+                    </div>
+
+                    <p class="footer-description">
+                        An independent educational resource for understanding
+                        drinking-water results, contaminants, treatment methods,
+                        public water, and private wells.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <a href="calculator.html">
+                        Check a Result
+                    </a>
+
+                    <a href="treatment.html">
+                        Treatment
+                    </a>
+
+                    <a href="emergencies.html">
+                        Emergencies
+                    </a>
+                </div>
+            </div>
+
+            <p class="copyright">
+                This website does not replace advice from a certified laboratory,
+                water utility, health department, or medical professional.
+                © <span id="current-year"></span> Uma Bodapudi
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        "use strict";
+
+        const menuButton = document.getElementById("menu-button");
+        const mainNavigation =
+            document.getElementById("main-navigation");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen =
+                mainNavigation.classList.toggle("is-open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+            );
+        });
+
+        mainNavigation.addEventListener("click", function (event) {
+            if (event.target.tagName !== "A") {
+                return;
+            }
+
+            mainNavigation.classList.remove("is-open");
+            menuButton.setAttribute("aria-expanded", "false");
+            menuButton.setAttribute(
+                "aria-label",
+                "Open navigation menu"
+            );
+        });
+
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 700) {
+                mainNavigation.classList.remove("is-open");
+                menuButton.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        document.getElementById("current-year").textContent =
+            new Date().getFullYear();
+    </script>
 </body>
 </html>
