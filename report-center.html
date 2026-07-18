@@ -15,10 +15,8 @@
 
     <title>Report Center | Water Quality Hub</title>
 
-    <!-- Your existing website stylesheet -->
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Report Center page styling -->
     <style>
         .report-page {
             max-width: 1100px;
@@ -30,12 +28,11 @@
             padding: 38px 28px;
             margin-bottom: 28px;
             color: #ffffff;
-            background:
-                linear-gradient(
-                    135deg,
-                    #087f8c,
-                    #075f78
-                );
+            background: linear-gradient(
+                135deg,
+                #087f8c,
+                #075f78
+            );
             border-radius: 22px;
         }
 
@@ -101,8 +98,7 @@
 
         .report-form-grid {
             display: grid;
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
             margin-top: 24px;
         }
@@ -128,6 +124,7 @@
             background: #ffffff;
             color: #17324d;
             font: inherit;
+            box-sizing: border-box;
         }
 
         .report-field textarea {
@@ -167,6 +164,11 @@
             font-weight: 700;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        .report-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
         .report-button-primary {
@@ -214,6 +216,10 @@
             background: #fde8e8;
         }
 
+        .report-status a {
+            font-weight: 700;
+        }
+
         .report-results {
             display: none;
             margin-top: 26px;
@@ -239,8 +245,7 @@
 
         .system-information {
             display: grid;
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px 22px;
             margin-top: 18px;
         }
@@ -267,8 +272,7 @@
 
         .explanation-grid {
             display: grid;
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
             margin-top: 22px;
         }
@@ -326,17 +330,17 @@
 
 <body>
 
-    <!--
-        Replace this header with your existing website header
-        when copying the page into your project.
-    -->
     <header class="site-header">
         <nav class="main-nav">
             <a href="index.html">Water Quality Hub</a>
 
             <div>
                 <a href="index.html">Home</a>
-                <a href="report-center.html" aria-current="page">
+
+                <a
+                    href="report-center.html"
+                    aria-current="page"
+                >
                     Report Center
                 </a>
             </div>
@@ -349,9 +353,8 @@
             <h1>Water Report Center</h1>
 
             <p>
-                Find possible public water systems serving your ZIP
-                code, open available annual water-quality reports,
-                view EPA system information, or paste report text
+                Find possible public water systems serving your city or
+                county, view EPA system information, or paste report text
                 for a plain-language explanation.
             </p>
         </section>
@@ -384,7 +387,6 @@
             </button>
         </div>
 
-        <!-- Water-system finder -->
         <section
             id="water-system-panel"
             class="report-panel active"
@@ -393,11 +395,10 @@
             <h2>Find your public water system</h2>
 
             <p class="report-description">
-                Select your state and enter your ZIP code. We will
-                show possible public water systems serving that ZIP
-                code. Water-service boundaries do not always follow
-                ZIP-code boundaries, so confirm the correct provider
-                using your water bill or property manager.
+                Select a state, choose whether you are searching by city
+                or county, and enter the location name. Public water-system
+                boundaries may overlap, so confirm your provider using your
+                water bill, landlord, property manager, or utility.
             </p>
 
             <div class="report-form-grid">
@@ -408,10 +409,7 @@
                     </label>
 
                     <select id="reportState">
-                        <option value="">
-                            Select a state
-                        </option>
-
+                        <option value="">Select a state</option>
                         <option value="AL">Alabama</option>
                         <option value="AK">Alaska</option>
                         <option value="AZ">Arizona</option>
@@ -467,21 +465,31 @@
                 </div>
 
                 <div class="report-field">
-                    <label for="reportZip">
-                        ZIP code *
+                    <label for="locationType">
+                        Search by *
+                    </label>
+
+                    <select id="locationType">
+                        <option value="city">City or town</option>
+                        <option value="county">County</option>
+                    </select>
+                </div>
+
+                <div class="report-field report-full-width">
+                    <label for="reportLocation">
+                        City, town, or county name *
                     </label>
 
                     <input
-                        id="reportZip"
+                        id="reportLocation"
                         type="text"
-                        inputmode="numeric"
-                        autocomplete="postal-code"
-                        maxlength="5"
-                        placeholder="Example: 97201"
+                        autocomplete="address-level2"
+                        placeholder="Example: Portland or Multnomah"
                     >
 
                     <div class="report-hint">
-                        Enter a five-digit ZIP code.
+                        Enter only the location name. Do not add the state
+                        abbreviation or the word “County.”
                     </div>
                 </div>
 
@@ -527,8 +535,8 @@
                     </select>
 
                     <div class="report-hint">
-                        Official system names may be different from
-                        the name shown on your bill.
+                        Confirm the provider using your water bill or
+                        property manager.
                     </div>
                 </div>
 
@@ -587,41 +595,35 @@
 
                     <div class="report-actions">
                         <a
-                            id="annualReportButton"
-                            class="report-button report-button-primary"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            hidden
-                        >
-                            Open Annual Water Report
-                        </a>
-
-                        <a
                             id="epaSystemButton"
-                            class="report-button report-button-secondary"
+                            class="report-button report-button-primary"
                             href="#"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             View EPA System Details
                         </a>
+
+                        <a
+                            id="epaSearchButton"
+                            class="report-button report-button-secondary"
+                            href="https://sdwis.epa.gov/ords/sfdw_pub/r/sfdw/sdwis_fed_reports_public/200"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Open EPA Search
+                        </a>
                     </div>
 
-                    <div
-                        id="annualReportUnavailable"
-                        class="report-notice"
-                        hidden
-                    >
-                        A direct annual report link is not currently
-                        available for this system. You can still view
-                        its EPA information and compliance history.
+                    <div class="report-notice">
+                        Public water-system service areas may not match
+                        city or county boundaries exactly. Confirm the
+                        correct provider before relying on its report.
                     </div>
                 </article>
             </div>
         </section>
 
-        <!-- Report explainer -->
         <section
             id="report-explainer-panel"
             class="report-panel"
@@ -630,9 +632,9 @@
             <h2>Explain your water report</h2>
 
             <p class="report-description">
-                Paste text from a Consumer Confidence Report or
-                laboratory report. This tool identifies common
-                drinking-water terms, units and measurements.
+                Paste text from a Consumer Confidence Report or laboratory
+                report. This tool identifies common drinking-water terms,
+                units, and measurements.
             </p>
 
             <div class="report-field">
@@ -685,14 +687,12 @@
             ></div>
 
             <p class="report-disclaimer">
-                This tool provides general educational information.
-                It does not replace guidance from your water utility,
-                health department or healthcare provider.
+                This tool provides general educational information. It
+                does not replace guidance from your water utility, health
+                department, or healthcare provider.
             </p>
         </section>
     </main>
-
-    <!-- Your existing website footer can go here -->
 
     <script src="report-center.js"></script>
 </body>
