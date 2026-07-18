@@ -448,6 +448,133 @@ HERO
 =========================================================
 */
 
+/*
+=========================================================
+ROTATING HOME RESULT
+=========================================================
+*/
+
+.rotating-result-card {
+    overflow: hidden;
+}
+
+.rotating-result {
+    min-height: 175px;
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: var(--white);
+    transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
+}
+
+.rotating-result.changing {
+    opacity: 0;
+    transform: translateY(5px);
+}
+
+.rotating-result-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.rotating-result-heading span {
+    color: var(--text-dark);
+    font-size: 1.15rem;
+    font-weight: 850;
+}
+
+.rotating-result-heading strong {
+    color: var(--blue-900);
+    font-size: 1.35rem;
+}
+
+.result-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 750;
+}
+
+.result-dot {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--warning);
+}
+
+.result-line[data-level="above"]
+.result-dot {
+    background: var(--danger);
+}
+
+.result-line[data-level="below"]
+.result-dot {
+    background: var(--success);
+}
+
+.result-line[data-level="near"]
+.result-dot {
+    background: var(--warning);
+}
+
+.result-line[data-level="above"] {
+    color: var(--danger);
+}
+
+.result-line[data-level="below"] {
+    color: var(--success);
+}
+
+.result-line[data-level="near"] {
+    color: var(--warning);
+}
+
+.rotating-result-description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.rotating-result-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 12px 0;
+}
+
+.rotating-result-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    transition:
+        width 0.18s ease,
+        background 0.18s ease;
+}
+
+.rotating-result-dots span.active {
+    width: 20px;
+    border-radius: 999px;
+    background: var(--blue-700);
+}
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+    .rotating-result {
+        transition: none;
+    }
+}
 .hero-section {
     padding: 44px 0 28px;
 }
