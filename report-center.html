@@ -13,7 +13,8 @@
         content="Find your public water system and understand your drinking-water report."
     >
 
-    <title>Report Center | Water Quality Hub</title>
+    
+    <title>Find My Water System | Water Quality Hub</title>
 
     <link rel="stylesheet" href="styles.css">
 
@@ -330,62 +331,69 @@
 
 <body>
 
+
     <header class="site-header">
-        <nav class="main-nav">
-            <a href="index.html">Water Quality Hub</a>
+    <nav class="main-nav">
+        <a href="index.html" class="site-name">
+            Water Quality Hub
+        </a>
 
-            <div>
-                <a href="index.html">Home</a>
+        <div class="nav-links">
+            <a href="index.html">
+                Dashboard
+            </a>
 
-                <a
-                    href="report-center.html"
-                    aria-current="page"
-                >
-                    Report Center
-                </a>
-            </div>
-        </nav>
-    </header>
+            <a
+                href="report-center.html"
+                aria-current="page"
+                class="active"
+            >
+                Find My Water System
+            </a>
+        </div>
+    </nav>
+</header>
 
     <main class="report-page">
 
+        
         <section class="report-hero">
-            <h1>Water Report Center</h1>
+    <h1>Find and Understand Your Water System</h1>
 
-            <p>
-                Find possible public water systems serving your city or
-                county, view EPA system information, or paste report text
-                for a plain-language explanation.
-            </p>
-        </section>
+    <p>
+        Search for public water systems serving your city or county,
+        view official EPA system information, and learn the meaning
+        of common terms found in drinking-water reports.
+    </p>
+</section>
 
         <div
-            class="report-tabs"
-            role="tablist"
-            aria-label="Report Center sections"
-        >
-            <button
-                class="report-tab active"
-                type="button"
-                role="tab"
-                aria-selected="true"
-                aria-controls="water-system-panel"
-                data-report-tab="water-system-panel"
-            >
-                Find My Water System
-            </button>
+    class="report-tabs"
+    role="tablist"
+    aria-label="Water system tools"
+>
+    <button
+        class="report-tab active"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="water-system-panel"
+        data-report-tab="water-system-panel"
+    >
+        Find a Water System
+    </button>
 
-            <button
-                class="report-tab"
-                type="button"
-                role="tab"
-                aria-selected="false"
-                aria-controls="report-explainer-panel"
-                data-report-tab="report-explainer-panel"
-            >
-                Explain My Report
-            </button>
-        </div>
+    <button
+        class="report-tab"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="report-explainer-panel"
+        data-report-tab="report-explainer-panel"
+    >
+        Understand Report Terms
+    </button>
+</div>
 
         <section
             id="water-system-panel"
@@ -629,22 +637,29 @@
             class="report-panel"
             role="tabpanel"
         >
-            <h2>Explain your water report</h2>
+            <h2>Understand Terms in Your Water Report</h2>
 
-            <p class="report-description">
-                Paste text from a Consumer Confidence Report or laboratory
-                report. This tool identifies common drinking-water terms,
-                units, and measurements.
-            </p>
+<p class="report-description">
+    Paste text from a Consumer Confidence Report or laboratory
+    report. This tool identifies common drinking-water terms,
+    abbreviations, units, measurements, and possible exceedance
+    language.
+</p>
+
+<div class="report-notice">
+    This tool explains terminology such as MCL, MCLG, action level,
+    violation, non-detect, and treatment technique. It does not
+    analyze the entire report or determine whether your water is safe.
+</div>
 
             <div class="report-field">
                 <label for="waterReportText">
-                    Report text
+                    Paste report text or unfamiliar terms
                 </label>
 
                 <textarea
                     id="waterReportText"
-                    placeholder="Paste part of your water report here..."
+                    placeholder="Example: Arsenic was not detected above the reporting limit. The system had no MCL violations."
                 ></textarea>
             </div>
 
@@ -654,7 +669,7 @@
                     class="report-button report-button-primary"
                     type="button"
                 >
-                    Explain This Text
+                    Explain Terms
                 </button>
 
                 <button
