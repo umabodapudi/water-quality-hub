@@ -1988,6 +1988,203 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     /*
+=========================================================
+ROTATING HOME RESULT EXAMPLES
+=========================================================
+*/
+
+const rotatingContaminant =
+    document.getElementById(
+        "rotating-contaminant"
+    );
+
+const rotatingValue =
+    document.getElementById(
+        "rotating-value"
+    );
+
+const rotatingStatus =
+    document.getElementById(
+        "rotating-status"
+    );
+
+const rotatingStatusRow =
+    document.getElementById(
+        "rotating-status-row"
+    );
+
+const rotatingDescription =
+    document.getElementById(
+        "rotating-description"
+    );
+
+const rotatingResult =
+    document.getElementById(
+        "rotating-result"
+    );
+
+const rotatingDots =
+    document.querySelectorAll(
+        ".rotating-result-dots span"
+    );
+
+const rotatingExamples = [
+    {
+        contaminant: "Arsenic",
+        value: "12 ppb",
+        status: "Above the drinking-water limit",
+        level: "above",
+        description:
+            "Arsenic at this level is above the federal limit of 10 ppb."
+    },
+    {
+        contaminant: "Lead",
+        value: "8 ppb",
+        status: "Below the action level",
+        level: "below",
+        description:
+            "Lead can enter water from household plumbing and fixtures."
+    },
+    {
+        contaminant: "Nitrate",
+        value: "11 ppm",
+        status: "Above the drinking-water limit",
+        level: "above",
+        description:
+            "Nitrate above 10 ppm requires prompt attention, especially for infants."
+    },
+    {
+        contaminant: "Fluoride",
+        value: "2.1 ppm",
+        status: "Below the drinking-water limit",
+        level: "below",
+        description:
+            "This result is below the federal maximum contaminant level."
+    },
+    {
+        contaminant: "PFOS",
+        value: "5 ppt",
+        status: "Above the drinking-water limit",
+        level: "above",
+        description:
+            "PFOS is measured in very small concentrations using parts per trillion."
+    }
+];
+
+let rotatingExampleIndex = 0;
+let rotatingExampleTimer = null;
+
+function updateRotatingExample() {
+    if (
+        !rotatingContaminant ||
+        !rotatingValue ||
+        !rotatingStatus ||
+        !rotatingResult
+    ) {
+        return;
+    }
+
+    const example =
+        rotatingExamples[
+            rotatingExampleIndex
+        ];
+
+    rotatingResult.classList.add(
+        "changing"
+    );
+
+    setTimeout(() => {
+        rotatingContaminant.textContent =
+            example.contaminant;
+
+        rotatingValue.textContent =
+            example.value;
+
+        rotatingStatus.textContent =
+            example.status;
+
+        if (rotatingDescription) {
+            rotatingDescription.textContent =
+                example.description;
+        }
+
+        if (rotatingStatusRow) {
+            rotatingStatusRow.dataset.level =
+                example.level;
+        }
+
+        rotatingDots.forEach(
+            (dot, index) => {
+                dot.classList.toggle(
+                    "active",
+                    index ===
+                        rotatingExampleIndex
+                );
+            }
+        );
+
+        rotatingResult.classList.remove(
+            "changing"
+        );
+    }, 220);
+}
+
+function showNextRotatingExample() {
+    rotatingExampleIndex =
+        (rotatingExampleIndex + 1) %
+        rotatingExamples.length;
+
+    updateRotatingExample();
+}
+
+function startRotatingExamples() {
+    if (!rotatingResult) {
+        return;
+    }
+
+    rotatingExampleTimer =
+        window.setInterval(
+            showNextRotatingExample,
+            4000
+        );
+}
+
+function stopRotatingExamples() {
+    if (rotatingExampleTimer) {
+        window.clearInterval(
+            rotatingExampleTimer
+        );
+
+        rotatingExampleTimer = null;
+    }
+}
+
+if (rotatingResult) {
+    updateRotatingExample();
+    startRotatingExamples();
+
+    rotatingResult.addEventListener(
+        "mouseenter",
+        stopRotatingExamples
+    );
+
+    rotatingResult.addEventListener(
+        "mouseleave",
+        startRotatingExamples
+    );
+
+    rotatingResult.addEventListener(
+        "focusin",
+        stopRotatingExamples
+    );
+
+    rotatingResult.addEventListener(
+        "focusout",
+        startRotatingExamples
+    );
+}
+
+    /*
     =====================================================
     INITIALIZE
     =====================================================
