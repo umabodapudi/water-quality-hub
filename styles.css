@@ -1721,52 +1721,75 @@ select:disabled {
     }
 }
 
+
+
 #install-app-section {
     display: none;
 
-    max-width: 500px;
-    width: fit-content;
+    width: 95%;
+    max-width: 1200px;
 
     margin: 30px auto;
-    padding: 18px 24px;
+    padding: 22px 35px;
 
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+
+    box-sizing: border-box;
+}
+
+.install-text {
+    flex: 1;
     text-align: center;
-
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
-#install-app-section h2 {
-    margin: 0 0 10px;
-    font-size: 1.4rem;
+.install-text h2 {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
 }
 
-#install-app-section p {
-    margin: 0 0 16px;
+.install-text p {
+    margin: 0;
     line-height: 1.5;
-    max-width: 420px;
+    color: #555;
 }
 
 #installAppButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 12px;
-    padding: 12px 22px;
+    flex-shrink: 0;
+
+    padding: 12px 24px;
+
     border: none;
     border-radius: 8px;
+
     background: #086788;
     color: white;
+
     font-size: 1rem;
     font-weight: 700;
+
     cursor: pointer;
 }
 
 #installAppButton:hover {
-    filter: brightness(0.9);
+    background: #055b73;
 }
+@media (max-width: 768px) {
 
-#installAppButton[hidden] {
-    display: none;
+    #install-app-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #installAppButton {
+        width: 100%;
+        max-width: 250px;
+    }
+
 }
