@@ -1723,17 +1723,29 @@ select:disabled {
 
 #install-app-section {
     display: none;
-    width: 100%;
-    max-width: 700px;
-    margin: 60px auto;
-    padding: 30px;
-    box-sizing: border-box;
+
+    max-width: 500px;
+    width: fit-content;
+
+    margin: 30px auto;
+    padding: 18px 24px;
 
     text-align: center;
 
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+#install-app-section h2 {
+    margin: 0 0 10px;
+    font-size: 1.4rem;
+}
+
+#install-app-section p {
+    margin: 0 0 16px;
+    line-height: 1.5;
+    max-width: 420px;
 }
 
 #installAppButton {
