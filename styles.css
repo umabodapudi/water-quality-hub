@@ -1720,3 +1720,24 @@ select:disabled {
         grid-template-columns: 1fr;
     }
 }
+#installAppButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #086788;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#installAppButton:hover {
+    filter: brightness(0.9);
+}
+
+#installAppButton[hidden] {
+    display: none;
+}
