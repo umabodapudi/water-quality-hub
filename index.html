@@ -1633,36 +1633,34 @@ let deferredInstallPrompt;
 const installButton = document.getElementById("installAppButton");
 const installSection = document.getElementById("install-app-section");
 
-// Hide the section by default
-installSection.style.display = "none";
-
 window.addEventListener("beforeinstallprompt", function (event) {
     event.preventDefault();
 
     deferredInstallPrompt = event;
 
-    // Show the section only if installation is available
     installSection.style.display = "block";
-
     installButton.hidden = false;
 });
 
 installButton.addEventListener("click", async function () {
-
-    if (!deferredInstallPrompt) return;
+    if (!deferredInstallPrompt) {
+        return;
+    }
 
     deferredInstallPrompt.prompt();
 
-    await deferredInstallPrompt.userChoice;
+    const choiceResult = await deferredInstallPrompt.userChoice;
+
+    if (choiceResult.outcome === "accepted") {
+        installSection.style.display = "none";
+    }
 
     deferredInstallPrompt = null;
 });
 
 window.addEventListener("appinstalled", function () {
-
-    // Hide the whole section after installation
     installSection.style.display = "none";
-
+    installButton.hidden = true;
     deferredInstallPrompt = null;
 });
 </script>
