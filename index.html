@@ -1632,6 +1632,43 @@
         });
     }
 </script>
+    <button id="installAppButton" hidden>
+    Install Water Quality Hub
+</button>
+
+<script>
+    let deferredInstallPrompt;
+
+    const installButton =
+        document.getElementById("installAppButton");
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        function (event) {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            installButton.hidden = false;
+        }
+    );
+
+    installButton.addEventListener("click", async function () {
+        if (!deferredInstallPrompt) {
+            return;
+        }
+
+        deferredInstallPrompt.prompt();
+
+        await deferredInstallPrompt.userChoice;
+
+        deferredInstallPrompt = null;
+        installButton.hidden = true;
+    });
+
+    window.addEventListener("appinstalled", function () {
+        installButton.hidden = true;
+        deferredInstallPrompt = null;
+    });
+</script>
 
     <!-- =====================================================
          SCRIPTS
