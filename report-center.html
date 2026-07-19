@@ -19,6 +19,39 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
+        .page-header{
+    max-width:1100px;
+    margin:20px auto 10px;
+    padding:0 20px;
+}
+
+.back-home-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    background:#087f8c;
+    color:#fff;
+
+    padding:14px 24px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:1rem;
+    font-weight:700;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+    transition:.2s ease;
+}
+
+.back-home-btn:hover{
+    background:#056773;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.2);
+}
         .report-page {
             max-width: 1100px;
             margin: 0 auto;
@@ -332,14 +365,12 @@
 <body>
 
 
-    <header class="site-header">
-    <nav class="main-nav">
+    <header class="page-header">
 
-        <a href="index.html" class="back-home">
-            ← Back to Home
-        </a>
+    <a href="index.html" class="back-home-btn">
+        🏠 Back to Home
+    </a>
 
-    </nav>
 </header>
 
     <main class="report-page">
