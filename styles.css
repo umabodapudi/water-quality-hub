@@ -1722,14 +1722,18 @@ select:disabled {
 }
 
 #install-app-section {
-    display: none; /* hidden until installation is available */
+    display: none;
+    width: 100%;
     max-width: 700px;
     margin: 60px auto;
     padding: 30px;
+    box-sizing: border-box;
+
     text-align: center;
+
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
 #installAppButton {
