@@ -1760,8 +1760,10 @@ select:disabled {
     color: #555;
 }
 
+
+
 #installAppButton {
-    flex-shrink: 0;
+    margin-left: auto;
 
     padding: 12px 24px;
 
@@ -1776,7 +1778,6 @@ select:disabled {
 
     cursor: pointer;
 }
-
 #installAppButton:hover {
     background: #055b73;
 }
