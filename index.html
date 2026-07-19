@@ -139,8 +139,7 @@
     <h2>Install Water Quality Hub</h2>
 
     <p>
-        Add Water Quality Hub to your phone or computer for
-        quicker access.
+        Add Water Quality Hub to your home screen for one-tap access to water quality tools, contaminant information, and treatment guidance.
     </p>
 
      <button id="installAppButton" hidden>
@@ -1629,39 +1628,44 @@
    
 
 <script>
-    let deferredInstallPrompt;
+let deferredInstallPrompt;
 
-    const installButton =
-        document.getElementById("installAppButton");
+const installButton = document.getElementById("installAppButton");
+const installSection = document.getElementById("install-app-section");
 
-    window.addEventListener(
-        "beforeinstallprompt",
-        function (event) {
-            event.preventDefault();
-            deferredInstallPrompt = event;
-            installButton.hidden = false;
-        }
-    );
+// Hide the section by default
+installSection.style.display = "none";
 
-    installButton.addEventListener("click", async function () {
-        if (!deferredInstallPrompt) {
-            return;
-        }
+window.addEventListener("beforeinstallprompt", function (event) {
+    event.preventDefault();
 
-        deferredInstallPrompt.prompt();
+    deferredInstallPrompt = event;
 
-        await deferredInstallPrompt.userChoice;
+    // Show the section only if installation is available
+    installSection.style.display = "block";
 
-        deferredInstallPrompt = null;
-        installButton.hidden = true;
-    });
+    installButton.hidden = false;
+});
 
-    window.addEventListener("appinstalled", function () {
-        installButton.hidden = true;
-        deferredInstallPrompt = null;
-    });
+installButton.addEventListener("click", async function () {
+
+    if (!deferredInstallPrompt) return;
+
+    deferredInstallPrompt.prompt();
+
+    await deferredInstallPrompt.userChoice;
+
+    deferredInstallPrompt = null;
+});
+
+window.addEventListener("appinstalled", function () {
+
+    // Hide the whole section after installation
+    installSection.style.display = "none";
+
+    deferredInstallPrompt = null;
+});
 </script>
-
     <!-- =====================================================
          SCRIPTS
     ====================================================== -->
