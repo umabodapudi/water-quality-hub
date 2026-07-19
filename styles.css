@@ -189,7 +189,7 @@ main {
 }
 
 .app-view {
-    padding: 42px 0 62px;
+    padding: 0 0 62px;
 }
 
 .app-view.active {
@@ -307,7 +307,7 @@ main {
 .hero-section {
     position: relative;
     overflow: hidden;
-    padding: 60px 0 48px;
+    padding: 35px 0 48px;
     background:
         radial-gradient(
             circle at 88% 8%,
